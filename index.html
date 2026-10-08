@@ -2,646 +2,316 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Diariobook — Solatium et Tempus</title>
-  
-  <!-- Web App Capabilities for iOS/Android Mobile -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Diariobook">
-  <meta name="theme-color" content="#F4F6F8">
-  
-  <!-- Fonts: Cinzel & Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Phosphor Icons CDN for minimalist UI icons -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  
-  <!-- Tailwind CSS CDN for fluid utility layout -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'fog': '#F4F6F8',
-            'slate-deep': '#2C3E50',
-            'sage-blue': '#5B7B88',
-            'eucalyptus': '#82A3A1',
-            'warm-clay': '#D9B48F',
-            'clay-dark': '#B88258',
-            'eucalyptus-dark': '#527B78'
-          },
-          fontFamily: {
-            cinzel: ['Cinzel', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Custom Anti-Glare & Smooth Touch Styling */
-    body {
-      background-color: #F4F6F8;
-      color: #2C3E50;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+    :root {
+      --bg: #F4F6F8;
+      --card: #FFFFFF;
+      --text-main: #2C3E50;
+      --text-muted: #64748B;
+      --accent-main: #5B7B88;
+      --accent-health: #82A3A1;
+      --accent-warm: #D9B48F;
+      --border: #E2E8F0;
+      --font-title: 'Cinzel', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Subtle custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #F4F6F8;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94A3B8;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background-color: var(--bg); color: var(--text-main); min-height: 100vh; padding-bottom: 30px; }
+
+    /* Cabecera Principal / Estilo App */
+    header { background: var(--card); border-bottom: 1px solid var(--border); text-align: center; padding: 20px 15px 15px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+    header h1 { font-family: var(--font-title); font-size: 1.8rem; letter-spacing: 2px; color: var(--accent-main); }
+    header p { font-size: 0.8rem; font-style: italic; color: var(--text-muted); margin-top: 2px; }
+
+    /* Menú Superior de Pestañas (3 Opciones) */
+    .nav-tabs { display: flex; background: var(--card); border-bottom: 1px solid var(--border); max-width: 600px; margin: 0 auto; }
+    .tab-btn { flex: 1; padding: 14px 10px; background: none; border: none; border-bottom: 3px solid transparent; font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .tab-btn.active { color: var(--accent-main); border-bottom-color: var(--accent-main); background: #F8FAFC; }
+    .tab-btn:hover:not(.active) { color: var(--text-main); background: #FAFBFB; }
+
+    /* Contenedor Principal */
+    main { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+
+    /* Vistas de Pestaña */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .card-shadow {
-      box-shadow: 0 4px 20px -2px rgba(44, 62, 80, 0.04), 0 2px 6px -1px rgba(44, 62, 80, 0.02);
-    }
+    /* Tarjetas y Formularios */
+    .card { background: var(--card); border-radius: 16px; padding: 22px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--bg); padding-bottom: 10px; }
+    .card-header h2 { font-family: var(--font-title); font-size: 1.2rem; color: var(--accent-main); }
+    .card-header .latin-tag { font-size: 0.72rem; font-family: var(--font-body); letter-spacing: 1px; color: var(--text-muted); background: var(--bg); padding: 3px 8px; border-radius: 6px; font-weight: 600; }
 
-    /* Soft transition for interactive cards */
-    .interactive-card {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .interactive-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px -4px rgba(44, 62, 80, 0.08);
-    }
+    /* Form Inputs */
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
+    input, textarea, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); font-family: var(--font-body); font-size: 0.9rem; color: var(--text-main); background: #FAFAFA; outline: none; transition: border 0.2s; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent-main); background: #FFF; }
+    textarea { resize: vertical; min-height: 80px; }
 
-    /* Focus outline adjustment for visual comfort */
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #5B7B88 !important;
-      box-shadow: 0 0 0 3px rgba(91, 123, 136, 0.15) !important;
-    }
+    /* Botones */
+    .btn { width: 100%; padding: 12px; background: var(--accent-main); color: #FFF; border: none; border-radius: 10px; font-family: var(--font-body); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: opacity 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn:hover { opacity: 0.92; }
+    .btn-health { background: var(--accent-health); }
+
+    /* Listas de Registros */
+    .section-title { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 10px 4px; }
+    ul { list-style: none; }
+    li { background: var(--card); border: 1px solid var(--border); padding: 14px 16px; border-radius: 12px; margin-bottom: 10px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.01); }
+    .item-content { flex: 1; }
+    .item-title { font-weight: 600; color: var(--text-main); margin-bottom: 3px; display: block; }
+    .item-sub { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+    .badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 600; display: inline-block; margin-bottom: 4px; }
+    .badge-leve { background: #E6F4EA; color: #137333; }
+    .badge-moderado { background: #FEF7E0; color: #B06000; }
+    .badge-severo { background: #FCE8E6; color: #C5221F; }
+    
+    .btn-delete { background: none; border: none; color: #94A3B8; cursor: pointer; padding: 4px; border-radius: 4px; }
+    .btn-delete:hover { color: #E07A5F; }
+    .empty-msg { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px 0; font-style: italic; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 md:p-8">
+<body>
 
-  <div class="max-w-6xl mx-auto w-full">
-    
-    <!-- Top Branding Navigation Bar -->
-    <header class="text-center py-6 mb-6 border-b border-gray-200/60 relative">
-      <div class="inline-flex items-center gap-2 mb-1">
-        <i class="ph-bold ph-book-bookmark text-2xl text-sage-blue"></i>
-        <h1 class="font-cinzel text-3xl sm:text-4xl font-bold tracking-wider text-slate-deep">DIARIOBOOK</h1>
+  <!-- CABECERA -->
+  <header>
+    <h1>DIARIOBOOK</h1>
+    <p>Solatium et Tempus</p>
+  </header>
+
+  <!-- NAVEGACIÓN POR PESTAÑAS (3 OPCIONES) -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('horario')">
+      📅 Horario
+    </button>
+    <button class="tab-btn" onclick="switchTab('migranas')">
+      🌿 Migrañas
+    </button>
+    <button class="tab-btn" onclick="switchTab('devocional')">
+      📖 Devocional
+    </button>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+
+    <!-- PESTAÑA 1: HORARIO / AGENDA -->
+    <section id="tab-horario" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <h2>Horario & Agenda</h2>
+          <span class="latin-tag">ORDO</span>
+        </div>
+        <div class="form-group">
+          <label for="taskTime">Hora de la Actividad</label>
+          <input type="time" id="taskTime">
+        </div>
+        <div class="form-group">
+          <label for="taskDesc">Descripción de la Tarea</label>
+          <input type="text" id="taskDesc" placeholder="Ej: Lectura, ejercicio, reunión...">
+        </div>
+        <button class="btn" onclick="addTask()">+ Agregar a la Agenda</button>
       </div>
-      <p class="text-xs sm:text-sm font-cinzel text-sage-blue tracking-widest font-semibold uppercase">Solatium et Tempus</p>
-      <p class="text-xs text-gray-500 mt-1">Tu espacio personal de orden, salud y contemplación</p>
-      
-      <!-- Utility Action Bar (Clear/Export Data) -->
-      <div class="mt-4 flex justify-center gap-2 text-xs">
-        <button onclick="toggleExportModal()" class="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-slate-deep hover:bg-gray-50 transition flex items-center gap-1.5 shadow-sm">
-          <i class="ph-bold ph-download-simple"></i> Respaldar / Exportar
-        </button>
-        <button onclick="confirmClearAll()" class="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-red-500 hover:text-red-600 hover:bg-red-50 transition flex items-center gap-1.5 shadow-sm">
-          <i class="ph-bold ph-trash"></i> Resetear
-        </button>
+
+      <div class="section-title">Actividades del Día</div>
+      <ul id="taskList"></ul>
+    </section>
+
+    <!-- PESTAÑA 2: REGISTRO DE MIGRAÑA -->
+    <section id="tab-migranas" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>Registro de Migraña</h2>
+          <span class="latin-tag">SOLATIUM</span>
+        </div>
+        <div class="form-group">
+          <label for="migraineLevel">Intensidad del Dolor</label>
+          <select id="migraineLevel">
+            <option value="Leve">Leve (Dolor soportable, 1-3)</option>
+            <option value="Moderado">Moderado (Molestia clara, 4-6)</option>
+            <option value="Severo">Severo (Incapacitante, 7-10)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="migraineTrigger">Detonante Probable</label>
+          <input type="text" id="migraineTrigger" placeholder="Ej: Luz fuerte, estrés, café, fatiga...">
+        </div>
+        <button class="btn btn-health" onclick="addMigraine()">+ Registrar Episodio</button>
       </div>
-    </header>
 
-    <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="section-title">Historial de Síntomas</div>
+      <ul id="migraineList"></ul>
+    </section>
 
-      <!-- ========================================== -->
-      <!-- MÓDULO 1: HORARIO & AGENDA (ORDO)          -->
-      <!-- ========================================== -->
-      <section class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 card-shadow flex flex-col justify-between interactive-card">
-        <div>
-          <!-- Section Header -->
-          <div class="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <div class="p-2 rounded-xl bg-sage-blue/10 text-sage-blue">
-                <i class="ph-bold ph-clock text-xl"></i>
-              </div>
-              <div>
-                <h2 class="font-cinzel font-bold text-lg text-slate-deep leading-tight">Horario & Agenda</h2>
-                <span class="text-[10px] font-cinzel font-bold tracking-widest text-sage-blue uppercase">ORDO</span>
-              </div>
-            </div>
-            <span id="taskCountBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">0 tareas</span>
-          </div>
-
-          <!-- Input Form -->
-          <form onsubmit="handleAddTask(event)" class="space-y-3 mb-5">
-            <div class="grid grid-cols-3 gap-2">
-              <div class="col-span-1">
-                <label class="block text-[11px] font-medium text-gray-500 mb-1">Hora</label>
-                <input type="time" id="taskTime" required class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep font-medium">
-              </div>
-              <div class="col-span-2">
-                <label class="block text-[11px] font-medium text-gray-500 mb-1">Categoría</label>
-                <select id="taskCategory" class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep">
-                  <option value="General">Rutina General</option>
-                  <option value="Trabajo">Trabajo / Estudio</option>
-                  <option value="Descanso">Descanso / Pausa</option>
-                  <option value="Salud">Salud / Ejercicio</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Descripción de Actividad</label>
-              <input type="text" id="taskDesc" placeholder="Ej. Caminata matutina, lectura..." required class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep placeholder-gray-400">
-            </div>
-            <button type="submit" class="w-full py-2.5 px-4 bg-sage-blue hover:bg-slate-deep text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
-              <i class="ph-bold ph-plus"></i> Agregar a la Agenda
-            </button>
-          </form>
-
-          <!-- List Container -->
-          <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1" id="taskListContainer">
-            <!-- Dynamic task items inserted here -->
-          </div>
+    <!-- PESTAÑA 3: DEVOCIONAL PERSONAL -->
+    <section id="tab-devocional" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h2>Devocional Personal</h2>
+          <span class="latin-tag">DEVOTIO</span>
         </div>
-
-        <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-          <span>Persistencia activa</span>
-          <i class="ph-bold ph-check-circle text-eucalyptus text-sm"></i>
+        <div class="form-group">
+          <label for="devPassage">Cita Bíblica / Pasaje</label>
+          <input type="text" id="devPassage" placeholder="Ej: Salmos 23:1, Mateo 6:33...">
         </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- MÓDULO 2: REGISTRO DE MIGRAÑAS (SOLATIUM)  -->
-      <!-- ========================================== -->
-      <section class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 card-shadow flex flex-col justify-between interactive-card">
-        <div>
-          <!-- Section Header -->
-          <div class="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <div class="p-2 rounded-xl bg-eucalyptus/15 text-eucalyptus-dark">
-                <i class="ph-bold ph-heartbeat text-xl"></i>
-              </div>
-              <div>
-                <h2 class="font-cinzel font-bold text-lg text-slate-deep leading-tight">Salud & Migraña</h2>
-                <span class="text-[10px] font-cinzel font-bold tracking-widest text-eucalyptus-dark uppercase">SOLATIUM</span>
-              </div>
-            </div>
-            <span id="migraineCountBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">0 episodios</span>
-          </div>
-
-          <!-- Input Form -->
-          <form onsubmit="handleAddMigraine(event)" class="space-y-3 mb-5">
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Nivel de Intensidad</label>
-              <div class="grid grid-cols-3 gap-2">
-                <label class="cursor-pointer">
-                  <input type="radio" name="migraineLevel" value="Leve" checked class="peer sr-only">
-                  <div class="text-center py-2 px-1 text-xs font-medium border border-gray-200 rounded-xl peer-checked:bg-eucalyptus/20 peer-checked:border-eucalyptus peer-checked:text-eucalyptus-dark text-gray-600 transition">
-                    Leve (1-3)
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="migraineLevel" value="Moderado" class="peer sr-only">
-                  <div class="text-center py-2 px-1 text-xs font-medium border border-gray-200 rounded-xl peer-checked:bg-warm-clay/30 peer-checked:border-warm-clay peer-checked:text-clay-dark text-gray-600 transition">
-                    Moderado (4-6)
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="migraineLevel" value="Severo" class="peer sr-only">
-                  <div class="text-center py-2 px-1 text-xs font-medium border border-gray-200 rounded-xl peer-checked:bg-red-100 peer-checked:border-red-300 peer-checked:text-red-700 text-gray-600 transition">
-                    Severo (7-10)
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Detonante / Factor Probable</label>
-              <input type="text" id="migraineTrigger" placeholder="Ej. Pantalla prolongada, estrés, falta de agua..." required class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep placeholder-gray-400">
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Síntoma o Medida Tomada (Opcional)</label>
-              <input type="text" id="migraineAction" placeholder="Ej. Aura visual, descanso en penumbra, hidratación..." class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep placeholder-gray-400">
-            </div>
-
-            <button type="submit" class="w-full py-2.5 px-4 bg-eucalyptus hover:bg-eucalyptus-dark text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
-              <i class="ph-bold ph-first-aid"></i> Registrar Episodio
-            </button>
-          </form>
-
-          <!-- List Container -->
-          <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1" id="migraineListContainer">
-            <!-- Dynamic migraine entries inserted here -->
-          </div>
+        <div class="form-group">
+          <label for="devNotes">Reflexión u Oración</label>
+          <textarea id="devNotes" placeholder="Escribe lo que aprendiste hoy o tu petición..."></textarea>
         </div>
-
-        <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-          <span>Diseño anti-fatiga visual</span>
-          <i class="ph-bold ph-eye-slash text-sage-blue text-sm"></i>
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- MÓDULO 3: DEVOCIONAL PERSONAL (DEVOTIO)    -->
-      <!-- ========================================== -->
-      <section class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 card-shadow flex flex-col justify-between interactive-card">
-        <div>
-          <!-- Section Header -->
-          <div class="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <div class="p-2 rounded-xl bg-warm-clay/20 text-clay-dark">
-                <i class="ph-bold ph-hands-praying text-xl"></i>
-              </div>
-              <div>
-                <h2 class="font-cinzel font-bold text-lg text-slate-deep leading-tight">Devocional Diario</h2>
-                <span class="text-[10px] font-cinzel font-bold tracking-widest text-clay-dark uppercase">DEVOTIO</span>
-              </div>
-            </div>
-            <span id="devotionalCountBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">0 entradas</span>
-          </div>
-
-          <!-- Input Form -->
-          <form onsubmit="handleAddDevotional(event)" class="space-y-3 mb-5">
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Pasaje Bíblico o Cita</label>
-              <input type="text" id="devPassage" placeholder="Ej. Salmos 23:1-3, Filipenses 4:6..." required class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep placeholder-gray-400">
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-medium text-gray-500 mb-1">Reflexión, Oración o Petición</label>
-              <textarea id="devNotes" rows="3" placeholder="Escribe lo que hoy hablas con Dios, gratitud o pensamientos..." required class="w-full px-3 py-2 text-sm bg-fog border border-gray-200 rounded-xl text-slate-deep placeholder-gray-400 resize-none"></textarea>
-            </div>
-
-            <button type="submit" class="w-full py-2.5 px-4 bg-warm-clay hover:bg-clay-dark text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
-              <i class="ph-bold ph-bookmark-simple"></i> Guardar Enfoque
-            </button>
-          </form>
-
-          <!-- List Container -->
-          <div class="space-y-2 max-h-[380px] overflow-y-auto pr-1" id="devotionalListContainer">
-            <!-- Dynamic devotional items inserted here -->
-          </div>
-        </div>
-
-        <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-          <span>Refugio de Paz</span>
-          <i class="ph-bold ph-sparkle text-warm-clay text-sm"></i>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Footer section -->
-    <footer class="mt-10 py-6 text-center text-xs text-gray-400 border-t border-gray-200/50 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p>© Diariobook — <span class="font-cinzel">Solatium et Tempus</span>. Diseñado para calma y bienestar.</p>
-      <div class="flex items-center gap-4">
-        <span>Datos guardados en tu navegador</span>
-        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-slate-deep transition">
-          <i class="ph-bold ph-arrow-up"></i> Arriba
-        </button>
+        <button class="btn" onclick="saveDevotional()">+ Guardar Reflexión</button>
       </div>
-    </footer>
-  </div>
 
-  <!-- Modal for Backup / Export -->
-  <div id="exportModal" class="fixed inset-0 bg-slate-deep/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-        <h3 class="font-cinzel font-bold text-lg text-slate-deep">Gestión de Datos</h3>
-        <button onclick="toggleExportModal()" class="text-gray-400 hover:text-slate-deep"><i class="ph-bold ph-x text-xl"></i></button>
-      </div>
-      <p class="text-xs text-gray-600 mb-4">Puedes respaldar todos tus registros en un archivo comprimido JSON o restaurar un respaldo previo.</p>
-      
-      <div class="space-y-3">
-        <button onclick="downloadBackup()" class="w-full py-2.5 px-4 bg-slate-deep text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2 hover:bg-slate-700 transition">
-          <i class="ph-bold ph-download-simple"></i> Descargar Respaldo JSON
-        </button>
-        
-        <div class="relative">
-          <input type="file" id="importFileInput" onchange="importBackup(event)" accept=".json" class="hidden">
-          <button onclick="document.getElementById('importFileInput').click()" class="w-full py-2.5 px-4 bg-gray-100 text-slate-deep text-sm font-medium rounded-xl flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-            <i class="ph-bold ph-upload-simple"></i> Cargar Respaldo JSON
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+      <div class="section-title">Reflexiones Guardadas</div>
+      <ul id="devotionalList"></ul>
+    </section>
 
+  </main>
+
+  <!-- JAVASCRIPT & LOCALSTORAGE -->
   <script>
-    // App State Management Keys
-    const KEYS = {
-      TASKS: 'db_tasks_data',
-      MIGRAINES: 'db_migraines_data',
-      DEVOTIONALS: 'db_devotionals_data'
-    };
+    // Cambiar entre pestañas
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-    // Initial Load Listener
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Inicializar app
     document.addEventListener('DOMContentLoaded', () => {
       renderTasks();
       renderMigraines();
       renderDevotionals();
     });
 
-    // --- UTILITY HELPERS ---
-    function getStoredData(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch (e) {
-        console.error("Error reading LocalStorage", e);
-        return [];
-      }
+    // --- MANEJO DE LOCALSTORAGE ---
+    function getStore(key) {
+      return JSON.parse(localStorage.getItem(key) || '[]');
     }
 
-    function saveStoredData(key, data) {
+    function saveStore(key, data) {
       localStorage.setItem(key, JSON.stringify(data));
     }
 
-    function formatDate(dateString) {
-      const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      return new Date(dateString).toLocaleDateString('es-ES', options);
+    function removeItem(key, index) {
+      const store = getStore(key);
+      store.splice(index, 1);
+      saveStore(key, store);
+      if(key === 'db_tasks') renderTasks();
+      if(key === 'db_migraines') renderMigraines();
+      if(key === 'db_devotionals') renderDevotionals();
     }
 
-    // --- MÓDULO 1: TASKS (ORDO) ---
-    function handleAddTask(e) {
-      e.preventDefault();
+    // --- HORARIO ---
+    function addTask() {
       const time = document.getElementById('taskTime').value;
-      const category = document.getElementById('taskCategory').value;
       const desc = document.getElementById('taskDesc').value.trim();
+      if (!time || !desc) return alert('Por favor ingresa hora y descripción.');
 
-      if (!time || !desc) return;
+      const store = getStore('db_tasks');
+      store.unshift({ time, desc, id: Date.now() });
+      saveStore('db_tasks', store);
 
-      const tasks = getStoredData(KEYS.TASKS);
-      tasks.unshift({
-        id: Date.now(),
-        time,
-        category,
-        desc,
-        completed: false,
-        createdAt: new Date().toISOString()
-      });
-
-      saveStoredData(KEYS.TASKS, tasks);
+      document.getElementById('taskTime').value = '';
       document.getElementById('taskDesc').value = '';
       renderTasks();
     }
 
-    function toggleTask(id) {
-      const tasks = getStoredData(KEYS.TASKS);
-      const updated = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-      saveStoredData(KEYS.TASKS, updated);
-      renderTasks();
-    }
-
-    function deleteTask(id) {
-      const tasks = getStoredData(KEYS.TASKS);
-      const filtered = tasks.filter(t => t.id !== id);
-      saveStoredData(KEYS.TASKS, filtered);
-      renderTasks();
-    }
-
     function renderTasks() {
-      const container = document.getElementById('taskListContainer');
-      const tasks = getStoredData(KEYS.TASKS);
-      document.getElementById('taskCountBadge').innerText = `${tasks.length} ${tasks.length === 1 ? 'tarea' : 'tareas'}`;
-
-      if (tasks.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-8 text-gray-400">
-            <i class="ph-thin ph-calendar-blank text-3xl mb-1 block"></i>
-            <p class="text-xs">No hay actividades programadas.</p>
-          </div>
-        `;
+      const list = document.getElementById('taskList');
+      const store = getStore('db_tasks');
+      if (store.length === 0) {
+        list.innerHTML = '<li class="empty-msg">No hay tareas programadas.</li>';
         return;
       }
-
-      container.innerHTML = tasks.map(t => `
-        <div class="p-3 rounded-xl bg-fog border border-gray-100 flex items-center justify-between gap-2 group transition hover:border-gray-200">
-          <div class="flex items-center gap-3 min-w-0">
-            <button onclick="toggleTask(${t.id})" class="text-lg text-gray-400 hover:text-sage-blue transition">
-              <i class="ph-bold ${t.completed ? 'ph-check-circle text-eucalyptus text-xl' : 'ph-circle'}"></i>
-            </button>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-slate-deep">${t.time}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-md bg-white border border-gray-200 text-gray-500 font-medium">${t.category}</span>
-              </div>
-              <p class="text-xs text-gray-700 truncate ${t.completed ? 'line-through opacity-50' : ''}">${escapeHtml(t.desc)}</p>
-            </div>
+      list.innerHTML = store.map((item, idx) => `
+        <li>
+          <div class="item-content">
+            <span class="item-title">⏰ ${item.time}</span>
+            <span class="item-sub">${item.desc}</span>
           </div>
-          <button onclick="deleteTask(${t.id})" class="opacity-80 sm:opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 p-1.5 transition">
-            <i class="ph-bold ph-trash text-sm"></i>
-          </button>
-        </div>
+          <button class="btn-delete" onclick="removeItem('db_tasks', ${idx})" title="Eliminar">✕</button>
+        </li>
       `).join('');
     }
 
-    // --- MÓDULO 2: MIGRAÑAS (SOLATIUM) ---
-    function handleAddMigraine(e) {
-      e.preventDefault();
-      const levelRadio = document.querySelector('input[name="migraineLevel"]:checked');
-      const level = levelRadio ? levelRadio.value : 'Leve';
-      const trigger = document.getElementById('migraineTrigger').value.trim();
-      const action = document.getElementById('migraineAction').value.trim();
+    // --- MIGRAÑA ---
+    function addMigraine() {
+      const level = document.getElementById('migraineLevel').value;
+      const trigger = document.getElementById('migraineTrigger').value.trim() || 'Sin especificar';
 
-      if (!trigger) return;
+      const store = getStore('db_migraines');
+      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+      store.unshift({ level, trigger, date, id: Date.now() });
+      saveStore('db_migraines', store);
 
-      const migraines = getStoredData(KEYS.MIGRAINES);
-      migraines.unshift({
-        id: Date.now(),
-        level,
-        trigger,
-        action: action || 'Sin especificar',
-        date: new Date().toISOString()
-      });
-
-      saveStoredData(KEYS.MIGRAINES, migraines);
       document.getElementById('migraineTrigger').value = '';
-      document.getElementById('migraineAction').value = '';
-      renderMigraines();
-    }
-
-    function deleteMigraine(id) {
-      const migraines = getStoredData(KEYS.MIGRAINES);
-      const filtered = migraines.filter(m => m.id !== id);
-      saveStoredData(KEYS.MIGRAINES, filtered);
       renderMigraines();
     }
 
     function renderMigraines() {
-      const container = document.getElementById('migraineListContainer');
-      const migraines = getStoredData(KEYS.MIGRAINES);
-      document.getElementById('migraineCountBadge').innerText = `${migraines.length} ${migraines.length === 1 ? 'episodio' : 'episodios'}`;
-
-      if (migraines.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-8 text-gray-400">
-            <i class="ph-thin ph-smiley-relaxed text-3xl mb-1 block"></i>
-            <p class="text-xs">Sin episodios registrados.</p>
-          </div>
-        `;
+      const list = document.getElementById('migraineList');
+      const store = getStore('db_migraines');
+      if (store.length === 0) {
+        list.innerHTML = '<li class="empty-msg">Sin registros de migraña.</li>';
         return;
       }
-
-      const getBadgeStyle = (level) => {
-        switch (level) {
-          case 'Severo': return 'bg-red-50 text-red-700 border-red-200';
-          case 'Moderado': return 'bg-warm-clay/20 text-clay-dark border-warm-clay/40';
-          default: return 'bg-eucalyptus/20 text-eucalyptus-dark border-eucalyptus/40';
-        }
-      };
-
-      container.innerHTML = migraines.map(m => `
-        <div class="p-3 rounded-xl bg-fog border border-gray-100 flex flex-col gap-1.5 group transition hover:border-gray-200 relative">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${getBadgeStyle(m.level)}">
-              Intensidad: ${m.level}
-            </span>
-            <span class="text-[10px] text-gray-400">${formatDate(m.date)}</span>
-          </div>
-          <div class="text-xs text-slate-deep">
-            <span class="font-semibold text-gray-500">Detonante:</span> ${escapeHtml(m.trigger)}
-          </div>
-          ${m.action ? `<div class="text-[11px] text-gray-500 bg-white/60 p-2 rounded-lg border border-gray-100"><span class="font-medium text-slate-deep">Nota:</span> ${escapeHtml(m.action)}</div>` : ''}
-          <button onclick="deleteMigraine(${m.id})" class="absolute top-2 right-2 opacity-80 sm:opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 p-1 transition">
-            <i class="ph-bold ph-trash text-xs"></i>
-          </button>
-        </div>
-      `).join('');
+      list.innerHTML = store.map((item, idx) => {
+        const badgeClass = `badge-${item.level.toLowerCase()}`;
+        return `
+          <li>
+            <div class="item-content">
+              <span class="badge ${badgeClass}">${item.level}</span>
+              <span class="item-title">${item.date} — Detonante: ${item.trigger}</span>
+            </div>
+            <button class="btn-delete" onclick="removeItem('db_migraines', ${idx})" title="Eliminar">✕</button>
+          </li>
+        `;
+      }).join('');
     }
 
-    // --- MÓDULO 3: DEVOCIONAL (DEVOTIO) ---
-    function handleAddDevotional(e) {
-      e.preventDefault();
+    // --- DEVOCIONAL ---
+    function saveDevotional() {
       const passage = document.getElementById('devPassage').value.trim();
       const notes = document.getElementById('devNotes').value.trim();
+      if (!passage || !notes) return alert('Por favor ingresa la cita bíblica y tu reflexión.');
 
-      if (!passage || !notes) return;
+      const store = getStore('db_devotionals');
+      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+      store.unshift({ passage, notes, date, id: Date.now() });
+      saveStore('db_devotionals', store);
 
-      const devotionals = getStoredData(KEYS.DEVOTIONALS);
-      devotionals.unshift({
-        id: Date.now(),
-        passage,
-        notes,
-        date: new Date().toISOString()
-      });
-
-      saveStoredData(KEYS.DEVOTIONALS, devotionals);
       document.getElementById('devPassage').value = '';
       document.getElementById('devNotes').value = '';
       renderDevotionals();
     }
 
-    function deleteDevotional(id) {
-      const devotionals = getStoredData(KEYS.DEVOTIONALS);
-      const filtered = devotionals.filter(d => d.id !== id);
-      saveStoredData(KEYS.DEVOTIONALS, filtered);
-      renderDevotionals();
-    }
-
     function renderDevotionals() {
-      const container = document.getElementById('devotionalListContainer');
-      const devotionals = getStoredData(KEYS.DEVOTIONALS);
-      document.getElementById('devotionalCountBadge').innerText = `${devotionals.length} ${devotionals.length === 1 ? 'entrada' : 'entradas'}`;
-
-      if (devotionals.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-8 text-gray-400">
-            <i class="ph-thin ph-book-open text-3xl mb-1 block"></i>
-            <p class="text-xs">No hay reflexiones aún.</p>
-          </div>
-        `;
+      const list = document.getElementById('devotionalList');
+      const store = getStore('db_devotionals');
+      if (store.length === 0) {
+        list.innerHTML = '<li class="empty-msg">No has guardado reflexiones aún.</li>';
         return;
       }
-
-      container.innerHTML = devotionals.map(d => `
-        <div class="p-3.5 rounded-xl bg-fog border border-gray-100 flex flex-col gap-2 group transition hover:border-gray-200 relative">
-          <div class="flex items-center justify-between border-b border-gray-200/50 pb-1.5">
-            <span class="text-xs font-bold font-cinzel text-clay-dark flex items-center gap-1">
-              <i class="ph-bold ph-bookmarks"></i> ${escapeHtml(d.passage)}
-            </span>
-            <span class="text-[10px] text-gray-400">${formatDate(d.date)}</span>
+      list.innerHTML = store.map((item, idx) => `
+        <li>
+          <div class="item-content">
+            <span class="item-title">📖 ${item.passage} <small style="color:var(--text-muted); font-weight:normal;">(${item.date})</small></span>
+            <span class="item-sub">${item.notes}</span>
           </div>
-          <p class="text-xs text-gray-700 whitespace-pre-line leading-relaxed">${escapeHtml(d.notes)}</p>
-          <button onclick="deleteDevotional(${d.id})" class="absolute top-2 right-2 opacity-80 sm:opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 p-1 transition">
-            <i class="ph-bold ph-trash text-xs"></i>
-          </button>
-        </div>
+          <button class="btn-delete" onclick="removeItem('db_devotionals', ${idx})" title="Eliminar">✕</button>
+        </li>
       `).join('');
-    }
-
-    // --- GLOBAL DATA MANAGEMENT ---
-    function confirmClearAll() {
-      if (confirm('¿Estás seguro de que deseas eliminar TODOS los registros de Diariobook? Esta acción no se puede deshacer.')) {
-        localStorage.removeItem(KEYS.TASKS);
-        localStorage.removeItem(KEYS.MIGRAINES);
-        localStorage.removeItem(KEYS.DEVOTIONALS);
-        renderTasks();
-        renderMigraines();
-        renderDevotionals();
-      }
-    }
-
-    function toggleExportModal() {
-      const modal = document.getElementById('exportModal');
-      modal.classList.toggle('hidden');
-    }
-
-    function downloadBackup() {
-      const backupData = {
-        tasks: getStoredData(KEYS.TASKS),
-        migraines: getStoredData(KEYS.MIGRAINES),
-        devotionals: getStoredData(KEYS.DEVOTIONALS),
-        exportedAt: new Date().toISOString()
-      };
-
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `Diariobook_Backup_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-    }
-
-    function importBackup(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        try {
-          const parsed = JSON.parse(event.target.result);
-          if (parsed.tasks) saveStoredData(KEYS.TASKS, parsed.tasks);
-          if (parsed.migraines) saveStoredData(KEYS.MIGRAINES, parsed.migraines);
-          if (parsed.devotionals) saveStoredData(KEYS.DEVOTIONALS, parsed.devotionals);
-          
-          renderTasks();
-          renderMigraines();
-          renderDevotionals();
-          toggleExportModal();
-          alert('¡Datos restaurados con éxito!');
-        } catch (err) {
-          alert('El archivo cargado no tiene un formato JSON válido.');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, function(m) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#039;'
-        }[m];
-      });
     }
   </script>
 </body>
