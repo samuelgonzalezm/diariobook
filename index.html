@@ -16,14 +16,13 @@
   <!-- Manifest PWA Embebido -->
   <link rel="manifest" href='data:application/manifest+json,{"name":"CondoApp","short_name":"CondoApp","start_url":".","display":"standalone","background_color":"#0A192F","theme_color":"#0056B3","icons":[{"src":"https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza","sizes":"192x192","type":"image/png"},{"src":"https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza","sizes":"512x512","type":"image/png"}]}'>
 
-  <!-- Tipografía Estilo Red Social (Poppins & Plus Jakarta Sans) -->
+  <!-- Tipografía Estilo Red Social -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      /* Colores Fuertes y Saturados (Sin tonos pasteles) */
       --blue-dark: #0A192F;         /* Azul Oscuro Base */
       --blue-electric: #0056B3;     /* Azul Vivo Principal */
       --blue-bright: #0088FF;       /* Azul Neón Acción */
@@ -39,12 +38,20 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: var(--font-social); background-color: var(--blue-dark); color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Layout Estilo Red Social / Dashboard */
-    .app-container { display: flex; flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; background: var(--blue-dark); min-height: 100vh; }
+    /* PANTALLA DE ACCESO / LOGIN */
+    .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--blue-dark); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .auth-card { background: var(--card-white); color: var(--text-dark); padding: 30px 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 3px solid var(--yellow-vivid); }
+    .auth-logo { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--yellow-vivid); margin-bottom: 12px; }
+    .auth-title { font-size: 1.5rem; font-weight: 900; color: var(--blue-electric); margin-bottom: 5px; text-transform: uppercase; }
+    .auth-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; }
+    .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-social); font-size: 1rem; font-weight: 700; text-align: center; margin-bottom: 14px; outline: none; }
+    .auth-input:focus { border-color: var(--blue-electric); box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2); }
 
-    /* Barra Lateral Azul Intenso */
+    /* LAYOUT PRINCIPAL */
+    .app-container { display: none; flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; background: var(--blue-dark); min-height: 100vh; }
+    .app-container.visible { display: flex; }
+
     sidebar { width: 230px; background: var(--blue-electric); color: #FFF; padding: 20px 14px; display: flex; flex-direction: column; gap: 10px; border-right: 3px solid var(--yellow-vivid); }
-    
     .logo-box { display: flex; align-items: center; gap: 12px; padding: 10px; margin-bottom: 15px; }
     .logo-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
     .logo-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
@@ -52,18 +59,15 @@
 
     .nav-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; border: none; background: none; width: 100%; text-align: left; }
     .nav-btn:hover, .nav-btn.active { background: var(--yellow-vivid); color: var(--text-dark); font-weight: 800; transform: translateX(3px); }
+    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; margin-top: auto; }
 
-    /* Área de Contenido Principal */
     .content-area { flex: 1; display: flex; flex-direction: column; background: #0E223D; overflow-y: auto; }
-
-    /* Header Banner Estilo Red Social */
     .header-banner { background: linear-gradient(135deg, var(--blue-electric) 0%, #002D62 100%); padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
     .banner-title { font-size: 1.1rem; font-weight: 800; color: #FFF; text-transform: uppercase; letter-spacing: 1px; }
 
     .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-weight: 800; font-size: 0.82rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4); }
-    .btn-install:active { transform: scale(0.95); }
 
-    /* Tarjetas Blancas con Contraste Fuerte */
+    /* TARJETAS */
     .main-body { padding: 22px; max-width: 700px; margin: 0 auto; width: 100%; }
     .tab-section { display: none; }
     .tab-section.active { display: block; animation: slideIn 0.2s ease-out; }
@@ -73,7 +77,6 @@
     .card { background: var(--card-white); border-radius: 18px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
     .card-title { font-size: 1.25rem; font-weight: 800; color: var(--blue-electric); margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
-    /* Formularios */
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
     input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 10px; border: 2px solid var(--border); font-family: var(--font-social); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
@@ -82,21 +85,18 @@
     .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 14px rgba(230, 0, 0, 0.4); }
     .btn-submit:active { transform: scale(0.98); }
 
-    /* Listas y Elementos */
     .section-label { font-size: 0.88rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
     ul { list-style: none; }
     li { background: var(--card-white); color: var(--text-dark); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 5px solid var(--blue-bright); }
-    
+
     .super-item { display: flex; align-items: center; gap: 14px; width: 100%; font-weight: 700; }
     .super-item.completed span { text-decoration: line-through; opacity: 0.4; }
     .super-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--red-vivid); cursor: pointer; }
 
     .btn-delete { background: var(--red-vivid); color: #FFF; border: none; padding: 6px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
-    .btn-delete:hover { background: #B30000; }
 
-    /* Adaptación Móvil */
     @media (max-width: 650px) {
-      .app-container { flex-direction: column; }
+      .app-container.visible { flex-direction: column; }
       sidebar { width: 100%; flex-direction: row; border-right: none; border-bottom: 3px solid var(--yellow-vivid); padding: 10px; overflow-x: auto; }
       .logo-box { display: none; }
       .nav-btn { padding: 10px 12px; font-size: 0.85rem; white-space: nowrap; justify-content: center; }
@@ -106,9 +106,23 @@
 </head>
 <body>
 
-  <div class="app-container">
+  <!-- 1. PANTALLA DE AUTENTICACIÓN / BLOQUEO -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" class="auth-logo" alt="Logo">
+      <div class="auth-title">CondoApp</div>
+      <div id="authSubtitle" class="auth-sub">Ingresa tu número de registro y clave de acceso</div>
+      
+      <input type="text" id="regNumberInput" class="auth-input" placeholder="N° de Registro (ej: 101)" autocomplete="off">
+      <input type="password" id="passKeyInput" class="auth-input" placeholder="Clave de Acceso" autocomplete="off">
+      
+      <button id="authBtn" class="btn-submit" onclick="handleAuth()">Ingresar</button>
+    </div>
+  </div>
+
+  <!-- 2. CONTENIDO PROTEGIDO DE CONDOAPP -->
+  <div id="appContainer" class="app-container">
     
-    <!-- BARRA LATERAL CON COLORES SATURADOS -->
     <sidebar>
       <div class="logo-box">
         <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo CondoApp" class="logo-img">
@@ -118,9 +132,9 @@
       <button class="nav-btn" onclick="switchTab('super', this)">🛒 Súper</button>
       <button class="nav-btn" onclick="switchTab('migranas', this)">🌿 Migrañas</button>
       <button class="nav-btn" onclick="switchTab('devocional', this)">📖 Devocional</button>
+      <button class="nav-btn btn-logout" onclick="logout()">🔒 Salir / Bloquear</button>
     </sidebar>
 
-    <!-- ÁREA DE CONTENIDO PRINCIPAL -->
     <div class="content-area">
       <div class="header-banner">
         <span class="banner-title">CondoApp — Tu Espacio</span>
@@ -129,7 +143,7 @@
 
       <div class="main-body">
 
-        <!-- 1. AGENDA / HORARIO -->
+        <!-- AGENDA -->
         <section id="tab-horario" class="tab-section active">
           <div class="card">
             <div class="card-title">Agenda & Horario</div>
@@ -147,7 +161,7 @@
           <ul id="taskList"></ul>
         </section>
 
-        <!-- 2. LISTA DEL SÚPER -->
+        <!-- SÚPER -->
         <section id="tab-super" class="tab-section">
           <div class="card">
             <div class="card-title">Lista del Súper 🛒</div>
@@ -161,7 +175,7 @@
           <ul id="superList"></ul>
         </section>
 
-        <!-- 3. MIGRAÑA -->
+        <!-- MIGRAÑA -->
         <section id="tab-migranas" class="tab-section">
           <div class="card">
             <div class="card-title">Registro de Migraña</div>
@@ -183,7 +197,7 @@
           <ul id="migraineList"></ul>
         </section>
 
-        <!-- 4. DEVOCIONAL -->
+        <!-- DEVOCIONAL -->
         <section id="tab-devocional" class="tab-section">
           <div class="card">
             <div class="card-title">Devocional Personal</div>
@@ -205,19 +219,70 @@
     </div>
   </div>
 
-  <!-- SCRIPT DE FUNCIONALIDAD, LOCALSTORAGE Y PWA -->
   <script>
+    // SISTEMA DE SEGURIDAD LOCAL
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      setupPWA();
+    });
+
+    function checkAuthStatus() {
+      const storedReg = localStorage.getItem('condo_regNumber');
+      const storedPass = localStorage.getItem('condo_passKey');
+
+      if (!storedReg || !storedPass) {
+        document.getElementById('authSubtitle').innerText = 'Crea tu N° de Registro y Clave por primera vez';
+        document.getElementById('authBtn').innerText = 'Crear Cuenta Segura';
+      } else {
+        document.getElementById('authSubtitle').innerText = 'Ingresa tus credenciales para acceder';
+        document.getElementById('authBtn').innerText = 'Iniciar Sesión';
+      }
+    }
+
+    function handleAuth() {
+      const regInput = document.getElementById('regNumberInput').value.trim();
+      const passInput = document.getElementById('passKeyInput').value.trim();
+
+      if (!regInput || !passInput) return alert('Debes completar ambos campos.');
+
+      const storedReg = localStorage.getItem('condo_regNumber');
+      const storedPass = localStorage.getItem('condo_passKey');
+
+      // Primer Registro
+      if (!storedReg || !storedPass) {
+        localStorage.setItem('condo_regNumber', regInput);
+        localStorage.setItem('condo_passKey', passInput);
+        alert('¡Credenciales creadas con éxito!');
+        unlockApp();
+      } else {
+        // Validación de Sesión
+        if (regInput === storedReg && passInput === storedPass) {
+          unlockApp();
+        } else {
+          alert('Número de registro o clave incorrectos.');
+        }
+      }
+    }
+
+    function unlockApp() {
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('appContainer').classList.add('visible');
+      renderAll();
+    }
+
+    function logout() {
+      document.getElementById('authOverlay').style.display = 'flex';
+      document.getElementById('appContainer').classList.remove('visible');
+      document.getElementById('passKeyInput').value = '';
+    }
+
+    /* PESTAÑAS Y DATOS */
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(`tab-${tabId}`).classList.add('active');
       btn.classList.add('active');
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderAll();
-      setupPWA();
-    });
 
     function getStore(k) { return JSON.parse(localStorage.getItem(k) || '[]'); }
     function setStore(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
@@ -229,7 +294,6 @@
       renderAll();
     }
 
-    /* AGENDA */
     function addTask() {
       const time = document.getElementById('taskTime').value;
       const desc = document.getElementById('taskDesc').value.trim();
@@ -242,7 +306,6 @@
       renderAll();
     }
 
-    /* SÚPER */
     function addSuperItem() {
       const name = document.getElementById('superItem').value.trim();
       if(!name) return alert('Ingresa un producto.');
@@ -260,7 +323,6 @@
       renderAll();
     }
 
-    /* MIGRAÑA */
     function addMigraine() {
       const level = document.getElementById('migraineLevel').value;
       const trigger = document.getElementById('migraineTrigger').value.trim() || 'Sin detonante';
@@ -272,7 +334,6 @@
       renderAll();
     }
 
-    /* DEVOCIONAL */
     function saveDevotional() {
       const passage = document.getElementById('devPassage').value.trim();
       const notes = document.getElementById('devNotes').value.trim();
@@ -287,13 +348,11 @@
     }
 
     function renderAll() {
-      // Render Agenda
       const tasks = getStore('app_tasks');
       document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
         <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div><button class="btn-delete" onclick="removeItem('app_tasks', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin tareas registradas.</li>';
 
-      // Render Súper
       const superItems = getStore('app_super');
       document.getElementById('superList').innerHTML = superItems.length ? superItems.map((s, i) => `
         <li>
@@ -305,13 +364,11 @@
         </li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Lista de compras vacía.</li>';
 
-      // Render Migraña
       const migraines = getStore('app_migraines');
       document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
         <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-delete" onclick="removeItem('app_migraines', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin registros.</li>';
 
-      // Render Devocional
       const devotionals = getStore('app_devotionals');
       document.getElementById('devotionalList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
         <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small style="color:var(--text-muted);">${d.notes}</small></div><button class="btn-delete" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
