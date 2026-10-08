@@ -1,0 +1,21 @@
+{
+  "name": "CondoApp",
+  "short_name": "CondoApp",
+  "description": "Tu espacio personal de organización, salud y devocional.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0A192F",
+  "theme_color": "#0056B3",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
