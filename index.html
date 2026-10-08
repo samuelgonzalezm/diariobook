@@ -5,369 +5,339 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CondoApp</title>
   
-  <!-- Configuración de PWA / Instalación en Celular -->
-  <meta name="theme-color" content="#1E293B">
+  <!-- PWA & Configuración Móvil -->
+  <meta name="theme-color" content="#0096C7">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CondoApp">
-  <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/appointment-reminders.png">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
 
-  <!-- Web App Manifest Embebido -->
-  <link rel="manifest" href='data:application/manifest+json,{"name":"CondoApp","short_name":"CondoApp","start_url":".","display":"standalone","background_color":"#1E293B","theme_color":"#1E293B","icons":[{"src":"https://img.icons8.com/color/192/appointment-reminders.png","sizes":"192x192","type":"image/png"},{"src":"https://img.icons8.com/color/512/appointment-reminders.png","sizes":"512x512","type":"image/png"}]}'>
+  <!-- Manifest PWA Embebido -->
+  <link rel="manifest" href='data:application/manifest+json,{"name":"CondoApp","short_name":"CondoApp","start_url":".","display":"standalone","background_color":"#0096C7","theme_color":"#0096C7","icons":[{"src":"https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza","sizes":"192x192","type":"image/png"},{"src":"https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza","sizes":"512x512","type":"image/png"}]}'>
 
-  <!-- Tipografía Moderna (Inter & Plus Jakarta Sans) -->
+  <!-- Tipografía Moderna -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #1E293B;          /* Azul Marino Moderno */
-      --card-white: #FFFFFF;       /* Blanco */
-      --text-dark: #0F172A;        /* Texto Principal */
-      --text-muted: #64748B;       /* Texto Secundario */
-      --text-light: #F8FAFC;       /* Texto Claro */
-      --accent-red: #EF4444;       /* Rojo Acción */
-      --accent-yellow: #F59E0B;    /* Amarillo Cálido */
+      --primary-cyan: #00A8E8;
+      --primary-blue: #0077B6;
+      --bg-light: #F1F5F9;
+      --card-white: #FFFFFF;
+      --text-dark: #0F172A;
+      --text-muted: #64748B;
+      --accent-red: #EF4444;
+      --accent-green: #10B981;
       --border: #E2E8F0;
-      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: var(--font-main); background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; padding-bottom: 30px; line-height: 1.5; }
+    body { font-family: var(--font-main); background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Cabecera Principal */
-    header { background: var(--bg-dark); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 18px 20px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin: 0 auto; }
-    .brand-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--card-white); display: flex; align-items: center; gap: 8px; }
-    .brand-title span { color: var(--accent-yellow); }
+    /* Layout Principal Estilo App / Dashboard */
+    .app-container { display: flex; flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; background: #FFF; box-shadow: 0 10px 30px rgba(0,0,0,0.08); min-height: 100vh; }
+
+    /* Sidebar Estilo Celeste Vibrante */
+    sidebar { width: 220px; background: linear-gradient(180deg, var(--primary-cyan) 0%, var(--primary-blue) 100%); color: #FFF; padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; }
     
-    /* Botón de Instalación PWA */
-    .btn-install { background: var(--accent-yellow); color: #0F172A; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: none; align-items: center; gap: 6px; font-family: var(--font-main); transition: transform 0.2s; }
-    .btn-install:active { transform: scale(0.95); }
+    .logo-container { display: flex; align-items: center; gap: 10px; padding: 10px; margin-bottom: 15px; }
+    .logo-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #FFF; background: #FFF; }
+    .logo-text { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
 
-    /* Menú Superior de Navegación */
-    .nav-tabs { display: flex; background: #0F172A; border-bottom: 2px solid rgba(255,255,255,0.05); max-width: 500px; margin: 0 auto; }
-    .tab-btn { flex: 1; padding: 14px 6px; background: none; border: none; border-bottom: 3px solid transparent; font-family: var(--font-main); font-weight: 600; font-size: 0.85rem; color: #94A3B8; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .tab-btn.active { color: var(--accent-yellow); border-bottom-color: var(--accent-yellow); background: rgba(245, 158, 11, 0.08); font-weight: 700; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; color: rgba(255,255,255,0.85); font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; text-decoration: none; border: none; background: none; width: 100%; text-align: left; }
+    .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.2); color: #FFF; font-weight: 700; }
 
-    /* Contenedor Principal */
-    main { max-width: 500px; margin: 20px auto; padding: 0 16px; }
+    /* Contenido Principal */
+    .content-area { flex: 1; display: flex; flex-direction: column; background: var(--bg-light); overflow-y: auto; }
 
-    /* Transición de Pestañas */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    /* Banner Geométrico de Cabecera */
+    .header-banner { background: linear-gradient(135deg, #E2E8F0 25%, #CBD5E1 100%); height: 110px; position: relative; padding: 15px 25px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .header-banner::before { content: ""; position: absolute; top:0; left:0; right:0; bottom:0; opacity: 0.15; background-image: radial-gradient(#000 1px, transparent 1px); background-size: 12px 12px; }
+    
+    .install-btn { background: var(--primary-cyan); color: #FFF; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: none; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Área de Tarjetas */
+    .main-body { padding: 20px; max-width: 750px; margin: 0 auto; width: 100%; }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
 
-    /* Tarjetas Intuitivas */
-    .card { background: var(--card-white); border-radius: 20px; padding: 22px; color: var(--text-dark); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); margin-bottom: 20px; }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 2px solid #F1F5F9; padding-bottom: 12px; }
-    .card-header h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--text-dark); letter-spacing: -0.3px; }
-    .card-header .badge-tag { font-size: 0.72rem; font-weight: 700; color: var(--accent-red); background: #FEF2F2; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Formularios Modernos */
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-    input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 1.5px solid var(--border); font-family: var(--font-main); font-size: 0.95rem; color: var(--text-dark); background: #F8FAFC; outline: none; transition: all 0.2s; }
-    input:focus, textarea:focus, select:focus { border-color: var(--accent-red); background: #FFF; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
-    textarea { resize: vertical; min-height: 85px; }
+    .card { background: var(--card-white); border-radius: 16px; padding: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border); margin-bottom: 20px; }
+    .card-title { font-size: 1.15rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 16px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-    /* Botones de Acción */
-    .btn { width: 100%; padding: 15px; background: var(--accent-red); color: var(--card-white); border: none; border-radius: 14px; font-family: var(--font-main); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.15s ease; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); }
-    .btn:active { transform: scale(0.98); }
-    .btn-yellow { background: var(--accent-yellow); color: #0F172A; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
+    /* Formularios */
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border); font-family: var(--font-main); font-size: 0.9rem; outline: none; background: #FAFAFA; }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary-cyan); background: #FFF; }
 
-    /* Listas de Registros */
-    .section-title { font-family: var(--font-display); font-size: 0.85rem; font-weight: 800; color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
+    .btn-action { width: 100%; padding: 13px; background: var(--primary-cyan); color: #FFF; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: opacity 0.2s; }
+    .btn-action:hover { opacity: 0.9; }
+
+    /* Listas */
+    .section-label { font-size: 0.82rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 20px 0 10px 2px; }
     ul { list-style: none; }
-    li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 15px 18px; margin-bottom: 12px; font-size: 0.92rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
-    .item-content { flex: 1; }
-    .item-title { font-weight: 700; color: var(--text-dark); margin-bottom: 3px; display: block; }
-    .item-sub { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
-    .status-badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; display: inline-block; margin-bottom: 5px; }
-    .badge-leve { background: #FEF3C7; color: #92400E; }
-    .badge-moderado { background: #FFEDD5; color: #C2410C; }
-    .badge-severo { background: #FEE2E2; color: #991B1B; }
+    li { background: var(--card-white); border-radius: 12px; padding: 14px 16px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
     
-    .btn-delete { background: none; border: none; color: #94A3B8; cursor: pointer; padding: 4px; border-radius: 6px; font-size: 1.2rem; transition: color 0.2s; }
-    .btn-delete:hover { color: var(--accent-red); }
-    .empty-msg { text-align: center; color: #94A3B8; font-size: 0.88rem; padding: 25px 0; font-style: italic; background: transparent; box-shadow: none; }
+    /* Estilos Súper Market Checklist */
+    .super-item { display: flex; align-items: center; gap: 12px; width: 100%; }
+    .super-item.completed span { text-decoration: line-through; opacity: 0.5; }
+    .checkbox-custom { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--primary-cyan); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    .btn-del { background: none; border: none; color: #94A3B8; cursor: pointer; font-size: 1.1rem; }
+    .btn-del:hover { color: var(--accent-red); }
+
+    /* Responsivo para Celular */
+    @media (max-width: 650px) {
+      .app-container { flex-direction: column; }
+      sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 10px; justify-content: space-around; }
+      .logo-container { display: none; }
+      .nav-item { padding: 8px 12px; font-size: 0.8rem; white-space: nowrap; }
+      .header-banner { height: 70px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- CABECERA PRINCIPAL CON BOTÓN DE INSTALACIÓN -->
-  <header>
-    <div class="brand-title">Condo<span>App</span></div>
-    <button id="installBtn" class="btn-install" onclick="installApp()">
-      📲 Instalar App
-    </button>
-  </header>
+  <div class="app-container">
+    
+    <!-- BARRA LATERAL ESTILO DASHBOARD -->
+    <sidebar>
+      <div class="logo-container">
+        <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo" class="logo-img">
+        <div class="logo-text">CondoApp</div>
+      </div>
+      <button class="nav-item active" onclick="showTab('horario', this)">📅 Agenda</button>
+      <button class="nav-item" onclick="showTab('super', this)">🛒 Súper</button>
+      <button class="nav-item" onclick="showTab('migranas', this)">🌿 Migrañas</button>
+      <button class="nav-item" onclick="showTab('devocional', this)">📖 Devocional</button>
+    </sidebar>
 
-  <!-- NAVEGACIÓN SUPERIOR INTUITIVA -->
-  <nav class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('horario', this)">
-      📅 Horario
-    </button>
-    <button class="tab-btn" onclick="switchTab('migranas', this)">
-      🌿 Migrañas
-    </button>
-    <button class="tab-btn" onclick="switchTab('devocional', this)">
-      📖 Devocional
-    </button>
-  </nav>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <main>
-
-    <!-- MÓDULO 1: HORARIO / AGENDA -->
-    <section id="tab-horario" class="tab-content active">
-      <div class="card">
-        <div class="card-header">
-          <h2>Horario & Agenda</h2>
-          <span class="badge-tag">Rutina</span>
-        </div>
-        <div class="form-group">
-          <label for="taskTime">Hora de Actividad</label>
-          <input type="time" id="taskTime">
-        </div>
-        <div class="form-group">
-          <label for="taskDesc">Descripción</label>
-          <input type="text" id="taskDesc" placeholder="Ej: Trabajo, ejercicio, llamada...">
-        </div>
-        <button class="btn" onclick="addTask()">+ Agregar a la Agenda</button>
+    <!-- ÁREA DE CONTENIDO -->
+    <div class="content-area">
+      <div class="header-banner">
+        <div></div>
+        <button id="pwaInstallBtn" class="install-btn" onclick="installPWA()">📲 Instalar en Celular</button>
       </div>
 
-      <div class="section-title">Actividades de Hoy</div>
-      <ul id="taskList"></ul>
-    </section>
+      <div class="main-body">
 
-    <!-- MÓDULO 2: REGISTRO DE MIGRAÑA -->
-    <section id="tab-migranas" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <h2>Registro de Migraña</h2>
-          <span class="badge-tag">Salud</span>
-        </div>
-        <div class="form-group">
-          <label for="migraineLevel">Intensidad del Dolor</label>
-          <select id="migraineLevel">
-            <option value="Leve">Leve (Soportable, 1-3)</option>
-            <option value="Moderado">Moderado (Molestia, 4-6)</option>
-            <option value="Severo">Severo (Incapacitante, 7-10)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="migraineTrigger">Detonante Probable</label>
-          <input type="text" id="migraineTrigger" placeholder="Ej: Luz solar, estrés, café...">
-        </div>
-        <button class="btn btn-yellow" onclick="addMigraine()">+ Registrar Episodio</button>
+        <!-- 1. AGENDA -->
+        <section id="tab-horario" class="tab-section active">
+          <div class="card">
+            <div class="card-title">Agenda & Horario</div>
+            <div class="form-group">
+              <label>Hora</label>
+              <input type="time" id="taskTime">
+            </div>
+            <div class="form-group">
+              <label>Actividad</label>
+              <input type="text" id="taskDesc" placeholder="Ej: Gimnasio, reunión...">
+            </div>
+            <button class="btn-action" onclick="addTask()">+ Agregar Tarea</button>
+          </div>
+          <div class="section-label">Actividades Registradas</div>
+          <ul id="taskList"></ul>
+        </section>
+
+        <!-- 2. LISTA DEL SÚPER -->
+        <section id="tab-super" class="tab-section">
+          <div class="card">
+            <div class="card-title">Lista del Súper 🛒</div>
+            <div class="form-group">
+              <label>Producto</label>
+              <input type="text" id="superItem" placeholder="Ej: Leche, Frutas, Pan...">
+            </div>
+            <button class="btn-action" onclick="addSuperItem()">+ Agregar al Carrito</button>
+          </div>
+          <div class="section-label">Lista de Compras</div>
+          <ul id="superList"></ul>
+        </section>
+
+        <!-- 3. MIGRAÑAS -->
+        <section id="tab-migranas" class="tab-section">
+          <div class="card">
+            <div class="card-title">Registro de Migraña</div>
+            <div class="form-group">
+              <label>Intensidad del Dolor</label>
+              <select id="migraineLevel">
+                <option value="Leve">Leve (1-3)</option>
+                <option value="Moderado">Moderado (4-6)</option>
+                <option value="Severo">Severo (7-10)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Detonante</label>
+              <input type="text" id="migraineTrigger" placeholder="Ej: Estrés, pantalla, café...">
+            </div>
+            <button class="btn-action" onclick="addMigraine()">+ Registrar Episodio</button>
+          </div>
+          <div class="section-label">Historial de Dolor</div>
+          <ul id="migraineList"></ul>
+        </section>
+
+        <!-- 4. DEVOCIONAL -->
+        <section id="tab-devocional" class="tab-section">
+          <div class="card">
+            <div class="card-title">Devocional Personal</div>
+            <div class="form-group">
+              <label>Cita / Pasaje</label>
+              <input type="text" id="devPassage" placeholder="Ej: Salmos 23:1">
+            </div>
+            <div class="form-group">
+              <label>Reflexión / Oración</label>
+              <textarea id="devNotes" rows="3" placeholder="Mi nota del día..."></textarea>
+            </div>
+            <button class="btn-action" onclick="saveDevotional()">+ Guardar Nota</button>
+          </div>
+          <div class="section-label">Notas Guardadas</div>
+          <ul id="devotionalList"></ul>
+        </section>
+
       </div>
+    </div>
+  </div>
 
-      <div class="section-title">Historial de Síntomas</div>
-      <ul id="migraineList"></ul>
-    </section>
-
-    <!-- MÓDULO 3: DEVOCIONAL PERSONAL -->
-    <section id="tab-devocional" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <h2>Devocional Personal</h2>
-          <span class="badge-tag">Espíritu</span>
-        </div>
-        <div class="form-group">
-          <label for="devPassage">Cita Bíblica / Pasaje</label>
-          <input type="text" id="devPassage" placeholder="Ej: Salmos 23, Mateo 6:33...">
-        </div>
-        <div class="form-group">
-          <label for="devNotes">Reflexión / Oración</label>
-          <textarea id="devNotes" placeholder="Escribe lo que aprendiste o tu oración del día..."></textarea>
-        </div>
-        <button class="btn" onclick="saveDevotional()">+ Guardar Reflexión</button>
-      </div>
-
-      <div class="section-title">Reflexiones Guardadas</div>
-      <ul id="devotionalList"></ul>
-    </section>
-
-  </main>
-
-  <!-- SCRIPT DE NAVEGACIÓN, PWA Y LOCALSTORAGE -->
   <script>
-    // Configuración de Cambio de Pestañas
-    function switchTab(tabName, element) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-      document.getElementById(`tab-${tabName}`).classList.add('active');
-      element.classList.add('active');
+    function showTab(tabId, el) {
+      document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      el.classList.add('active');
     }
 
-    // Inicialización al cargar la página
     document.addEventListener('DOMContentLoaded', () => {
-      renderTasks();
-      renderMigraines();
-      renderDevotionals();
-      registerServiceWorker();
+      renderAll();
+      initPWA();
     });
 
-    // --- INSTALACIÓN PWA EN MÓVIL ---
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const installBtn = document.getElementById('installBtn');
-      if (installBtn) installBtn.style.display = 'flex';
-    });
+    function getStore(k) { return JSON.parse(localStorage.getItem(k) || '[]'); }
+    function setStore(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 
-    function installApp() {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          document.getElementById('installBtn').style.display = 'none';
-        }
-        deferredPrompt = null;
-      });
+    function removeItem(k, idx) {
+      const store = getStore(k);
+      store.splice(idx, 1);
+      setStore(k, store);
+      renderAll();
     }
 
-    // Registro de Service Worker para PWA
-    function registerServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        const swCode = `
-          self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-          self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-          self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
-        `;
-        const blob = new Blob([swCode], { type: 'text/javascript' });
-        const swUrl = URL.createObjectURL(blob);
-        navigator.serviceWorker.register(swUrl).catch(() => {});
-      }
-    }
-
-    // --- LOCALSTORAGE & MANEJO DE DATOS ---
-    function getStore(key) {
-      return JSON.parse(localStorage.getItem(key) || '[]');
-    }
-
-    function saveStore(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
-
-    function removeItem(key, index) {
-      const store = getStore(key);
-      store.splice(index, 1);
-      saveStore(key, store);
-      if(key === 'db_tasks') renderTasks();
-      if(key === 'db_migraines') renderMigraines();
-      if(key === 'db_devotionals') renderDevotionals();
-    }
-
-    // --- HORARIO ---
+    /* AGENDA */
     function addTask() {
       const time = document.getElementById('taskTime').value;
       const desc = document.getElementById('taskDesc').value.trim();
-      if (!time || !desc) return alert('Ingresa hora y descripción.');
-
-      const store = getStore('db_tasks');
+      if(!time || !desc) return;
+      const store = getStore('app_tasks');
       store.unshift({ time, desc });
-      saveStore('db_tasks', store);
-
+      setStore('app_tasks', store);
       document.getElementById('taskTime').value = '';
       document.getElementById('taskDesc').value = '';
-      renderTasks();
+      renderAll();
     }
 
-    function renderTasks() {
-      const list = document.getElementById('taskList');
-      const store = getStore('db_tasks');
-      if (store.length === 0) {
-        list.innerHTML = '<li class="empty-msg">No hay tareas agendadas.</li>';
-        return;
-      }
-      list.innerHTML = store.map((item, idx) => `
-        <li>
-          <div class="item-content">
-            <span class="item-title">⏰ ${item.time}</span>
-            <span class="item-sub">${item.desc}</span>
-          </div>
-          <button class="btn-delete" onclick="removeItem('db_tasks', ${idx})" title="Eliminar">✕</button>
-        </li>
-      `).join('');
+    /* SÚPER */
+    function addSuperItem() {
+      const name = document.getElementById('superItem').value.trim();
+      if(!name) return;
+      const store = getStore('app_super');
+      store.unshift({ name, done: false });
+      setStore('app_super', store);
+      document.getElementById('superItem').value = '';
+      renderAll();
     }
 
-    // --- MIGRAÑA ---
+    function toggleSuper(idx) {
+      const store = getStore('app_super');
+      store[idx].done = !store[idx].done;
+      setStore('app_super', store);
+      renderAll();
+    }
+
+    /* MIGRAÑA */
     function addMigraine() {
       const level = document.getElementById('migraineLevel').value;
-      const trigger = document.getElementById('migraineTrigger').value.trim() || 'Sin especificar';
-
-      const store = getStore('db_migraines');
+      const trigger = document.getElementById('migraineTrigger').value.trim() || 'Sin detonante';
+      const store = getStore('app_migraines');
       const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
       store.unshift({ level, trigger, date });
-      saveStore('db_migraines', store);
-
+      setStore('app_migraines', store);
       document.getElementById('migraineTrigger').value = '';
-      renderMigraines();
+      renderAll();
     }
 
-    function renderMigraines() {
-      const list = document.getElementById('migraineList');
-      const store = getStore('db_migraines');
-      if (store.length === 0) {
-        list.innerHTML = '<li class="empty-msg">Sin registros de síntoma.</li>';
-        return;
-      }
-      list.innerHTML = store.map((item, idx) => {
-        const badgeClass = `badge-${item.level.toLowerCase()}`;
-        return `
-          <li>
-            <div class="item-content">
-              <span class="status-badge ${badgeClass}">${item.level}</span>
-              <span class="item-title">${item.date} — Detonante: ${item.trigger}</span>
-            </div>
-            <button class="btn-delete" onclick="removeItem('db_migraines', ${idx})" title="Eliminar">✕</button>
-          </li>
-        `;
-      }).join('');
-    }
-
-    // --- DEVOCIONAL ---
+    /* DEVOCIONAL */
     function saveDevotional() {
       const passage = document.getElementById('devPassage').value.trim();
       const notes = document.getElementById('devNotes').value.trim();
-      if (!passage || !notes) return alert('Ingresa cita bíblica y reflexión.');
-
-      const store = getStore('db_devotionals');
+      if(!passage) return;
+      const store = getStore('app_devotionals');
       const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
       store.unshift({ passage, notes, date });
-      saveStore('db_devotionals', store);
-
+      setStore('app_devotionals', store);
       document.getElementById('devPassage').value = '';
       document.getElementById('devNotes').value = '';
-      renderDevotionals();
+      renderAll();
     }
 
-    function renderDevotionals() {
-      const list = document.getElementById('devotionalList');
-      const store = getStore('db_devotionals');
-      if (store.length === 0) {
-        list.innerHTML = '<li class="empty-msg">Sin reflexiones guardadas.</li>';
-        return;
-      }
-      list.innerHTML = store.map((item, idx) => `
+    function renderAll() {
+      // Agenda
+      const tasks = getStore('app_tasks');
+      document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
+        <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div><button class="btn-del" onclick="removeItem('app_tasks', ${i})">✕</button></li>
+      `).join('') : '<li style="color:#94A3B8;">Sin tareas pendientes.</li>';
+
+      // Súper
+      const superItems = getStore('app_super');
+      document.getElementById('superList').innerHTML = superItems.length ? superItems.map((s, i) => `
         <li>
-          <div class="item-content">
-            <span class="item-title">📖 ${item.passage} <small style="color:#64748B; font-weight:normal;">(${item.date})</small></span>
-            <span class="item-sub">${item.notes}</span>
+          <div class="super-item ${s.done ? 'completed' : ''}">
+            <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSuper(${i})">
+            <span>${s.name}</span>
           </div>
-          <button class="btn-delete" onclick="removeItem('db_devotionals', ${idx})" title="Eliminar">✕</button>
+          <button class="btn-del" onclick="removeItem('app_super', ${i})">✕</button>
         </li>
-      `).join('');
+      `).join('') : '<li style="color:#94A3B8;">Lista de compras vacía.</li>';
+
+      // Migraña
+      const migraines = getStore('app_migraines');
+      document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
+        <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-del" onclick="removeItem('app_migraines', ${i})">✕</button></li>
+      `).join('') : '<li style="color:#94A3B8;">Sin registros.</li>';
+
+      // Devocional
+      const devotionals = getStore('app_devotionals');
+      document.getElementById('devotionalList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
+        <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small>${d.notes}</small></div><button class="btn-del" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
+      `).join('') : '<li style="color:#94A3B8;">Sin notas guardadas.</li>';
+    }
+
+    /* INSTALACIÓN PWA */
+    let deferredPrompt;
+    function initPWA() {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('pwaInstallBtn').style.display = 'block';
+      });
+      if ('serviceWorker' in navigator) {
+        const sw = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));`;
+        const blob = new Blob([sw], { type: 'text/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+      }
+    }
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          document.getElementById('pwaInstallBtn').style.display = 'none';
+          deferredPrompt = null;
+        });
+      }
     }
   </script>
 </body>
