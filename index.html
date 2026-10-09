@@ -44,7 +44,7 @@
     /* AUTH OVERLAY / SPLASH ESTILIZADO */
     .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px; color: #FFF; overflow-y: auto; }
     .splash-card-wrapper { width: 100%; max-width: 400px; background: #FFFFFF; border-radius: 24px; padding: 24px 20px; color: var(--text-dark); box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center; }
-    .splash-logo { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-accent); margin-bottom: 10px; background: #FFF; }
+    .splash-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-accent); margin-bottom: 10px; background: #FFF; }
     .splash-title { font-size: 2rem; font-weight: 900; color: var(--primary-blue); margin-bottom: 2px; text-transform: lowercase; }
     .splash-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 500; font-style: italic; }
     
@@ -71,12 +71,13 @@
     /* SIDEBAR (DESKTOP) */
     .sidebar { width: 250px; background: var(--primary-blue); color: #FFF; padding: 20px 14px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
     .brand-header { display: flex; align-items: center; gap: 10px; padding: 6px; margin-bottom: 12px; }
-    .brand-logo-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
+    .brand-logo-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
     .brand-title { font-size: 1.5rem; font-weight: 900; text-transform: lowercase; }
     
-    .user-profile-preview { display: flex; flex-direction: column; gap: 2px; padding: 12px; background: rgba(255,255,255,0.12); border-radius: 14px; margin-bottom: 16px; cursor: pointer; border: 1px solid rgba(255,255,255,0.18); }
-    .profile-info-name { font-size: 0.9rem; font-weight: 800; color: #FFFFFF; }
-    .profile-info-sub { font-size: 0.75rem; opacity: 0.85; font-style: italic; color: #E0E8FF; }
+    .user-profile-preview { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.12); border-radius: 14px; margin-bottom: 16px; cursor: pointer; border: 1px solid rgba(255,255,255,0.18); }
+    .profile-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
+    .profile-info-name { font-size: 0.88rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; }
+    .profile-info-sub { font-size: 0.72rem; opacity: 0.85; font-style: italic; color: #E0E8FF; }
 
     .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; color: rgba(255,255,255,0.85); font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; background: none; width: 100%; text-align: left; font-size: 0.9rem; font-family: var(--font-main); }
     .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.15); color: #FFF; }
@@ -87,7 +88,8 @@
     /* MAIN CONTENT AREA */
     .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; width: 100%; }
     .top-header { background: #FFF; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-    .header-user-box { display: flex; flex-direction: column; gap: 2px; }
+    .header-user-box { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .header-logo-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-blue); background: #FFF; }
     .user-greeting { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px; }
     .user-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; font-style: italic; }
 
@@ -187,7 +189,7 @@
 </head>
 <body>
 
-  <!-- AUTH / LOGIN OVERLAY -->
+  <!-- AUTH / LOGIN OVERLAY DEGRADADO -->
   <div id="authOverlay" class="auth-overlay">
     <div class="splash-card-wrapper">
       <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="splash-logo" alt="Omniapp Logo">
@@ -254,8 +256,11 @@
       </div>
 
       <div class="user-profile-preview" onclick="switchTabByCode('perfil')">
-        <div class="profile-info-name" id="sidebarUserName">Usuario</div>
-        <div class="profile-info-sub" id="sidebarUserReg">Reg: --------</div>
+        <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="profile-avatar" alt="Logo Persona">
+        <div>
+          <div class="profile-info-name" id="sidebarUserName">Usuario</div>
+          <div class="profile-info-sub" id="sidebarUserReg">Reg: --------</div>
+        </div>
       </div>
 
       <button class="nav-item active" onclick="switchTab('inicio', this)">
@@ -287,9 +292,12 @@
     <!-- CONTENT WRAPPER -->
     <div class="main-wrapper">
       <header class="top-header">
-        <div class="header-user-box" onclick="switchTabByCode('perfil')" style="cursor:pointer;">
-          <div class="user-greeting" id="userGreeting">¡Hola!</div>
-          <div class="user-sub" id="currentDateDisplay">Cargando fecha...</div>
+        <div class="header-user-box" onclick="switchTabByCode('perfil')">
+          <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="header-logo-img" alt="Omniapp Logo">
+          <div>
+            <div class="user-greeting" id="userGreeting">¡Hola!</div>
+            <div class="user-sub" id="currentDateDisplay">Cargando fecha...</div>
+          </div>
         </div>
       </header>
 
@@ -563,6 +571,7 @@
         <!-- 6. PERFIL -->
         <section id="tab-perfil" class="tab-section" style="display:none;">
           <div class="card" style="text-align:center;">
+            <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid var(--yellow-accent); margin-bottom:10px;">
             <h2 id="profilePageName" style="color:var(--primary-blue);">Usuario</h2>
             <p id="profilePageReg" style="color:var(--text-muted); font-size:0.85rem; font-style:italic;">N° Registro: --------</p>
           </div>
