@@ -81,7 +81,7 @@
 
     .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4); }
 
-    /* CARDS */
+    /* CARDS & FORMULARIOS */
     .main-body { padding: 22px; max-width: 800px; margin: 0 auto; width: 100%; }
     .tab-section { display: none; }
     .tab-section.active { display: block; animation: slideUp 0.25s ease-out; }
@@ -91,7 +91,6 @@
     .card { background: var(--card-white); border-radius: 20px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
     .card-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: #0040A0; margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
-    /* FORMULARIOS Y GRID */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
@@ -103,20 +102,19 @@
 
     .section-label { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
     ul { list-style: none; }
-    li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); }
-
-    .agenda-card { flex-direction: column; align-items: flex-start; gap: 8px; border-left: 6px solid var(--blue-bright); position: relative; }
-    .agenda-card.prioridad-alta { border-left-color: var(--red-vivid); }
-    .agenda-card.prioridad-media { border-left-color: var(--yellow-vivid); }
     
+    /* AGENDA ITEMS */
+    li.agenda-card { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); position: relative; }
+    li.agenda-card.prioridad-alta { border-left-color: var(--red-vivid); }
+    li.agenda-card.prioridad-media { border-left-color: var(--yellow-vivid); }
+
     .agenda-header-info { display: flex; justify-content: space-between; width: 100%; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
     .agenda-type-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: #E2E8F0; color: var(--text-dark); }
     .agenda-title { font-size: 1.05rem; font-weight: 800; color: #0040A0; margin-top: 4px; }
     .agenda-details { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
-    
+
     .btn-delete-item { position: absolute; top: 14px; right: 14px; background: var(--red-vivid); color: #FFF; border: none; padding: 4px 9px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.8rem; }
 
-    /* MI DÍA Y OTROS */
     .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
     .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
     .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
@@ -216,66 +214,25 @@
 
         </section>
 
-        <!-- 2. AGENDA ESTUDIANTIL COMPLETA (TIPO AGENDA FÍSICA) -->
+        <!-- 2. AGENDA CON FORMULARIO DINÁMICO POR CATEGORÍA -->
         <section id="tab-horario" class="tab-section">
           <div class="card">
-            <div class="card-title">Nueva Entrega / Cita / Actividad 📝</div>
+            <div class="card-title">Agendar Evento / Registro 📝</div>
             
-            <div class="grid-2">
-              <div class="form-group">
-                <label for="taskType">Tipo de Registro</label>
-                <select id="taskType">
-                  <option value="Tarea / Proyecto">📘 Tarea / Proyecto</option>
-                  <option value="Examen / Evaluación">📝 Examen / Evaluación</option>
-                  <option value="Clase / Conferencia">🏫 Clase / Conferencia</option>
-                  <option value="Cita / Reunión">🤝 Cita / Reunión</option>
-                  <option value="Actividad Personal">⭐ Actividad Personal</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="taskSubject">Materia / Asignatura</label>
-                <input type="text" id="taskSubject" placeholder="Ej: Matemáticas, Historia...">
-              </div>
-            </div>
-
+            <!-- SELECTOR DE CATEGORÍA -->
             <div class="form-group">
-              <label for="taskDesc">Título o Descripción de la Actividad</label>
-              <input type="text" id="taskDesc" placeholder="Ej: Entregar ensayo, Examen Parcial 1...">
+              <label for="taskType">Tipo de Registro</label>
+              <select id="taskType" onchange="renderDynamicForm()">
+                <option value="Tarea / Proyecto">📘 Tarea / Proyecto</option>
+                <option value="Examen / Evaluación">📝 Examen / Evaluación</option>
+                <option value="Clase / Conferencia">🏫 Clase / Conferencia</option>
+                <option value="Cita / Reunión">🤝 Cita / Reunión</option>
+                <option value="Actividad Personal">⭐ Actividad Personal</option>
+              </select>
             </div>
 
-            <div class="grid-2">
-              <div class="form-group">
-                <label for="taskDate">Fecha de Evento / Entrega</label>
-                <input type="date" id="taskDate">
-              </div>
-
-              <div class="form-group">
-                <label for="taskPriority">Nivel de Prioridad</label>
-                <select id="taskPriority">
-                  <option value="Alta">🔴 Alta Prioridad</option>
-                  <option value="Media" selected>🟡 Prioridad Media</option>
-                  <option value="Baja">🔵 Baja Prioridad</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid-2">
-              <div class="form-group">
-                <label for="taskTimeStart">Hora Inicio / Entrega</label>
-                <input type="time" id="taskTimeStart">
-              </div>
-
-              <div class="form-group">
-                <label for="taskTimeEnd">Hora Fin (Opcional)</label>
-                <input type="time" id="taskTimeEnd">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="taskDuration">Tiempo Medido / Invertido (Opcional)</label>
-              <input type="text" id="taskDuration" placeholder="Ej: 45 min, 2 horas...">
-            </div>
+            <!-- CONTENEDOR DE CAMPOS DINÁMICOS -->
+            <div id="dynamicFormContainer"></div>
 
             <button class="btn-submit" onclick="addAcademicTask()">+ Guardar en Agenda</button>
           </div>
@@ -363,6 +320,7 @@
       checkActiveSession();
       initLiveClock();
       loadQuickNotes();
+      renderDynamicForm();
     });
 
     function openSidebar() {
@@ -401,31 +359,177 @@
       setInterval(updateClock, 10000);
     }
 
-    /* AGENDA ESTUDIANTIL */
+    /* RENDERIZADO DINÁMICO DE FORMULARIO POR CATEGORÍA */
+    function renderDynamicForm() {
+      const type = document.getElementById('taskType').value;
+      const container = document.getElementById('dynamicFormContainer');
+      let html = '';
+
+      if (type === 'Tarea / Proyecto') {
+        html = `
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fSubject">Materia / Asignatura</label>
+              <input type="text" id="fSubject" placeholder="Ej: Programación, Cálculo...">
+            </div>
+            <div class="form-group">
+              <label for="fTitle">Título de la Tarea / Proyecto</label>
+              <input type="text" id="fTitle" placeholder="Ej: Proyecto Final, Ensayo...">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDate">Fecha Límite de Entrega</label>
+              <input type="date" id="fDate">
+            </div>
+            <div class="form-group">
+              <label for="fTimeStart">Hora de Entrega</label>
+              <input type="time" id="fTimeStart">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDuration">Tiempo Estimado / Medido (Opcional)</label>
+              <input type="text" id="fDuration" placeholder="Ej: 2 horas, 45 min...">
+            </div>
+            <div class="form-group">
+              <label for="fPriority">Prioridad</label>
+              <select id="fPriority">
+                <option value="Alta">🔴 Alta Prioridad</option>
+                <option value="Media" selected>🟡 Prioridad Media</option>
+                <option value="Baja">🔵 Baja Prioridad</option>
+              </select>
+            </div>
+          </div>
+        `;
+      } else if (type === 'Examen / Evaluación') {
+        html = `
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fSubject">Materia / Asignatura</label>
+              <input type="text" id="fSubject" placeholder="Ej: Física, Química...">
+            </div>
+            <div class="form-group">
+              <label for="fTitle">Temas o Unidades a Evaluar</label>
+              <input type="text" id="fTitle" placeholder="Ej: Unidades 1 y 2...">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDate">Fecha del Examen</label>
+              <input type="date" id="fDate">
+            </div>
+            <div class="form-group">
+              <label for="fPriority">Prioridad</label>
+              <select id="fPriority">
+                <option value="Alta" selected>🔴 Alta Prioridad</option>
+                <option value="Media">🟡 Prioridad Media</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fTimeStart">Hora de Inicio</label>
+              <input type="time" id="fTimeStart">
+            </div>
+            <div class="form-group">
+              <label for="fTimeEnd">Hora Fin (Opcional)</label>
+              <input type="time" id="fTimeEnd">
+            </div>
+          </div>
+        `;
+      } else if (type === 'Clase / Conferencia') {
+        html = `
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fSubject">Materia / Tema de Conferencia</label>
+              <input type="text" id="fSubject" placeholder="Ej: Taller de Liderazgo...">
+            </div>
+            <div class="form-group">
+              <label for="fExtra">Profesor / Ponente</label>
+              <input type="text" id="fExtra" placeholder="Ej: Dr. García...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fTitle">Lugar / Aula / Link de Zoom</label>
+            <input type="text" id="fTitle" placeholder="Ej: Aula B-202, Zoom Link...">
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDate">Fecha</label>
+              <input type="date" id="fDate">
+            </div>
+            <div class="form-group">
+              <label for="fTimeStart">Hora Inicio</label>
+              <input type="time" id="fTimeStart">
+            </div>
+          </div>
+        `;
+      } else if (type === 'Cita / Reunión') {
+        html = `
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fTitle">Motivo / Nombre de la Cita</label>
+              <input type="text" id="fTitle" placeholder="Ej: Asesoría de Tesis, Médico...">
+            </div>
+            <div class="form-group">
+              <label for="fExtra">Persona o Grupo de Reunión</label>
+              <input type="text" id="fExtra" placeholder="Ej: Equipo de Proyecto...">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDate">Fecha de la Cita</label>
+              <input type="date" id="fDate">
+            </div>
+            <div class="form-group">
+              <label for="fTimeStart">Hora de Cita</label>
+              <input type="time" id="fTimeStart">
+            </div>
+          </div>
+        `;
+      } else if (type === 'Actividad Personal') {
+        html = `
+          <div class="form-group">
+            <label for="fTitle">Título de la Actividad</label>
+            <input type="text" id="fTitle" placeholder="Ej: Ir al gimnasio, Comprar libros...">
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="fDate">Fecha</label>
+              <input type="date" id="fDate">
+            </div>
+            <div class="form-group">
+              <label for="fTimeStart">Hora</label>
+              <input type="time" id="fTimeStart">
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
     function addAcademicTask() {
       const type = document.getElementById('taskType').value;
-      const subject = document.getElementById('taskSubject').value.trim() || 'General';
-      const desc = document.getElementById('taskDesc').value.trim();
-      const date = document.getElementById('taskDate').value;
-      const priority = document.getElementById('taskPriority').value;
-      const timeStart = document.getElementById('taskTimeStart').value;
-      const timeEnd = document.getElementById('taskTimeEnd').value;
-      const duration = document.getElementById('taskDuration').value.trim();
+      const title = document.getElementById('fTitle') ? document.getElementById('fTitle').value.trim() : '';
+      const subject = document.getElementById('fSubject') ? document.getElementById('fSubject').value.trim() : 'General';
+      const date = document.getElementById('fDate') ? document.getElementById('fDate').value : '';
+      const timeStart = document.getElementById('fTimeStart') ? document.getElementById('fTimeStart').value : '';
+      const timeEnd = document.getElementById('fTimeEnd') ? document.getElementById('fTimeEnd').value : '';
+      const duration = document.getElementById('fDuration') ? document.getElementById('fDuration').value.trim() : '';
+      const priority = document.getElementById('fPriority') ? document.getElementById('fPriority').value : 'Media';
+      const extra = document.getElementById('fExtra') ? document.getElementById('fExtra').value.trim() : '';
 
-      if (!desc || !date || !timeStart) {
-        return alert('Por favor completa al menos la descripción, fecha y hora de inicio.');
+      if (!title || !date || !timeStart) {
+        return alert('Por favor completa los campos principales (Título, Fecha y Hora).');
       }
 
       const store = getStore('app_tasks');
-      store.unshift({ type, subject, desc, date, priority, timeStart, timeEnd, duration, id: Date.now() });
+      store.unshift({ type, subject, desc: title, date, priority, timeStart, timeEnd, duration, extra, id: Date.now() });
       setStore('app_tasks', store);
 
-      // Limpiar inputs
-      document.getElementById('taskDesc').value = '';
-      document.getElementById('taskSubject').value = '';
-      document.getElementById('taskTimeEnd').value = '';
-      document.getElementById('taskDuration').value = '';
-
+      renderDynamicForm();
       renderAll();
     }
 
@@ -584,6 +688,7 @@
         const priorityClass = `prioridad-${t.priority ? t.priority.toLowerCase() : 'media'}`;
         const endText = t.timeEnd ? ` a ${t.timeEnd}` : '';
         const durationText = t.duration ? ` | ⏱️ Medido: ${t.duration}` : '';
+        const extraText = t.extra ? ` | 👤 ${t.extra}` : '';
         
         return `
           <li class="agenda-card ${priorityClass}">
@@ -597,7 +702,7 @@
               <span>📚 <strong>${t.subject}</strong></span>
               <span>⏰ <strong>${t.timeStart}${endText}</strong></span>
               ${durationText ? `<span>${durationText}</span>` : ''}
-              <span>🚨 Prioridad: <strong>${t.priority || 'Media'}</strong></span>
+              ${extraText ? `<span>${extraText}</span>` : ''}
             </div>
           </li>
         `;
@@ -605,7 +710,7 @@
 
       document.getElementById('taskList').innerHTML = taskListHTML;
 
-      // Mi Día Render (Muestra las 3 entregas más próximas)
+      // Mi Día Render
       document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
         <li style="border-left: 5px solid var(--blue-bright);">
           <div>
@@ -614,7 +719,7 @@
         </li>
       `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes próximas entregas agendadas.</li>';
 
-      // Hábitos Render
+      // Hábitos
       const habits = getStore('app_habits');
       document.getElementById('habitsList').innerHTML = habits.length ? habits.map((h, i) => `
         <li>
