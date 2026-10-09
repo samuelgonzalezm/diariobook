@@ -7,7 +7,582 @@
   <meta name="theme-color" content="#0052CC">
   <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
   <link rel="manifest" href="./manifest.json">
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Omniapp — Todo lo importante en un solo lugar</title>
   
+  <meta name="theme-color" content="#0052CC">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Firebase Web SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <!-- Fuentes Elegantes: Raleway & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #0052CC;
+      --primary-dark: #003B99;
+      --bg-light: #F4F6FA;
+      --card-white: #FFFFFF;
+      --yellow-accent: #FFC700;
+      --red-accent: #FF3B30;
+      --green-accent: #34C759;
+      --purple-accent: #AF52DE;
+      --text-dark: #1C1C1E;
+      --text-muted: #8E8E93;
+      --border-color: #E5E5EA;
+      
+      /* Tipografía refinada */
+      --font-heading: 'Raleway', sans-serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: var(--font-body); background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+    h1, h2, h3, h4, .brand-title, .splash-title, .user-greeting, .card-title { font-family: var(--font-heading); }
+
+    /* AUTH OVERLAY / SPLASH */
+    .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary-blue); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; color: #FFF; text-align: center; }
+    .splash-logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--yellow-accent); margin-bottom: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); background: #FFF; }
+    .splash-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; text-transform: lowercase; }
+    .splash-sub { font-size: 0.95rem; opacity: 0.9; margin-bottom: 32px; font-weight: 300; letter-spacing: 0.5px; }
+    .auth-card { background: #FFF; border-radius: 20px; padding: 26px; width: 100%; max-width: 360px; color: var(--text-dark); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+    .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); font-size: 0.95rem; font-weight: 500; text-align: center; margin-bottom: 14px; outline: none; font-family: var(--font-body); }
+    
+    .btn-yellow { width: 100%; padding: 15px; background: var(--yellow-accent); color: var(--text-dark); border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.1s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-yellow:active { transform: scale(0.98); }
+
+    /* MAIN LAYOUT */
+    .app-layout { display: none; width: 100%; min-height: 100vh; }
+    .app-layout.visible { display: flex; }
+
+    /* SIDEBAR (DESKTOP) */
+    .sidebar { width: 260px; background: var(--primary-blue); color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+    .brand-header { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin-bottom: 24px; }
+    .brand-logo-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
+    .brand-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; text-transform: lowercase; }
+    
+    .nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; color: rgba(255,255,255,0.85); font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; background: none; width: 100%; text-align: left; font-size: 0.95rem; font-family: var(--font-body); }
+    .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.15); color: #FFF; font-weight: 600; }
+    .nav-item.active { background: var(--yellow-accent); color: var(--text-dark); font-weight: 700; }
+
+    .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.15); }
+
+    /* MAIN CONTENT AREA */
+    .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+    .top-header { background: #FFF; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+    .user-greeting { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    .user-sub { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; }
+
+    .content-body { padding: 26px; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; }
+
+    /* DASHBOARD GRID */
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 26px; }
+    .quick-card { background: #FFF; border-radius: 18px; padding: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .quick-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
+    .qc-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #FFF; flex-shrink: 0; }
+
+    /* SECTION CARDS */
+    .card { background: var(--card-white); border-radius: 20px; padding: 22px; border: 1px solid var(--border-color); margin-bottom: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.02); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .card-title { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+
+    /* FORMS & INPUTS */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    input, select, textarea { width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.95rem; font-family: var(--font-body); outline: none; background: #FAFAFC; color: var(--text-dark); }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary-blue); background: #FFF; }
+
+    .btn-primary { width: 100%; padding: 14px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: var(--font-body); }
+
+    /* EMOJI MOOD SELECTOR */
+    .mood-selector { display: flex; justify-content: space-between; gap: 10px; margin: 14px 0 20px 0; }
+    .mood-btn { flex: 1; padding: 14px 8px; border-radius: 14px; border: 1px solid var(--border-color); background: #FFF; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .mood-btn.active { border-color: var(--red-accent); background: #FFF0F0; }
+    .mood-emoji { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+    .mood-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+
+    .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; background: #F4F6FA; padding: 12px; border-radius: 10px; }
+
+    /* BOTTOM NAV (MOBILE) */
+    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #FFF; border-top: 1px solid var(--border-color); padding: 8px 12px; justify-content: space-around; z-index: 1000; }
+    .mn-item { display: flex; flex-direction: column; align-items: center; gap: 4px; border: none; background: none; color: var(--text-muted); font-size: 0.7rem; font-weight: 500; cursor: pointer; font-family: var(--font-body); }
+    .mn-item.active { color: var(--primary-blue); font-weight: 700; }
+    .mn-icon { font-size: 1.25rem; }
+
+    /* DEVOCIONAL CARD BANNER */
+    .devotional-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); color: #FFF; border-radius: 18px; padding: 22px; margin-bottom: 18px; }
+    .devotional-quote { font-family: var(--font-heading); font-style: italic; font-size: 1.1rem; margin-bottom: 10px; line-height: 1.5; font-weight: 300; }
+    .devotional-ref { font-size: 0.85rem; opacity: 0.85; text-align: right; font-weight: 600; }
+
+    ul { list-style: none; }
+    li.item-row { background: #FFF; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: flex; }
+      .main-wrapper { padding-bottom: 75px; }
+      .top-header { padding: 16px; }
+      .content-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH / LOGIN OVERLAY -->
+  <div id="authOverlay" class="auth-overlay">
+    <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" class="splash-logo" alt="Omniapp Logo">
+    <div class="splash-title">omniapp</div>
+    <div class="splash-sub">Todo lo importante en un solo lugar</div>
+    
+    <div class="auth-card">
+      <input type="text" id="regNumberInput" class="auth-input" placeholder="N° de Registro (ej: 101)">
+      <input type="password" id="passKeyInput" class="auth-input" placeholder="Clave de Acceso">
+      <button class="btn-yellow" onclick="handleAuth()">Comenzar →</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP STRUCTURE -->
+  <div id="appLayout" class="app-layout">
+    
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand-header">
+        <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" class="brand-logo-img" alt="Omniapp Logo">
+        <div class="brand-title">omniapp</div>
+      </div>
+
+      <button class="nav-item active" onclick="switchTab('inicio', this)">
+        <span>🏠</span> Inicio
+      </button>
+      <button class="nav-item" onclick="switchTab('agenda', this)">
+        <span>📅</span> Agenda
+      </button>
+      <button class="nav-item" onclick="switchTab('super', this)">
+        <span>🛒</span> Súper
+      </button>
+      <button class="nav-item" onclick="switchTab('migrana', this)">
+        <span>🧠</span> Migraña
+      </button>
+      <button class="nav-item" onclick="switchTab('devocional', this)">
+        <span>📖</span> Devocional
+      </button>
+
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="logout()">
+          <span>🔒</span> Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="main-wrapper">
+      <header class="top-header">
+        <div>
+          <div class="user-greeting" id="userGreeting">¡Hola!</div>
+          <div class="user-sub" id="currentDateDisplay">Cargando fecha...</div>
+        </div>
+      </header>
+
+      <main class="content-body">
+
+        <!-- 1. INICIO / DASHBOARD -->
+        <section id="tab-inicio" class="tab-section">
+          <div class="dash-grid">
+            <div class="quick-card" onclick="switchTabByCode('agenda')">
+              <div class="qc-icon" style="background: var(--primary-blue);">📅</div>
+              <div>
+                <strong style="display:block; font-family:var(--font-heading);">Agenda</strong>
+                <span class="user-sub">Tus planes de hoy</span>
+              </div>
+            </div>
+            <div class="quick-card" onclick="switchTabByCode('super')">
+              <div class="qc-icon" style="background: var(--yellow-accent); color:#000;">🛒</div>
+              <div>
+                <strong style="display:block; font-family:var(--font-heading);">Súper</strong>
+                <span class="user-sub">Tu lista de compras</span>
+              </div>
+            </div>
+            <div class="quick-card" onclick="switchTabByCode('migrana')">
+              <div class="qc-icon" style="background: var(--red-accent);">🧠</div>
+              <div>
+                <strong style="display:block; font-family:var(--font-heading);">Migraña</strong>
+                <span class="user-sub">Registra y cuídate</span>
+              </div>
+            </div>
+            <div class="quick-card" onclick="switchTabByCode('devocional')">
+              <div class="qc-icon" style="background: var(--primary-blue);">📖</div>
+              <div>
+                <strong style="display:block; font-family:var(--font-heading);">Devocional</strong>
+                <span class="user-sub">Conecta con Dios</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📅 Próximos Eventos</div>
+            </div>
+            <ul id="dashTasksList"></ul>
+          </div>
+        </section>
+
+        <!-- 2. AGENDA -->
+        <section id="tab-agenda" class="tab-section" style="display:none;">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Agendar evento</div>
+            <div class="form-group">
+              <label>Título</label>
+              <input type="text" id="fTitle" placeholder="Ej: Reunión de trabajo, Examen...">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" id="fDate">
+              </div>
+              <div class="form-group">
+                <label>Hora</label>
+                <input type="time" id="fTimeStart">
+              </div>
+            </div>
+            <button class="btn-primary" onclick="addAcademicTask()">Guardar evento</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Tus eventos agendados</div>
+            <ul id="taskList"></ul>
+          </div>
+        </section>
+
+        <!-- 3. SÚPER -->
+        <section id="tab-super" class="tab-section" style="display:none;">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Agregar producto</div>
+            <div class="form-group">
+              <input type="text" id="superItem" placeholder="Escribe el nombre del producto...">
+            </div>
+            <button class="btn-primary" onclick="addSuperItem()">+ Agregar a la lista</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Lista de compras</div>
+            <ul id="superList"></ul>
+          </div>
+        </section>
+
+        <!-- 4. MIGRAÑA -->
+        <section id="tab-migrana" class="tab-section" style="display:none;">
+          <div class="card">
+            <div class="card-title">¿Cómo te sientes hoy?</div>
+            <div class="mood-selector">
+              <div class="mood-btn" onclick="selectMood('Sin dolor', this)">
+                <span class="mood-emoji">😊</span>
+                <span class="mood-label">Sin dolor</span>
+              </div>
+              <div class="mood-btn" onclick="selectMood('Leve', this)">
+                <span class="mood-emoji">😐</span>
+                <span class="mood-label">Leve</span>
+              </div>
+              <div class="mood-btn" onclick="selectMood('Moderada', this)">
+                <span class="mood-emoji">😣</span>
+                <span class="mood-label">Moderada</span>
+              </div>
+              <div class="mood-btn" onclick="selectMood('Fuerte', this)">
+                <span class="mood-emoji">😫</span>
+                <span class="mood-label">Fuerte</span>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;">
+              <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" id="migraineDate">
+              </div>
+              <div class="form-group">
+                <label>Hora</label>
+                <input type="time" id="migraineTime">
+              </div>
+            </div>
+
+            <label>Posibles Desencadenantes</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" value="No se sabe" class="trig-check"> ❓ No se sabe</label>
+              <label class="checkbox-item"><input type="checkbox" value="Estrés" class="trig-check"> 🤯 Estrés</label>
+              <label class="checkbox-item"><input type="checkbox" value="Luz intensa" class="trig-check"> 💡 Luz Intensa</label>
+              <label class="checkbox-item"><input type="checkbox" value="Ruido" class="trig-check"> 💥 Ruido Intenso</label>
+            </div>
+
+            <button class="btn-primary" onclick="addFullMigraine()" style="background:var(--red-accent);">Registrar episodio</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Historial de migrañas</div>
+            <ul id="migraineList"></ul>
+          </div>
+        </section>
+
+        <!-- 5. DEVOCIONAL -->
+        <section id="tab-devocional" class="tab-section" style="display:none;">
+          <div class="devotional-banner">
+            <div class="devotional-quote">“Él da fuerzas al cansado y aumenta el vigor del que no tiene ningunas.”</div>
+            <div class="devotional-ref">Isaías 40:29</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Nueva Oración / Reflexión</div>
+            <div class="form-group">
+              <label>Título</label>
+              <input type="text" id="devTitle" placeholder="Ej: Oración de agradecimiento...">
+            </div>
+            <div class="form-group">
+              <label>Notas / Reflexión</label>
+              <textarea id="devNotes" rows="4" placeholder="Escribe aquí tus pensamientos..."></textarea>
+            </div>
+            <button class="btn-primary" onclick="saveDevotional()">Guardar en devocional</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Mis Oraciones</div>
+            <ul id="devotionalIndexList"></ul>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-nav">
+    <button class="mn-item active" onclick="switchTab('inicio', this)">
+      <span class="mn-icon">🏠</span> Inicio
+    </button>
+    <button class="mn-item" onclick="switchTab('agenda', this)">
+      <span class="mn-icon">📅</span> Agenda
+    </button>
+    <button class="mn-item" onclick="switchTab('super', this)">
+      <span class="mn-icon">🛒</span> Súper
+    </button>
+    <button class="mn-item" onclick="switchTab('migrana', this)">
+      <span class="mn-icon">🧠</span> Migraña
+    </button>
+    <button class="mn-item" onclick="switchTab('devocional', this)">
+      <span class="mn-icon">📖</span> Devocional
+    </button>
+  </nav>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
+      authDomain: "condoapp-d1729.firebaseapp.com",
+      databaseURL: "https://condoapp-d1729-default-rtdb.firebaseio.com",
+      projectId: "condoapp-d1729",
+      storageBucket: "condoapp-d1729.firebasestorage.app",
+      messagingSenderId: "834784357986",
+      appId: "1:834784357986:web:90855a08e0c5399d8aeb3b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let userKey = "usuario_default";
+    let selectedMigraineLevel = "Moderada";
+
+    function updateDateDisplay() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString('es-ES', options);
+      document.getElementById('currentDateDisplay').innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
+
+    function selectMood(level, btn) {
+      selectedMigraineLevel = level;
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function handleAuth() {
+      const reg = document.getElementById('regNumberInput').value.trim();
+      const pass = document.getElementById('passKeyInput').value.trim();
+      if(!reg || !pass) return alert('Por favor ingresa registro y clave');
+      userKey = `user_${reg}_${pass}`;
+      localStorage.setItem('omniapp_userKey', userKey);
+      unlockApp();
+    }
+
+    function checkActiveSession() {
+      const savedKey = localStorage.getItem('omniapp_userKey') || localStorage.getItem('condo_userKey');
+      if (savedKey) {
+        userKey = savedKey;
+        unlockApp();
+      }
+    }
+
+    function unlockApp() {
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('appLayout').classList.add('visible');
+      updateDateDisplay();
+      listenToDatabase();
+    }
+
+    function logout() {
+      localStorage.removeItem('omniapp_userKey');
+      localStorage.removeItem('condo_userKey');
+      location.reload();
+    }
+
+    function listenToDatabase() {
+      db.ref(`${userKey}/devotionals`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderDevotionals(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/tasks`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderTasks(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/super`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderSuper(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/migraines`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderMigraines(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+    }
+
+    /* FIREBASE ACTIONS */
+    function saveDevotional() {
+      const title = document.getElementById('devTitle').value.trim();
+      const notes = document.getElementById('devNotes').value.trim();
+      if(!title || !notes) return alert('Por favor completa el título y notas.');
+
+      db.ref(`${userKey}/devotionals`).push({
+        title, notes, date: new Date().toLocaleDateString('es-ES')
+      });
+
+      document.getElementById('devTitle').value = '';
+      document.getElementById('devNotes').value = '';
+      alert('¡Devocional guardado!');
+    }
+
+    function addAcademicTask() {
+      const title = document.getElementById('fTitle').value.trim();
+      const date = document.getElementById('fDate').value;
+      const timeStart = document.getElementById('fTimeStart').value;
+
+      if(!title || !date) return alert('Ingresa título y fecha.');
+
+      db.ref(`${userKey}/tasks`).push({ desc: title, date, timeStart });
+      document.getElementById('fTitle').value = '';
+    }
+
+    function addSuperItem() {
+      const name = document.getElementById('superItem').value.trim();
+      if(!name) return alert('Ingresa un producto.');
+      db.ref(`${userKey}/super`).push({ name, done: false });
+      document.getElementById('superItem').value = '';
+    }
+
+    function addFullMigraine() {
+      const date = document.getElementById('migraineDate').value;
+      const time = document.getElementById('migraineTime').value;
+      const triggers = Array.from(document.querySelectorAll('.trig-check:checked')).map(cb => cb.value);
+
+      if(!date) return alert('Ingresa la fecha.');
+
+      db.ref(`${userKey}/migraines`).push({ date, time, level: selectedMigraineLevel, triggers });
+      alert('¡Episodio registrado!');
+    }
+
+    function deleteItem(path, id) {
+      db.ref(`${userKey}/${path}/${id}`).remove();
+    }
+
+    function toggleItem(path, id, currentStatus) {
+      db.ref(`${userKey}/${path}/${id}`).update({ done: !currentStatus });
+    }
+
+    /* RENDERS */
+    function renderDevotionals(items) {
+      document.getElementById('devotionalIndexList').innerHTML = items.length ? items.map(d => `
+        <li class="item-row">
+          <div>
+            <strong>📖 ${d.title}</strong>
+            <div style="font-size:0.8rem; color:var(--text-muted);">${d.date}</div>
+          </div>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('devotionals', '${d.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin notas devocionales.</li>';
+    }
+
+    function renderTasks(items) {
+      document.getElementById('taskList').innerHTML = items.length ? items.map(t => `
+        <li class="item-row">
+          <div>
+            <strong>${t.desc}</strong>
+            <div style="font-size:0.8rem; color:var(--text-muted);">🗓️ ${t.date} ${t.timeStart ? ' - ' + t.timeStart : ''}</div>
+          </div>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('tasks', '${t.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin eventos agendados.</li>';
+
+      document.getElementById('dashTasksList').innerHTML = items.length ? items.slice(0, 3).map(t => `
+        <li class="item-row">📅 <strong>${t.date}</strong> — ${t.desc}</li>
+      `).join('') : '<li style="color:var(--text-muted);">No tienes próximas entregas agendadas.</li>';
+    }
+
+    function renderSuper(items) {
+      document.getElementById('superList').innerHTML = items.length ? items.map(s => `
+        <li class="item-row">
+          <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleItem('super', '${s.id}', ${s.done})">
+            <span>${s.name}</span>
+          </label>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('super', '${s.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Lista vacía.</li>';
+    }
+
+    function renderMigraines(items) {
+      document.getElementById('migraineList').innerHTML = items.length ? items.map(m => `
+        <li class="item-row">
+          <div>
+            <strong>📅 ${m.date}</strong> — <span style="color:var(--red-accent); font-weight:bold;">${m.level}</span>
+            ${m.triggers ? `<div style="font-size:0.8rem; color:var(--text-muted);">Desencadenantes: ${m.triggers.join(', ')}</div>` : ''}
+          </div>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('migraines', '${m.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin registros.</li>';
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-section').forEach(t => t.style.display = 'none');
+      document.querySelectorAll('.nav-item, .mn-item').forEach(b => b.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).style.display = 'block';
+      if(btn) btn.classList.add('active');
+    }
+
+    function switchTabByCode(tabId) {
+      switchTab(tabId, null);
+    }
+
+    document.addEventListener('DOMContentLoaded', checkActiveSession);
+  </script>
+</body>
+</html>
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
