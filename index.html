@@ -38,7 +38,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: var(--font-social); background-color: var(--blue-dark); color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* AUTH OVERLAY */
+    /* PANTALLA DE AUTENTICACIÓN */
     .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--blue-dark); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
     .auth-card { background: var(--card-white); color: var(--text-dark); padding: 30px 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 3px solid var(--yellow-vivid); }
     .auth-logo { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--yellow-vivid); margin-bottom: 12px; object-fit: cover; }
@@ -47,7 +47,7 @@
     .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-social); font-size: 1rem; font-weight: 700; text-align: center; margin-bottom: 14px; outline: none; }
     .auth-input:focus { border-color: var(--blue-electric); box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2); }
 
-    /* APP CONTAINER */
+    /* LAYOUT PRINCIPAL */
     .app-container { display: none; flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; background: var(--blue-dark); min-height: 100vh; }
     .app-container.visible { display: flex; }
 
@@ -59,7 +59,8 @@
 
     .nav-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; border: none; background: none; width: 100%; text-align: left; }
     .nav-btn:hover, .nav-btn.active { background: var(--yellow-vivid); color: var(--text-dark); font-weight: 800; transform: translateX(3px); }
-    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; margin-top: auto; }
+    .btn-notify { background: var(--blue-bright) !important; color: #FFF !important; margin-top: auto; }
+    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; }
 
     .content-area { flex: 1; display: flex; flex-direction: column; background: #0E223D; overflow-y: auto; }
     .header-banner { background: linear-gradient(135deg, var(--blue-electric) 0%, #002D62 100%); padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
@@ -131,6 +132,7 @@
       <button class="nav-btn" onclick="switchTab('super', this)">🛒 Súper</button>
       <button class="nav-btn" onclick="switchTab('migranas', this)">🌿 Migrañas</button>
       <button class="nav-btn" onclick="switchTab('devocional', this)">📖 Devocional</button>
+      <button class="nav-btn btn-notify" onclick="requestNotificationPermission()">🔔 Activar Avisos</button>
       <button class="nav-btn btn-logout" onclick="logout()">🔒 Salir / Bloquear</button>
     </sidebar>
 
@@ -222,11 +224,54 @@
     document.addEventListener('DOMContentLoaded', () => {
       checkAuthStatus();
       registerSW();
+      checkActiveSession();
     });
 
     function registerSW() {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
+      }
+    }
+
+    /* PERSISTENCIA DE SESIÓN */
+    function checkActiveSession() {
+      const isLogged = localStorage.getItem('condo_isLoggedIn');
+      if (isLogged === 'true') {
+        unlockApp();
+      }
+    }
+
+    /* NOTIFICACIONES Y RECORDATORIOS */
+    function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        return alert("Tu navegador no soporta notificaciones.");
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          alert("¡Notificaciones activadas con éxito! Te avisaremos con tus tareas.");
+        } else {
+          alert("Permiso de notificaciones denegado.");
+        }
+      });
+    }
+
+    function scheduleNotification(taskTime, taskDesc) {
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+      const now = new Date();
+      const [hours, minutes] = taskTime.split(':');
+      const targetTime = new Date();
+      targetTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+      const delay = targetTime.getTime() - now.getTime();
+
+      if (delay > 0) {
+        setTimeout(() => {
+          new Notification("CondoApp — Recordatorio", {
+            body: `⏰ Es hora de: ${taskDesc}`,
+            icon: "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza"
+          });
+        }, delay);
       }
     }
 
@@ -275,10 +320,12 @@
       if (!storedReg || !storedPass) {
         localStorage.setItem('condo_regNumber', regInput);
         localStorage.setItem('condo_passKey', passInput);
+        localStorage.setItem('condo_isLoggedIn', 'true');
         alert('¡Credenciales creadas con éxito!');
         unlockApp();
       } else {
         if (regInput === storedReg && passInput === storedPass) {
+          localStorage.setItem('condo_isLoggedIn', 'true');
           unlockApp();
         } else {
           alert('Número de registro o clave incorrectos.');
@@ -293,6 +340,7 @@
     }
 
     function logout() {
+      localStorage.removeItem('condo_isLoggedIn');
       document.getElementById('authOverlay').style.display = 'flex';
       document.getElementById('appContainer').classList.remove('visible');
       document.getElementById('passKeyInput').value = '';
@@ -320,9 +368,13 @@
       const time = document.getElementById('taskTime').value;
       const desc = document.getElementById('taskDesc').value.trim();
       if(!time || !desc) return alert('Ingresa hora y descripción.');
+      
       const store = getStore('app_tasks');
       store.unshift({ time, desc });
       setStore('app_tasks', store);
+
+      scheduleNotification(time, desc);
+
       document.getElementById('taskTime').value = '';
       document.getElementById('taskDesc').value = '';
       renderAll();
