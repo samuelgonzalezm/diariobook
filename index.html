@@ -98,7 +98,7 @@
     .quick-card { background: #FFF; border-radius: 16px; padding: 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; cursor: pointer; }
     .qc-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #FFF; flex-shrink: 0; }
 
-    /* SECTION CARDS & MOBILE FIXES */
+    /* SECTION CARDS */
     .card { background: var(--card-white); border-radius: 18px; padding: 16px; border: 1px solid var(--border-color); margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); width: 100%; overflow: hidden; }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
     .card-title { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
@@ -131,15 +131,35 @@
     .cal-day-cell.active-day { background: var(--primary-blue); color: #FFF; }
     .cal-task-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red-accent); margin-top: 2px; }
 
-    /* ESTILOS PRODUCTOS SÚPER */
-    .super-product-item { background: #FFF; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .super-product-item.completed span.product-name { text-decoration: line-through; opacity: 0.5; }
-    .product-details { display: flex; flex-direction: column; gap: 2px; }
-    .product-name { font-weight: 700; font-size: 0.9rem; }
-    .product-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .product-badge { background: #EFEFEF; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: var(--primary-blue); }
+    /* ESTILOS DE COMPRAS SEGÚN BOCETO REQUERIDO */
+    .super-product-item-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; width: 100%; }
+    
+    /* CASILLA CIRCULAR DE COMPRA (BOLITA) */
+    .custom-circle-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #C4C4C8; appearance: none; -webkit-appearance: none; outline: none; cursor: pointer; flex-shrink: 0; background: #FFF; transition: all 0.2s; }
+    .custom-circle-check:checked { background: var(--primary-blue); border-color: var(--primary-blue); position: relative; }
+    .custom-circle-check:checked::after { content: '✓'; color: #FFF; font-size: 12px; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-    /* FORMS & INPUTS */
+    /* DISEÑO PÍLDORA (ORDEN COMPUTADORA Y MÓVIL) */
+    .product-row-pill { display: flex; flex: 1; align-items: center; gap: 10px; }
+    
+    .pill-input { border-radius: 20px; background: #D0D7DE; border: none; padding: 10px 16px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); font-family: var(--font-main); outline: none; text-align: center; }
+    .pill-input::placeholder { color: #656D76; font-weight: 600; }
+    .pill-input:focus { background: #E2E8ED; }
+
+    .pill-name-box { flex: 2; min-width: 120px; text-align: left; }
+    .pill-qty-box { flex: 1; min-width: 80px; }
+    .pill-price-box { flex: 1; min-width: 80px; }
+
+    .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
+
+    /* ADAPTACIÓN MÓVIL FIEL AL BOCETO */
+    @media (max-width: 600px) {
+      .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; }
+      .pill-sub-group { display: flex; gap: 8px; width: 100%; }
+      .pill-qty-box, .pill-price-box { flex: 1; }
+    }
+
+    /* FORMS & INPUTS GENERALES */
     .form-group { margin-bottom: 12px; text-align: left; }
     label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
     input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.88rem; font-family: var(--font-main); font-weight: 600; outline: none; background: #FAFAFC; color: var(--text-dark); }
@@ -449,7 +469,7 @@
 
         </section>
 
-        <!-- 3. SÚPER REESTRUCTURADO POR TIENDAS CON DRAWER -->
+        <!-- 3. SÚPER REESTRUCTURADO FIEL AL BOCETO -->
         <section id="tab-super" class="tab-section" style="display:none;">
           
           <button class="drawer-open-btn" onclick="toggleStoreDrawer(true)">
@@ -476,27 +496,15 @@
               🥬 Mercado
             </div>
 
-            <!-- FORMULARIO AGREGAR PRODUCTO -->
-            <div style="background:#FAFAFC; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px;">
-              <div class="form-group">
-                <label>Nombre del Producto</label>
-                <input type="text" id="storeProdName" placeholder="Ej: Jitomate...">
+            <!-- FORMULARIO RÁPIDO PARA AGREGAR NUEVO PRODUCTO -->
+            <div style="background:#FAFAFC; padding:12px; border-radius:14px; border:1px solid var(--border-color); margin-bottom:16px;">
+              <div style="display:flex; gap:8px;">
+                <input type="text" id="storeProdName" placeholder="Agregar nuevo producto..." style="flex:1;">
+                <button class="btn-primary" style="width:auto; padding:10px 16px;" onclick="addStoreProduct()">+ AGREGAR</button>
               </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                <div class="form-group">
-                  <label>Cantidad</label>
-                  <input type="text" id="storeProdQty" placeholder="Ej: 1 kg, 2 piezas">
-                </div>
-                <div class="form-group">
-                  <label>Precio Est. ($)</label>
-                  <input type="number" id="storeProdPrice" placeholder="Opcional">
-                </div>
-              </div>
-              <button class="btn-primary" onclick="addStoreProduct()">+ AGREGAR A LA LISTA</button>
             </div>
 
-            <!-- LISTA DE PRODUCTOS DE LA TIENDA -->
-            <div class="card-title" style="font-size:0.95rem; margin-bottom:10px;">Lista de compras</div>
+            <!-- LISTA DE PRODUCTOS CON PÍLDORAS SEGÚN BOCETO -->
             <div id="storeProductsList"></div>
           </div>
 
@@ -612,66 +620,66 @@
     let loadedTasks = [];
     let currentStoreKey = "mercado";
 
-    // LISTA BASE DE TIENDAS Y PRODUCTOS
+    // LISTAS INICIALES CON CAMPOS EN BLANCO PARA CANTIDAD Y PRECIO
     const defaultStoreLists = {
       mercado: [
-        { name: "Quesillo", qty: "1/2 kg", price: "", done: false },
-        { name: "Yogurt", qty: "1 lt", price: "", done: false },
-        { name: "Jitomate", qty: "1 kg", price: "", done: false },
-        { name: "Cebolla", qty: "1 kg", price: "", done: false },
-        { name: "Calabaza", qty: "1/2 kg", price: "", done: false },
-        { name: "Zanahoria", qty: "1/2 kg", price: "", done: false },
-        { name: "Tomatillo", qty: "1/2 kg", price: "", done: false },
-        { name: "Lechuga italiana", qty: "1 pza", price: "", done: false },
-        { name: "Lechuga romana", qty: "1 pza", price: "", done: false },
-        { name: "Cilantro", qty: "1 manojo", price: "", done: false },
-        { name: "Nopales", qty: "1 bolsa", price: "", done: false },
-        { name: "Ajos", qty: "1 cabeza", price: "", done: false },
-        { name: "Papas", qty: "1 kg", price: "", done: false },
-        { name: "Manzana", qty: "1 kg", price: "", done: false },
-        { name: "Plátano", qty: "1 kg", price: "", done: false },
-        { name: "Papaya", qty: "1 pza", price: "", done: false },
-        { name: "Piña", qty: "1 pza", price: "", done: false },
-        { name: "Pierna con muslo", qty: "1 kg", price: "", done: false },
-        { name: "Pechuga", qty: "1 pza", price: "", done: false },
-        { name: "Tortilla", qty: "1 kg", price: "", done: false },
-        { name: "Huevo", qty: "1 casillero", price: "", done: false }
+        { name: "Quesillo", qty: "", price: "", done: false },
+        { name: "Yogurt", qty: "", price: "", done: false },
+        { name: "Jitomate", qty: "", price: "", done: false },
+        { name: "Cebolla", qty: "", price: "", done: false },
+        { name: "Calabaza", qty: "", price: "", done: false },
+        { name: "Zanahoria", qty: "", price: "", done: false },
+        { name: "Tomatillo", qty: "", price: "", done: false },
+        { name: "Lechuga italiana", qty: "", price: "", done: false },
+        { name: "Lechuga romana", qty: "", price: "", done: false },
+        { name: "Cilantro", qty: "", price: "", done: false },
+        { name: "Nopales", qty: "", price: "", done: false },
+        { name: "Ajos", qty: "", price: "", done: false },
+        { name: "Papas", qty: "", price: "", done: false },
+        { name: "Manzana", qty: "", price: "", done: false },
+        { name: "Plátano", qty: "", price: "", done: false },
+        { name: "Papaya", qty: "", price: "", done: false },
+        { name: "Piña", qty: "", price: "", done: false },
+        { name: "Pierna con muslo", qty: "", price: "", done: false },
+        { name: "Pechuga", qty: "", price: "", done: false },
+        { name: "Tortilla", qty: "", price: "", done: false },
+        { name: "Huevo", qty: "", price: "", done: false }
       ],
       costco: [
-        { name: "Carne molida", qty: "1 paquete", price: "", done: false },
-        { name: "Mantequilla", qty: "1 paquete", price: "", done: false },
-        { name: "Tortillas de harina", qty: "1 paquete", price: "", done: false },
-        { name: "Lechuga", qty: "1 domo", price: "", done: false }
+        { name: "Carne molida", qty: "", price: "", done: false },
+        { name: "Mantequilla", qty: "", price: "", done: false },
+        { name: "Tortillas de harina", qty: "", price: "", done: false },
+        { name: "Lechuga", qty: "", price: "", done: false }
       ],
       sams: [
-        { name: "Café", qty: "1 frasco", price: "", done: false },
-        { name: "Pescado / atún", qty: "1 paquete", price: "", done: false },
-        { name: "Catsup", qty: "1 pza", price: "", done: false },
-        { name: "Crema", qty: "1 lt", price: "", done: false },
-        { name: "Servilletas", qty: "1 paquete", price: "", done: false },
-        { name: "Servitoallas", qty: "1 paquete", price: "", done: false },
-        { name: "Jabón para trastes", qty: "1 galón", price: "", done: false },
-        { name: "Suavitel", qty: "1 lt", price: "", done: false },
-        { name: "Jabón para ropa", qty: "1 paquete", price: "", done: false },
-        { name: "Pan molido", qty: "1 pza", price: "", done: false },
-        { name: "Pino", qty: "1 galón", price: "", done: false },
-        { name: "Queso americano", qty: "1 paquete", price: "", done: false },
-        { name: "Windex", qty: "1 pza", price: "", done: false }
+        { name: "Café", qty: "", price: "", done: false },
+        { name: "Pescado / atún", qty: "", price: "", done: false },
+        { name: "Catsup", qty: "", price: "", done: false },
+        { name: "Crema", qty: "", price: "", done: false },
+        { name: "Servilletas", qty: "", price: "", done: false },
+        { name: "Servitoallas", qty: "", price: "", done: false },
+        { name: "Jabón para trastes", qty: "", price: "", done: false },
+        { name: "Suavitel", qty: "", price: "", done: false },
+        { name: "Jabón para ropa", qty: "", price: "", done: false },
+        { name: "Pan molido", qty: "", price: "", done: false },
+        { name: "Pino", qty: "", price: "", done: false },
+        { name: "Queso americano", qty: "", price: "", done: false },
+        { name: "Windex", qty: "", price: "", done: false }
       ],
       zorro: [
-        { name: "Arroz", qty: "1 bolsa", price: "", done: false },
-        { name: "Leche", qty: "1 caja", price: "", done: false },
-        { name: "Harina", qty: "1 bolsa", price: "", done: false },
-        { name: "Sal (bolsa)", qty: "1 bolsa", price: "", done: false },
-        { name: "Jamón", qty: "1/2 kg", price: "", done: false },
-        { name: "Aceite", qty: "1 botella", price: "", done: false },
-        { name: "Espagueti", qty: "1 paquete", price: "", done: false },
-        { name: "Sopa surtida", qty: "5 paquetes", price: "", done: false },
-        { name: "Azúcar", qty: "1 kg", price: "", done: false },
-        { name: "Pasta de dientes", qty: "1 pza", price: "", done: false },
-        { name: "Zote", qty: "1 pza", price: "", done: false },
-        { name: "Saladitas", qty: "1 paquete", price: "", done: false },
-        { name: "Mayonesa", qty: "1 frasco", price: "", done: false }
+        { name: "Arroz", qty: "", price: "", done: false },
+        { name: "Leche", qty: "", price: "", done: false },
+        { name: "Harina", qty: "", price: "", done: false },
+        { name: "Sal (bolsa)", qty: "", price: "", done: false },
+        { name: "Jamón", qty: "", price: "", done: false },
+        { name: "Aceite", qty: "", price: "", done: false },
+        { name: "Espagueti", qty: "", price: "", done: false },
+        { name: "Sopa surtida", qty: "", price: "", done: false },
+        { name: "Azúcar", qty: "", price: "", done: false },
+        { name: "Pasta de dientes", qty: "", price: "", done: false },
+        { name: "Zote", qty: "", price: "", done: false },
+        { name: "Saladitas", qty: "", price: "", done: false },
+        { name: "Mayonesa", qty: "", price: "", done: false }
       ]
     };
 
@@ -843,10 +851,11 @@
       });
     }
 
+    /* RENDERIZADO FIDELIDAD AL BOCETO EN PÍLDORAS REDONDEADAS */
     function renderStoreProducts(products) {
       const container = document.getElementById('storeProductsList');
-      if(!products || products.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay productos en esta tienda.</p>';
+      if(!products || Object.keys(products).length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; padding:10px 0;">No hay productos en esta lista.</p>';
         return;
       }
 
@@ -854,32 +863,42 @@
       Object.keys(products).forEach(key => {
         const p = products[key];
         html += `
-          <div class="super-product-item ${p.done ? 'completed' : ''}">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <input type="checkbox" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
-              <div class="product-details">
-                <span class="product-name">${p.name}</span>
-                <span class="product-meta">${p.qty ? 'Cant: ' + p.qty : ''} ${p.price ? ' | $' + p.price : ''}</span>
+          <div class="super-product-item-wrapper ${p.done ? 'completed' : ''}">
+            <!-- BOLITA CASILLA -->
+            <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
+            
+            <!-- CONTENEDOR DE PÍLDORAS -->
+            <div class="product-row-pill">
+              <!-- NOMBRE (PÍLDORA LARGA) -->
+              <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" placeholder="Nombre" onchange="updateStoreField('${key}', 'name', this.value)">
+              
+              <div class="pill-sub-group">
+                <!-- CANTIDAD (PÍLDORA EN BLANCO) -->
+                <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" placeholder="cantidad" onchange="updateStoreField('${key}', 'qty', this.value)">
+                
+                <!-- PRECIO (PÍLDORA EN BLANCO) -->
+                <input type="text" class="pill-input pill-price-box" value="${p.price || ''}" placeholder="precio" onchange="updateStoreField('${key}', 'price', this.value)">
               </div>
             </div>
-            <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteStoreProduct('${key}')">✕</button>
+
+            <!-- BOTÓN BORRAR -->
+            <button style="background:none; border:none; color:var(--red-accent); font-weight:800; cursor:pointer; font-size:1.1rem; padding:0 4px;" onclick="deleteStoreProduct('${key}')">✕</button>
           </div>`;
       });
 
       container.innerHTML = html;
     }
 
+    function updateStoreField(key, field, val) {
+      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ [field]: val });
+    }
+
     function addStoreProduct() {
       const name = document.getElementById('storeProdName').value.trim();
-      const qty = document.getElementById('storeProdQty').value.trim();
-      const price = document.getElementById('storeProdPrice').value.trim();
-
       if(!name) return alert('Ingresa el nombre del producto.');
 
-      db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty, price, done: false });
+      db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty: "", price: "", done: false });
       document.getElementById('storeProdName').value = '';
-      document.getElementById('storeProdQty').value = '';
-      document.getElementById('storeProdPrice').value = '';
     }
 
     function toggleStoreProduct(key, currentDone) {
