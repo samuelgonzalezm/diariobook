@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CondoApp</title>
   
-  <!-- Configuración PWA -->
   <meta name="theme-color" content="#0056B3">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="CondoApp">
   <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
   <link rel="manifest" href="./manifest.json">
 
-  <!-- Tipografías de Alto Impacto -->
+  <!-- Firebase Web SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +24,6 @@
       --blue-bright: #0072FF;
       --red-vivid: #FF0000;
       --yellow-vivid: #FFD000;
-      --green-vivid: #10B981;
       --card-white: #FFFFFF;
       --text-dark: #0F172A;
       --text-muted: #64748B;
@@ -38,50 +35,40 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: var(--font-body); background-color: #003B8E; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-    /* AUTH OVERLAY */
     .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #002B66; z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
     .auth-card { background: var(--card-white); color: var(--text-dark); padding: 32px 26px; border-radius: 24px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 4px solid var(--yellow-vivid); }
     .auth-logo { width: 75px; height: 75px; border-radius: 50%; border: 3px solid var(--yellow-vivid); margin-bottom: 14px; object-fit: cover; }
-    .auth-title { font-family: var(--font-display); font-size: 1.7rem; font-weight: 900; color: var(--blue-electric); margin-bottom: 4px; text-transform: uppercase; letter-spacing: -0.5px; }
+    .auth-title { font-family: var(--font-display); font-size: 1.7rem; font-weight: 900; color: var(--blue-electric); margin-bottom: 4px; text-transform: uppercase; }
     .auth-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 22px; font-weight: 600; }
     .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 1rem; font-weight: 700; text-align: center; margin-bottom: 14px; outline: none; }
-    .auth-input:focus { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.2); }
 
-    /* APP CONTAINER */
     .app-container { display: none; flex: 1; max-width: 1150px; width: 100%; margin: 0 auto; background: #003075; min-height: 100vh; position: relative; }
     .app-container.visible { display: flex; }
 
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 190; display: none; opacity: 0; transition: opacity 0.3s ease; }
     .sidebar-overlay.active { display: block; opacity: 1; }
 
-    /* SIDEBAR */
-    sidebar { width: 260px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; z-index: 200; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    sidebar { width: 260px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; z-index: 200; transition: transform 0.3s ease; }
     .logo-box { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; margin-bottom: 15px; }
     .logo-content { display: flex; align-items: center; gap: 12px; }
     .logo-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
-    .logo-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
+    .logo-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; color: #FFF; text-transform: uppercase; }
     .logo-title span { color: var(--yellow-vivid); }
 
     .btn-close-sidebar { display: none; background: rgba(255, 255, 255, 0.15); border: none; color: #FFF; font-size: 1.2rem; font-weight: 800; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; justify-content: center; align-items: center; }
 
-    .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none; background: none; width: 100%; text-align: left; }
-    .nav-btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(3px); }
+    .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s ease; border: none; background: none; width: 100%; text-align: left; }
     .nav-btn.active { background: var(--yellow-vivid); color: #002255; font-weight: 900; box-shadow: 0 4px 15px rgba(255, 208, 0, 0.3); }
     
-    .btn-notify { background: #0088FF !important; color: #FFF !important; margin-top: auto; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
-    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
+    .btn-notify { background: #0088FF !important; color: #FFF !important; margin-top: auto; border-radius: 16px; justify-content: center; }
+    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; border-radius: 16px; justify-content: center; }
 
-    /* CONTENT AREA */
     .content-area { flex: 1; display: flex; flex-direction: column; background: #002255; overflow-y: auto; }
     .header-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
-    
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .btn-hamburger { display: none; background: var(--yellow-vivid); color: #002255; border: none; font-size: 1.2rem; font-weight: 900; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    .banner-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-hamburger { display: none; background: var(--yellow-vivid); color: #002255; border: none; font-size: 1.2rem; font-weight: 900; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; }
+    .banner-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #FFF; text-transform: uppercase; }
 
-    .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4); }
-
-    /* CARDS & FORMULARIOS */
     .main-body { padding: 22px; max-width: 800px; margin: 0 auto; width: 100%; }
     .tab-section { display: none; }
     .tab-section.active { display: block; animation: slideUp 0.25s ease-out; }
@@ -93,89 +80,62 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; }
     input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
-    input:focus, textarea:focus, select:focus { border-color: #0052CC; background: #FFF; box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15); }
 
     .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
     .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--text-dark); background: #F1F5F9; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); }
     .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--blue-electric); cursor: pointer; }
 
-    .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 14px; font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4); }
-    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 14px; font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4); }
 
-    .section-label { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
-    ul { list-style: none; }
-
-    /* SUBPESTAÑAS PARA DEVOCIONAL */
     .subtabs-bar { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
     .subtab-btn { flex: 1; padding: 10px 6px; border-radius: 12px; border: none; background: #E2E8F0; color: var(--text-dark); font-family: var(--font-display); font-weight: 800; font-size: 0.82rem; cursor: pointer; text-align: center; }
-    .subtab-btn.active { background: var(--blue-electric); color: #FFF; box-shadow: 0 3px 10px rgba(0, 82, 204, 0.3); }
+    .subtab-btn.active { background: var(--blue-electric); color: #FFF; }
 
     .subtab-content { display: none; }
-    .subtab-content.active { display: block; animation: slideUp 0.2s ease-out; }
+    .subtab-content.active { display: block; }
 
-    .devotional-view-card { background: #F8FAFC; border: 2px dashed #0052CC; border-radius: 16px; padding: 20px; color: var(--text-dark); margin-top: 10px; }
+    .devotional-view-card { background: #F8FAFC; border: 2px dashed #0052CC; border-radius: 16px; padding: 20px; color: var(--text-dark); }
     .devotional-view-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; color: #0040A0; margin-bottom: 6px; }
     .devotional-view-date { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 14px; }
-    .devotional-view-body { font-size: 1rem; line-height: 1.6; font-weight: 600; white-space: pre-wrap; color: var(--text-dark); }
+    .devotional-view-body { font-size: 1rem; line-height: 1.6; font-weight: 600; white-space: pre-wrap; }
 
-    /* KPIS MIGRAÑA */
     .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
     .stat-card { background: #F8FAFC; border: 2px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; }
     .stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: #0052CC; line-height: 1; }
     .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
 
-    li.migraine-card { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid #8B5CF6; position: relative; }
-    .migraine-title { font-size: 1rem; font-weight: 800; color: #0040A0; display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .migraine-detail { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
-    .migraine-tag { font-size: 0.75rem; background: #EDF2F7; padding: 3px 8px; border-radius: 6px; font-weight: 700; color: #4A5568; display: inline-block; margin-top: 4px; }
+    ul { list-style: none; }
+    li.agenda-card { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); position: relative; }
 
-    .btn-delete-item { position: absolute; top: 14px; right: 14px; background: var(--red-vivid); color: #FFF; border: none; padding: 4px 9px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.8rem; }
-
-    .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
-    .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-    .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
-    .welcome-date { font-size: 0.9rem; font-weight: 600; opacity: 0.85; margin-top: 4px; }
-
-    .ideas-textarea { width: 100%; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); min-height: 90px; }
-
-    .super-item { display: flex; align-items: center; gap: 14px; width: 100%; font-weight: 700; }
-    .super-item.completed span { text-decoration: line-through; opacity: 0.4; }
-    .super-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--red-vivid); cursor: pointer; }
+    .btn-delete-item { position: absolute; top: 14px; right: 14px; background: var(--red-vivid); color: #FFF; border: none; padding: 4px 9px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
     @media (max-width: 768px) {
       .app-container.visible { flex-direction: row; }
-      .btn-hamburger { display: flex; }
-      .btn-close-sidebar { display: flex; }
+      .btn-hamburger, .btn-close-sidebar { display: flex; }
       .grid-2, .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
-
-      sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 270px; transform: translateX(-100%); box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+      sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 270px; transform: translateX(-100%); }
       sidebar.open { transform: translateX(0); }
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTH OVERLAY -->
   <div id="authOverlay" class="auth-overlay">
     <div class="auth-card">
       <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" class="auth-logo" alt="Logo">
       <div class="auth-title">CondoApp</div>
       <div id="authSubtitle" class="auth-sub">Ingresa tu número de registro y clave de acceso</div>
-      
-      <input type="text" id="regNumberInput" class="auth-input" placeholder="N° de Registro (ej: 101)" autocomplete="off">
-      <input type="password" id="passKeyInput" class="auth-input" placeholder="Clave de Acceso" autocomplete="off">
-      
+      <input type="text" id="regNumberInput" class="auth-input" placeholder="N° de Registro (ej: 101)">
+      <input type="password" id="passKeyInput" class="auth-input" placeholder="Clave de Acceso">
       <button id="authBtn" class="btn-submit" onclick="handleAuth()">Ingresar</button>
     </div>
   </div>
 
   <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-  <!-- APP CONTAINER -->
   <div id="appContainer" class="app-container">
-    
     <sidebar id="sidebar">
       <div class="logo-box">
         <div class="logo-content">
@@ -202,42 +162,29 @@
           <button class="btn-hamburger" onclick="openSidebar()">☰</button>
           <span class="banner-title">CondoApp — Tu Espacio</span>
         </div>
-        <button id="pwaBtn" class="btn-install" onclick="installApp()">📲 Instalar en Celular</button>
       </div>
 
       <div class="main-body">
 
         <!-- 1. MI DÍA -->
         <section id="tab-midia" class="tab-section active">
-          <div class="card welcome-card">
-            <div class="welcome-header">
-              <div>
-                <h2 id="greetingTitle" style="font-size: 1.5rem; font-family: var(--font-display);">¡Hola de nuevo!</h2>
-                <div id="currentDateText" class="welcome-date">Cargando fecha...</div>
-              </div>
-              <div id="liveClock" class="welcome-time">00:00</div>
-            </div>
+          <div class="card" style="background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color:#FFF;">
+            <h2 id="greetingTitle" style="font-family: var(--font-display);">¡Hola de nuevo!</h2>
+            <div id="currentDateText" style="font-size: 0.9rem; opacity: 0.85;">Cargando fecha...</div>
           </div>
-
           <div class="card">
             <div class="card-title">Próximas Entregas y Eventos 🎯</div>
             <ul id="myDayTaskList"></ul>
           </div>
-
-          <div class="card">
-            <div class="card-title">Ideas Rápidas 💡</div>
-            <textarea id="quickNotes" class="ideas-textarea" placeholder="Anota un pensamiento o idea veloz..." oninput="saveQuickNotes()"></textarea>
-          </div>
         </section>
 
-        <!-- 2. AGENDA ESTUDIANTIL -->
+        <!-- 2. AGENDA -->
         <section id="tab-horario" class="tab-section">
           <div class="card">
             <div class="card-title">Agendar Evento / Registro 📝</div>
-            
             <div class="form-group">
               <label for="taskType">Tipo de Registro</label>
-              <select id="taskType" onchange="renderDynamicForm()">
+              <select id="taskType">
                 <option value="Tarea / Proyecto">📘 Tarea / Proyecto</option>
                 <option value="Examen / Evaluación">📝 Examen / Evaluación</option>
                 <option value="Clase / Conferencia">🏫 Clase / Conferencia</option>
@@ -245,13 +192,23 @@
                 <option value="Actividad Personal">⭐ Actividad Personal</option>
               </select>
             </div>
-
-            <div id="dynamicFormContainer"></div>
-
-            <button class="btn-submit" onclick="addAcademicTask()">+ Guardar en Agenda</button>
+            <div class="form-group">
+              <label for="fTitle">Título de la Actividad</label>
+              <input type="text" id="fTitle" placeholder="Ej: Proyecto Final, Cita Médica...">
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="fDate">Fecha</label>
+                <input type="date" id="fDate">
+              </div>
+              <div class="form-group">
+                <label for="fTimeStart">Hora</label>
+                <input type="time" id="fTimeStart">
+              </div>
+            </div>
+            <button class="btn-submit" onclick="addAcademicTask()">+ Guardar en Agenda Sincronizada</button>
           </div>
-
-          <div class="section-label">Registro de Agenda Personal & Estudiantil</div>
+          <div style="font-family: var(--font-display); font-weight:800; margin:15px 0 10px 0; color:var(--yellow-vivid);">EVENTOS REGISTRADOS EN LA NUBE</div>
           <ul id="taskList"></ul>
         </section>
 
@@ -261,11 +218,10 @@
             <div class="card-title">Crear Nuevo Hábito ⚡</div>
             <div class="form-group">
               <label for="habitName">Nombre del Hábito</label>
-              <input type="text" id="habitName" placeholder="Ej: Entrenar, Leer 20 min, Meditar...">
+              <input type="text" id="habitName" placeholder="Ej: Entrenar, Leer 20 min...">
             </div>
             <button class="btn-submit" onclick="addHabit()">+ Guardar Hábito</button>
           </div>
-          <div class="section-label">Mis Hábitos</div>
           <ul id="habitsList"></ul>
         </section>
 
@@ -275,15 +231,14 @@
             <div class="card-title">Lista del Súper 🛒</div>
             <div class="form-group">
               <label for="superItem">Nombre del Producto</label>
-              <input type="text" id="superItem" placeholder="Ej: Leche, Frutas, Pan, Huevos...">
+              <input type="text" id="superItem" placeholder="Ej: Leche, Frutas, Pan...">
             </div>
             <button class="btn-submit" onclick="addSuperItem()">+ Agregar al Carrito</button>
           </div>
-          <div class="section-label">Lista de Compras</div>
           <ul id="superList"></ul>
         </section>
 
-        <!-- 5. REGISTRO DE MIGRAÑA ACTUALIZADO -->
+        <!-- 5. MIGRAÑAS -->
         <section id="tab-migranas" class="tab-section">
           <div class="stats-grid">
             <div class="stat-card">
@@ -298,21 +253,20 @@
 
           <div class="card">
             <div class="card-title">Registrar Nuevo Episodio 🌿</div>
-            
             <div class="grid-2">
               <div class="form-group">
-                <label for="migraineDate">Fecha del Episodio</label>
+                <label for="migraineDate">Fecha</label>
                 <input type="date" id="migraineDate">
               </div>
               <div class="form-group">
-                <label for="migraineTime">Hora de Inicio</label>
+                <label for="migraineTime">Hora</label>
                 <input type="time" id="migraineTime">
               </div>
             </div>
 
             <div class="grid-2">
               <div class="form-group">
-                <label for="migraineLevel">Intensidad del Dolor (1 a 10)</label>
+                <label for="migraineLevel">Intensidad (1-10)</label>
                 <select id="migraineLevel">
                   <option value="1 - Muy Leve">1 - Muy Leve</option>
                   <option value="3 - Leve">3 - Leve</option>
@@ -322,22 +276,19 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="migraineDuration">Duración Estimada</label>
-                <input type="text" id="migraineDuration" placeholder="Ej: 2 horas, todo el día...">
+                <label for="migraineDuration">Duración</label>
+                <input type="text" id="migraineDuration" placeholder="Ej: 2 horas...">
               </div>
             </div>
 
-            <!-- SÍNTOMAS -->
-            <label>Síntomas Experimentados</label>
+            <label>Síntomas</label>
             <div class="checkbox-grid">
               <label class="checkbox-item"><input type="checkbox" value="Náuseas" class="sym-check"> 🤢 Náuseas</label>
               <label class="checkbox-item"><input type="checkbox" value="Aura / Visión Borrosa" class="sym-check"> ✨ Aura / Visión</label>
               <label class="checkbox-item"><input type="checkbox" value="Sensibilidad a Luz" class="sym-check"> ☀️ Sensibilidad Luz</label>
               <label class="checkbox-item"><input type="checkbox" value="Sensibilidad a Ruido" class="sym-check"> 🔊 Sensibilidad Ruido</label>
-              <label class="checkbox-item"><input type="checkbox" value="Mareos / Vértigo" class="sym-check"> 💫 Mareos / Vértigo</label>
             </div>
 
-            <!-- DESENCADENANTES NUEVOS -->
             <label>Posibles Desencadenantes</label>
             <div class="checkbox-grid">
               <label class="checkbox-item"><input type="checkbox" value="Olor a pasto cortado" class="trig-check"> 🌱 Pasto Cortado</label>
@@ -348,68 +299,57 @@
               <label class="checkbox-item"><input type="checkbox" value="Estrés" class="trig-check"> 🤯 Estrés</label>
             </div>
 
-            <!-- CAMPO OTRO DESENCADENANTE -->
             <div class="form-group">
-              <label for="migraineOtherTrigger">Otro Desencadenante (Escribir opcional)</label>
-              <input type="text" id="migraineOtherTrigger" placeholder="Ej: Perfume, café, trasnocho...">
+              <label for="migraineOtherTrigger">Otro Desencadenante (Opcional)</label>
+              <input type="text" id="migraineOtherTrigger" placeholder="Ej: Perfume, café...">
             </div>
 
             <div class="form-group">
-              <label for="migraineMeds">Medicamentos Utilizados</label>
-              <input type="text" id="migraineMeds" placeholder="Ej: Ibuprofeno 400mg, Paracetamol...">
+              <label for="migraineMeds">Medicamento Utilizado</label>
+              <input type="text" id="migraineMeds" placeholder="Ej: Ibuprofeno 400mg...">
             </div>
 
-            <button class="btn-submit" onclick="addFullMigraine()">+ Guardar Episodio en Diario</button>
+            <button class="btn-submit" onclick="addFullMigraine()">+ Guardar Episodio Sincronizado</button>
           </div>
 
-          <div class="section-label">Diario e Historial de Episodios</div>
           <ul id="migraineList"></ul>
         </section>
 
-        <!-- 6. DEVOCIONAL EN 3 SUBSECCIONES -->
+        <!-- 6. DEVOCIONAL -->
         <section id="tab-devocional" class="tab-section">
           <div class="card">
             <div class="card-title">Devocional y Oraciones 📖</div>
-
-            <!-- SUBPESTAÑAS DE NAVEGACIÓN -->
             <div class="subtabs-bar">
               <button class="subtab-btn active" onclick="switchDevotionalSubtab('add', this)">➕ Agregar Oración</button>
               <button class="subtab-btn" onclick="switchDevotionalSubtab('index', this)">📋 Índice</button>
               <button class="subtab-btn" onclick="switchDevotionalSubtab('view', this)">👁️ Visualizar</button>
             </div>
 
-            <!-- SUBSECCIÓN 1: AGREGAR ORACIÓN -->
             <div id="devSubtab-add" class="subtab-content active">
               <div class="form-group">
-                <label for="devTitle">Título o Pasaje de la Oración</label>
-                <input type="text" id="devTitle" placeholder="Ej: Oración por la Familia, Salmos 23...">
+                <label for="devTitle">Título de la Oración</label>
+                <input type="text" id="devTitle" placeholder="Ej: Oración de Gratitud...">
               </div>
               <div class="form-group">
                 <label for="devCategory">Categoría / Motivo</label>
-                <input type="text" id="devCategory" placeholder="Ej: Gratitud, Petición, Fortaleza...">
+                <input type="text" id="devCategory" placeholder="Ej: Petición, Paz...">
               </div>
               <div class="form-group">
                 <label for="devNotes">Contenido de la Oración</label>
-                <textarea id="devNotes" rows="5" placeholder="Escribe aquí tu oración diaria completa..."></textarea>
+                <textarea id="devNotes" rows="5" placeholder="Escribe tu oración..."></textarea>
               </div>
-              <button class="btn-submit" onclick="saveDevotional()">+ Guardar en el Devocional</button>
+              <button class="btn-submit" onclick="saveDevotional()">+ Guardar en la Nube</button>
             </div>
 
-            <!-- SUBSECCIÓN 2: ÍNDICE DE ORACIONES -->
             <div id="devSubtab-index" class="subtab-content">
-              <div style="font-size:0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:12px;">Haz clic en 'Ver Oración' para abrir la lectura completa:</div>
               <ul id="devotionalIndexList"></ul>
             </div>
 
-            <!-- SUBSECCIÓN 3: VISUALIZACIÓN DE ORACIÓN -->
             <div id="devSubtab-view" class="subtab-content">
               <div id="devotionalDisplay">
-                <div style="text-align:center; padding:30px 10px; color:var(--text-muted); font-weight:700;">
-                  Selecciona una oración desde el <strong>📋 Índice</strong> para visualizarla aquí.
-                </div>
+                <div style="text-align:center; padding:20px; color:var(--text-muted);">Selecciona una oración del índice para leerla aquí.</div>
               </div>
             </div>
-
           </div>
         </section>
 
@@ -418,225 +358,135 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuthStatus();
-      registerSW();
-      checkActiveSession();
-      initLiveClock();
-      loadQuickNotes();
-      renderDynamicForm();
-    });
+    // CONFIGURACIÓN OBTENIDA DE TU CAPTURA DE PANTALLA DE FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
+      authDomain: "condoapp-d1729.firebaseapp.com",
+      databaseURL: "https://condoapp-d1729-default-rtdb.firebaseio.com",
+      projectId: "condoapp-d1729",
+      storageBucket: "condoapp-d1729.firebasestorage.app",
+      messagingSenderId: "834784357986",
+      appId: "1:834784357986:web:2a88a0322df771895a123d"
+    };
 
-    function openSidebar() {
-      document.getElementById('sidebar').classList.add('open');
-      document.getElementById('sidebarOverlay').classList.add('active');
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let userKey = "usuario_default";
+
+    function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('active'); }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+
+    function handleAuth() {
+      const reg = document.getElementById('regNumberInput').value.trim();
+      const pass = document.getElementById('passKeyInput').value.trim();
+      if(!reg || !pass) return alert('Por favor ingresa registro y clave');
+      userKey = `user_${reg}_${pass}`;
+      localStorage.setItem('condo_userKey', userKey);
+      unlockApp();
     }
 
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('sidebarOverlay').classList.remove('active');
-    }
-
-    function registerSW() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+    function checkActiveSession() {
+      const savedKey = localStorage.getItem('condo_userKey');
+      if (savedKey) {
+        userKey = savedKey;
+        unlockApp();
       }
     }
 
-    function initLiveClock() {
-      function updateClock() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('liveClock').innerText = `${hours}:${minutes}`;
-
-        const options = { weekday: 'long', day: 'numeric', month: 'long' };
-        document.getElementById('currentDateText').innerText = now.toLocaleDateString('es-ES', options);
-
-        const hr = now.getHours();
-        let greeting = '¡Buenos días!';
-        if (hr >= 12 && hr < 19) greeting = '¡Buenas tardes!';
-        if (hr >= 19 || hr < 6) greeting = '¡Buenas noches!';
-        document.getElementById('greetingTitle').innerText = greeting;
-      }
-      updateClock();
-      setInterval(updateClock, 10000);
+    function unlockApp() {
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('appContainer').classList.add('visible');
+      listenToDatabase();
     }
 
-    function renderDynamicForm() {
-      const type = document.getElementById('taskType').value;
-      const container = document.getElementById('dynamicFormContainer');
-      let html = '';
+    function logout() {
+      localStorage.removeItem('condo_userKey');
+      location.reload();
+    }
 
-      if (type === 'Tarea / Proyecto') {
-        html = `
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fSubject">Materia / Asignatura</label>
-              <input type="text" id="fSubject" placeholder="Ej: Programación, Cálculo...">
-            </div>
-            <div class="form-group">
-              <label for="fTitle">Título de la Tarea / Proyecto</label>
-              <input type="text" id="fTitle" placeholder="Ej: Proyecto Final, Ensayo...">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDate">Fecha Límite de Entrega</label>
-              <input type="date" id="fDate">
-            </div>
-            <div class="form-group">
-              <label for="fTimeStart">Hora de Entrega</label>
-              <input type="time" id="fTimeStart">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDuration">Tiempo Estimado / Medido (Opcional)</label>
-              <input type="text" id="fDuration" placeholder="Ej: 2 horas, 45 min...">
-            </div>
-            <div class="form-group">
-              <label for="fPriority">Prioridad</label>
-              <select id="fPriority">
-                <option value="Alta">🔴 Alta Prioridad</option>
-                <option value="Media" selected>🟡 Prioridad Media</option>
-                <option value="Baja">🔵 Baja Prioridad</option>
-              </select>
-            </div>
-          </div>
-        `;
-      } else if (type === 'Examen / Evaluación') {
-        html = `
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fSubject">Materia / Asignatura</label>
-              <input type="text" id="fSubject" placeholder="Ej: Física, Química...">
-            </div>
-            <div class="form-group">
-              <label for="fTitle">Temas o Unidades a Evaluar</label>
-              <input type="text" id="fTitle" placeholder="Ej: Unidades 1 y 2...">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDate">Fecha del Examen</label>
-              <input type="date" id="fDate">
-            </div>
-            <div class="form-group">
-              <label for="fPriority">Prioridad</label>
-              <select id="fPriority">
-                <option value="Alta" selected>🔴 Alta Prioridad</option>
-                <option value="Media">🟡 Prioridad Media</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fTimeStart">Hora de Inicio</label>
-              <input type="time" id="fTimeStart">
-            </div>
-            <div class="form-group">
-              <label for="fTimeEnd">Hora Fin (Opcional)</label>
-              <input type="time" id="fTimeEnd">
-            </div>
-          </div>
-        `;
-      } else if (type === 'Clase / Conferencia') {
-        html = `
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fSubject">Materia / Tema de Conferencia</label>
-              <input type="text" id="fSubject" placeholder="Ej: Taller de Liderazgo...">
-            </div>
-            <div class="form-group">
-              <label for="fExtra">Profesor / Ponente</label>
-              <input type="text" id="fExtra" placeholder="Ej: Dr. García...">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="fTitle">Lugar / Aula / Link de Zoom</label>
-            <input type="text" id="fTitle" placeholder="Ej: Aula B-202, Zoom Link...">
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDate">Fecha</label>
-              <input type="date" id="fDate">
-            </div>
-            <div class="form-group">
-              <label for="fTimeStart">Hora Inicio</label>
-              <input type="time" id="fTimeStart">
-            </div>
-          </div>
-        `;
-      } else if (type === 'Cita / Reunión') {
-        html = `
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fTitle">Motivo / Nombre de la Cita</label>
-              <input type="text" id="fTitle" placeholder="Ej: Asesoría de Tesis, Médico...">
-            </div>
-            <div class="form-group">
-              <label for="fExtra">Persona o Grupo de Reunión</label>
-              <input type="text" id="fExtra" placeholder="Ej: Equipo de Proyecto...">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDate">Fecha de la Cita</label>
-              <input type="date" id="fDate">
-            </div>
-            <div class="form-group">
-              <label for="fTimeStart">Hora de Cita</label>
-              <input type="time" id="fTimeStart">
-            </div>
-          </div>
-        `;
-      } else if (type === 'Actividad Personal') {
-        html = `
-          <div class="form-group">
-            <label for="fTitle">Título de la Actividad</label>
-            <input type="text" id="fTitle" placeholder="Ej: Ir al gimnasio, Comprar libros...">
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label for="fDate">Fecha</label>
-              <input type="date" id="fDate">
-            </div>
-            <div class="form-group">
-              <label for="fTimeStart">Hora</label>
-              <input type="time" id="fTimeStart">
-            </div>
-          </div>
-        `;
-      }
+    /* ESCUCHAR BASE DE DATOS EN TIEMPO REAL */
+    function listenToDatabase() {
+      // Devocionales
+      db.ref(`${userKey}/devotionals`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        renderDevotionals(list);
+      });
 
-      container.innerHTML = html;
+      // Agenda / Tareas
+      db.ref(`${userKey}/tasks`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        renderTasks(list);
+      });
+
+      // Hábitos
+      db.ref(`${userKey}/habits`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        renderHabits(list);
+      });
+
+      // Súper
+      db.ref(`${userKey}/super`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        renderSuper(list);
+      });
+
+      // Migrañas
+      db.ref(`${userKey}/migraines`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        renderMigraines(list);
+      });
+    }
+
+    /* OPERACIONES DE GUARDADO */
+    function saveDevotional() {
+      const title = document.getElementById('devTitle').value.trim();
+      const category = document.getElementById('devCategory').value.trim() || 'General';
+      const notes = document.getElementById('devNotes').value.trim();
+      if(!title || !notes) return alert('Ingresa título y contenido.');
+
+      db.ref(`${userKey}/devotionals`).push({
+        title, category, notes, date: new Date().toLocaleDateString('es-ES')
+      });
+
+      document.getElementById('devTitle').value = '';
+      document.getElementById('devCategory').value = '';
+      document.getElementById('devNotes').value = '';
+      alert('¡Oración guardada y sincronizada en la nube!');
+      switchDevotionalSubtab('index', document.querySelectorAll('.subtab-btn')[1]);
     }
 
     function addAcademicTask() {
       const type = document.getElementById('taskType').value;
-      const title = document.getElementById('fTitle') ? document.getElementById('fTitle').value.trim() : '';
-      const subject = document.getElementById('fSubject') ? document.getElementById('fSubject').value.trim() : 'General';
-      const date = document.getElementById('fDate') ? document.getElementById('fDate').value : '';
-      const timeStart = document.getElementById('fTimeStart') ? document.getElementById('fTimeStart').value : '';
-      const timeEnd = document.getElementById('fTimeEnd') ? document.getElementById('fTimeEnd').value : '';
-      const duration = document.getElementById('fDuration') ? document.getElementById('fDuration').value.trim() : '';
-      const priority = document.getElementById('fPriority') ? document.getElementById('fPriority').value : 'Media';
-      const extra = document.getElementById('fExtra') ? document.getElementById('fExtra').value.trim() : '';
+      const title = document.getElementById('fTitle').value.trim();
+      const date = document.getElementById('fDate').value;
+      const timeStart = document.getElementById('fTimeStart').value;
 
-      if (!title || !date || !timeStart) {
-        return alert('Por favor completa los campos principales (Título, Fecha y Hora).');
-      }
+      if(!title || !date) return alert('Ingresa título y fecha.');
 
-      const store = getStore('app_tasks');
-      store.unshift({ type, subject, desc: title, date, priority, timeStart, timeEnd, duration, extra, id: Date.now() });
-      setStore('app_tasks', store);
-
-      renderDynamicForm();
-      renderAll();
+      db.ref(`${userKey}/tasks`).push({ type, desc: title, date, timeStart });
+      document.getElementById('fTitle').value = '';
     }
 
-    /* MIGRAÑA ACTUALIZADA CON OTRO DESENCADENANTE */
+    function addHabit() {
+      const name = document.getElementById('habitName').value.trim();
+      if(!name) return alert('Ingresa un hábito.');
+      db.ref(`${userKey}/habits`).push({ name, done: false });
+      document.getElementById('habitName').value = '';
+    }
+
+    function addSuperItem() {
+      const name = document.getElementById('superItem').value.trim();
+      if(!name) return alert('Ingresa un producto.');
+      db.ref(`${userKey}/super`).push({ name, done: false });
+      document.getElementById('superItem').value = '';
+    }
+
     function addFullMigraine() {
       const date = document.getElementById('migraineDate').value;
       const time = document.getElementById('migraineTime').value;
@@ -647,163 +497,99 @@
 
       const symptoms = Array.from(document.querySelectorAll('.sym-check:checked')).map(cb => cb.value);
       const triggers = Array.from(document.querySelectorAll('.trig-check:checked')).map(cb => cb.value);
+      if (otherTrigger) triggers.push(otherTrigger);
 
-      if (otherTrigger) {
-        triggers.push(otherTrigger);
-      }
+      if(!date || !time) return alert('Ingresa fecha y hora.');
 
-      if(!date || !time) return alert('Ingresa fecha y hora de inicio.');
-
-      const store = getStore('app_migraines');
-      store.unshift({ date, time, level, duration, symptoms, triggers, meds, id: Date.now() });
-      setStore('app_migraines', store);
+      db.ref(`${userKey}/migraines`).push({ date, time, level, duration, symptoms, triggers, meds });
 
       document.getElementById('migraineDuration').value = '';
       document.getElementById('migraineMeds').value = '';
       document.getElementById('migraineOtherTrigger').value = '';
       document.querySelectorAll('.sym-check, .trig-check').forEach(cb => cb.checked = false);
-
-      renderAll();
     }
 
-    /* CONTROL DE SUBPESTAÑAS DEVOCIONAL */
-    function switchDevotionalSubtab(subtabId, btn) {
-      document.querySelectorAll('.subtab-content').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`devSubtab-${subtabId}`).classList.add('active');
-      btn.classList.add('active');
+    function deleteItem(path, id) {
+      db.ref(`${userKey}/${path}/${id}`).remove();
     }
 
-    function saveDevotional() {
-      const title = document.getElementById('devTitle').value.trim();
-      const category = document.getElementById('devCategory').value.trim() || 'General';
-      const notes = document.getElementById('devNotes').value.trim();
-
-      if(!title || !notes) return alert('Por favor ingresa el título y el contenido de la oración.');
-
-      const store = getStore('app_devotionals');
-      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-      store.unshift({ title, category, notes, date, id: Date.now() });
-      setStore('app_devotionals', store);
-
-      document.getElementById('devTitle').value = '';
-      document.getElementById('devCategory').value = '';
-      document.getElementById('devNotes').value = '';
-
-      alert('¡Oración guardada en tu Devocional!');
-      renderAll();
-      
-      // Ir automáticamente al índice
-      const indexBtn = document.querySelectorAll('.subtab-btn')[1];
-      if(indexBtn) switchDevotionalSubtab('index', indexBtn);
+    function toggleItem(path, id, currentStatus) {
+      db.ref(`${userKey}/${path}/${id}`).update({ done: !currentStatus });
     }
 
-    function viewDevotionalItem(idx) {
-      const store = getStore('app_devotionals');
-      const item = store[idx];
-      if(!item) return;
+    /* RENDERS DESDE FIREBASE */
+    function renderDevotionals(items) {
+      document.getElementById('devotionalIndexList').innerHTML = items.length ? items.map(d => `
+        <li style="background:#F8FAFC; border-radius:12px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid #0052CC;">
+          <div>
+            <strong style="color:#0040A0;">📖 ${d.title}</strong>
+            <div style="font-size:0.8rem; color:#64748B;">🗓️ ${d.date} | ${d.category || 'General'}</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button style="background:#0052CC; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer;" onclick="viewDevotional('${d.title}', '${d.date}', \`${d.notes}\`)">👁️ Ver</button>
+            <button style="background:#FF0000; color:#FFF; border:none; padding:4px 8px; border-radius:6px; font-weight:800; cursor:pointer;" onclick="deleteItem('devotionals', '${d.id}')">✕</button>
+          </div>
+        </li>
+      `).join('') : '<li style="color:#64748B;">Sin oraciones sincronizadas.</li>';
+    }
 
-      const display = document.getElementById('devotionalDisplay');
-      display.innerHTML = `
+    function viewDevotional(title, date, notes) {
+      document.getElementById('devotionalDisplay').innerHTML = `
         <div class="devotional-view-card">
-          <div class="devotional-view-title">📖 ${item.title}</div>
-          <div class="devotional-view-date">🗓️ ${item.date} | 🏷️ Categoría: ${item.category}</div>
-          <div class="devotional-view-body">${item.notes}</div>
+          <div class="devotional-view-title">📖 ${title}</div>
+          <div class="devotional-view-date">🗓️ ${date}</div>
+          <div class="devotional-view-body">${notes}</div>
         </div>
       `;
-
-      // Cambiar a la subpestaña de visualización
-      const viewBtn = document.querySelectorAll('.subtab-btn')[2];
-      if(viewBtn) switchDevotionalSubtab('view', viewBtn);
+      switchDevotionalSubtab('view', document.querySelectorAll('.subtab-btn')[2]);
     }
 
-    /* HÁBITOS */
-    function addHabit() {
-      const name = document.getElementById('habitName').value.trim();
-      if(!name) return alert('Ingresa el nombre del hábito.');
-      const habits = getStore('app_habits');
-      habits.unshift({ id: Date.now(), name, doneToday: false });
-      setStore('app_habits', habits);
-      document.getElementById('habitName').value = '';
-      renderAll();
+    function renderTasks(items) {
+      document.getElementById('taskList').innerHTML = items.length ? items.map(t => `
+        <li class="agenda-card">
+          <button class="btn-delete-item" onclick="deleteItem('tasks', '${t.id}')">✕</button>
+          <div><strong>${t.type}</strong> - ${t.date} (${t.timeStart || ''})</div>
+          <div style="font-weight:800; color:#0040A0;">${t.desc}</div>
+        </li>
+      `).join('') : '<li style="color:#FFF;">Sin actividades agendadas.</li>';
+
+      document.getElementById('myDayTaskList').innerHTML = items.length ? items.slice(0, 3).map(t => `
+        <li style="border-left: 4px solid var(--blue-bright);">📅 <strong>${t.date}</strong> — ${t.desc}</li>
+      `).join('') : '<li style="color:#64748B;">No tienes próximas entregas agendadas.</li>';
     }
 
-    function toggleHabit(idx) {
-      const habits = getStore('app_habits');
-      habits[idx].doneToday = !habits[idx].doneToday;
-      setStore('app_habits', habits);
-      renderAll();
+    function renderHabits(items) {
+      document.getElementById('habitsList').innerHTML = items.length ? items.map(h => `
+        <li style="background:#FFF; padding:12px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; color:#000;">
+          <label><input type="checkbox" ${h.done ? 'checked' : ''} onchange="toggleItem('habits', '${h.id}', ${h.done})"> <strong>${h.name}</strong></label>
+          <button style="background:#FF0000; color:#FFF; border:none; padding:2px 8px; border-radius:6px; cursor:pointer;" onclick="deleteItem('habits', '${h.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:#FFF;">Sin hábitos guardados.</li>';
     }
 
-    function saveQuickNotes() {
-      localStorage.setItem('app_quickNotes', document.getElementById('quickNotes').value);
+    function renderSuper(items) {
+      document.getElementById('superList').innerHTML = items.length ? items.map(s => `
+        <li style="background:#FFF; padding:12px; border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; color:#000;">
+          <label><input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleItem('super', '${s.id}', ${s.done})"> <strong>${s.name}</strong></label>
+          <button style="background:#FF0000; color:#FFF; border:none; padding:2px 8px; border-radius:6px; cursor:pointer;" onclick="deleteItem('super', '${s.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:#FFF;">Lista de compras vacía.</li>';
     }
 
-    function loadQuickNotes() {
-      document.getElementById('quickNotes').value = localStorage.getItem('app_quickNotes') || '';
-    }
+    function renderMigraines(items) {
+      document.getElementById('statMigraineCount').innerText = items.length;
+      let sum = 0;
+      items.forEach(m => { sum += parseInt(m.level) || 5; });
+      document.getElementById('statMigraineAvg').innerText = items.length ? (sum / items.length).toFixed(1) : 0;
 
-    function checkActiveSession() {
-      if (localStorage.getItem('condo_isLoggedIn') === 'true') {
-        unlockApp();
-      }
-    }
-
-    function requestNotificationPermission() {
-      if (!("Notification" in window)) return alert("Tu navegador no soporta notificaciones.");
-      Notification.requestPermission().then(permission => {
-        if (permission === "granted") alert("¡Notificaciones activadas!");
-      });
-    }
-
-    function checkAuthStatus() {
-      const storedReg = localStorage.getItem('condo_regNumber');
-      const storedPass = localStorage.getItem('condo_passKey');
-
-      if (!storedReg || !storedPass) {
-        document.getElementById('authSubtitle').innerText = 'Crea tu N° de Registro y Clave por primera vez';
-        document.getElementById('authBtn').innerText = 'Crear Cuenta Segura';
-      } else {
-        document.getElementById('authSubtitle').innerText = 'Ingresa tus credenciales para acceder';
-        document.getElementById('authBtn').innerText = 'Iniciar Sesión';
-      }
-    }
-
-    function handleAuth() {
-      const regInput = document.getElementById('regNumberInput').value.trim();
-      const passInput = document.getElementById('passKeyInput').value.trim();
-
-      if (!regInput || !passInput) return alert('Debes completar ambos campos.');
-
-      const storedReg = localStorage.getItem('condo_regNumber');
-      const storedPass = localStorage.getItem('condo_passKey');
-
-      if (!storedReg || !storedPass) {
-        localStorage.setItem('condo_regNumber', regInput);
-        localStorage.setItem('condo_passKey', passInput);
-        localStorage.setItem('condo_isLoggedIn', 'true');
-        unlockApp();
-      } else {
-        if (regInput === storedReg && passInput === storedPass) {
-          localStorage.setItem('condo_isLoggedIn', 'true');
-          unlockApp();
-        } else {
-          alert('Número de registro o clave incorrectos.');
-        }
-      }
-    }
-
-    function unlockApp() {
-      document.getElementById('authOverlay').style.display = 'none';
-      document.getElementById('appContainer').classList.add('visible');
-      renderAll();
-    }
-
-    function logout() {
-      localStorage.removeItem('condo_isLoggedIn');
-      document.getElementById('authOverlay').style.display = 'flex';
-      document.getElementById('appContainer').classList.remove('visible');
-      document.getElementById('passKeyInput').value = '';
+      document.getElementById('migraineList').innerHTML = items.length ? items.map(m => `
+        <li style="background:#FFF; padding:12px; border-radius:12px; margin-bottom:10px; color:#000; position:relative; border-left:5px solid #8B5CF6;">
+          <button class="btn-delete-item" onclick="deleteItem('migraines', '${m.id}')">✕</button>
+          <strong>📅 ${m.date} (${m.time})</strong> - <span style="color:red;">Intensidad: ${m.level}</span>
+          ${m.symptoms ? `<div>🤢 Síntomas: ${m.symptoms.join(', ')}</div>` : ''}
+          ${m.triggers ? `<div>🤯 Desencadenantes: ${m.triggers.join(', ')}</div>` : ''}
+        </li>
+      `).join('') : '<li style="color:#FFF;">Sin registros en el diario.</li>';
     }
 
     function switchTab(tabId, btn) {
@@ -814,139 +600,14 @@
       closeSidebar();
     }
 
-    function getStore(k) { return JSON.parse(localStorage.getItem(k) || '[]'); }
-    function setStore(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
-
-    function removeItem(k, idx) {
-      const store = getStore(k);
-      store.splice(idx, 1);
-      setStore(k, store);
-      renderAll();
+    function switchDevotionalSubtab(subtabId, btn) {
+      document.querySelectorAll('.subtab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`devSubtab-${subtabId}`).classList.add('active');
+      btn.classList.add('active');
     }
 
-    function addSuperItem() {
-      const name = document.getElementById('superItem').value.trim();
-      if(!name) return alert('Ingresa un producto.');
-      const store = getStore('app_super');
-      store.unshift({ name, done: false });
-      setStore('app_super', store);
-      document.getElementById('superItem').value = '';
-      renderAll();
-    }
-
-    function toggleSuper(idx) {
-      const store = getStore('app_super');
-      store[idx].done = !store[idx].done;
-      setStore('app_super', store);
-      renderAll();
-    }
-
-    function renderAll() {
-      // Agenda
-      const tasks = getStore('app_tasks');
-      document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => {
-        const priorityClass = `prioridad-${t.priority ? t.priority.toLowerCase() : 'media'}`;
-        return `
-          <li class="agenda-card ${priorityClass}">
-            <button class="btn-delete-item" onclick="removeItem('app_tasks', ${i})">✕</button>
-            <div class="agenda-header-info">
-              <span class="agenda-type-badge">${t.type || 'Evento'}</span>
-              <span style="font-size:0.8rem; font-weight:700; color:#0052CC;">📅 ${t.date}</span>
-            </div>
-            <div class="agenda-title">${t.desc}</div>
-            <div class="agenda-details">
-              <span>📚 <strong>${t.subject}</strong></span>
-              <span>⏰ <strong>${t.timeStart}${t.timeEnd ? ' a '+t.timeEnd : ''}</strong></span>
-            </div>
-          </li>
-        `;
-      }).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin eventos o entregas programadas.</li>';
-
-      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
-        <li style="border-left: 5px solid var(--blue-bright);">
-          <div><strong>📅 ${t.date} (${t.timeStart})</strong> — ${t.desc} [${t.subject}]</div>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes próximas entregas agendadas.</li>';
-
-      // Migrañas
-      const migraines = getStore('app_migraines');
-      document.getElementById('statMigraineCount').innerText = migraines.length;
-      
-      let levelSum = 0;
-      migraines.forEach(m => { levelSum += parseInt(m.level) || 5; });
-      document.getElementById('statMigraineAvg').innerText = migraines.length ? (levelSum / migraines.length).toFixed(1) : 0;
-
-      document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
-        <li class="migraine-card">
-          <button class="btn-delete-item" onclick="removeItem('app_migraines', ${i})">✕</button>
-          <div class="migraine-title">
-            <span>📅 ${m.date} (${m.time})</span>
-            <span style="color:var(--red-vivid);">Intensidad: ${m.level}</span>
-          </div>
-          ${m.duration ? `<div class="migraine-detail">⏱️ Duración: ${m.duration}</div>` : ''}
-          ${m.symptoms && m.symptoms.length ? `<div class="migraine-detail">🤢 Síntomas: ${m.symptoms.join(', ')}</div>` : ''}
-          ${m.triggers && m.triggers.length ? `<div class="migraine-detail">🤯 Desencadenantes: ${m.triggers.join(', ')}</div>` : ''}
-          ${m.meds ? `<div class="migraine-tag">💊 Medicamento: ${m.meds}</div>` : ''}
-        </li>
-      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin episodios registrados en el diario.</li>';
-
-      // Devocional Índice
-      const devotionals = getStore('app_devotionals');
-      document.getElementById('devotionalIndexList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
-        <li style="background:#F8FAFC; border-radius:12px; padding:12px 14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border-left:5px solid #0052CC;">
-          <div>
-            <strong style="color:#0040A0; font-size:1rem;">📖 ${d.title || d.passage}</strong>
-            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">🗓️ ${d.date} | ${d.category || 'General'}</div>
-          </div>
-          <div style="display:flex; gap:6px;">
-            <button style="background:var(--blue-electric); color:#FFF; border:none; padding:6px 10px; border-radius:8px; font-weight:800; font-size:0.8rem; cursor:pointer;" onclick="viewDevotionalItem(${i})">👁️ Ver</button>
-            <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_devotionals', ${i})">✕</button>
-          </div>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none;">No tienes oraciones guardadas en el índice.</li>';
-
-      // Hábitos
-      const habits = getStore('app_habits');
-      document.getElementById('habitsList').innerHTML = habits.length ? habits.map((h, i) => `
-        <li>
-          <div class="super-item ${h.doneToday ? 'completed' : ''}">
-            <input type="checkbox" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${i})">
-            <span>${h.name}</span>
-          </div>
-          <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_habits', ${i})">✕</button>
-        </li>
-      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin hábitos registrados.</li>';
-
-      // Súper
-      const superItems = getStore('app_super');
-      document.getElementById('superList').innerHTML = superItems.length ? superItems.map((s, i) => `
-        <li>
-          <div class="super-item ${s.done ? 'completed' : ''}">
-            <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSuper(${i})">
-            <span>${s.name}</span>
-          </div>
-          <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_super', ${i})">✕</button>
-        </li>
-      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Lista de compras vacía.</li>';
-    }
-
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('pwaBtn');
-      if (btn) btn.style.display = 'block';
-    });
-
-    function installApp() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          document.getElementById('pwaBtn').style.display = 'none';
-          deferredPrompt = null;
-        });
-      }
-    }
+    document.addEventListener('DOMContentLoaded', checkActiveSession);
   </script>
 </body>
 </html>
