@@ -12,101 +12,122 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CondoApp">
   <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
-
-  <!-- Enlace al Manifest Externo -->
   <link rel="manifest" href="./manifest.json">
 
-  <!-- Tipografía Estilo Red Social -->
+  <!-- Tipografías de Alto Impacto / Estilo Red Social Moderna (Plus Jakarta Sans & Outfit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --blue-dark: #0A192F;
-      --blue-electric: #0056B3;
-      --blue-bright: #0088FF;
-      --red-vivid: #E60000;
-      --yellow-vivid: #FFD700;
+      --blue-dark: #00429D;
+      --blue-electric: #0052CC;
+      --blue-bright: #0072FF;
+      --red-vivid: #FF0000;
+      --yellow-vivid: #FFD000;
       --card-white: #FFFFFF;
-      --text-dark: #050B14;
-      --text-muted: #4A5568;
-      --border: #CBD5E1;
-      --font-social: 'Poppins', sans-serif;
+      --text-dark: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: var(--font-social); background-color: var(--blue-dark); color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
+    body { font-family: var(--font-body); background-color: #003B8E; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* PANTALLA DE AUTENTICACIÓN */
-    .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--blue-dark); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .auth-card { background: var(--card-white); color: var(--text-dark); padding: 30px 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 3px solid var(--yellow-vivid); }
-    .auth-logo { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--yellow-vivid); margin-bottom: 12px; object-fit: cover; }
-    .auth-title { font-size: 1.5rem; font-weight: 900; color: var(--blue-electric); margin-bottom: 5px; text-transform: uppercase; }
-    .auth-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; }
-    .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-social); font-size: 1rem; font-weight: 700; text-align: center; margin-bottom: 14px; outline: none; }
-    .auth-input:focus { border-color: var(--blue-electric); box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2); }
+    /* AUTH OVERLAY */
+    .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #002B66; z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .auth-card { background: var(--card-white); color: var(--text-dark); padding: 32px 26px; border-radius: 24px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 4px solid var(--yellow-vivid); }
+    .auth-logo { width: 75px; height: 75px; border-radius: 50%; border: 3px solid var(--yellow-vivid); margin-bottom: 14px; object-fit: cover; }
+    .auth-title { font-family: var(--font-display); font-size: 1.7rem; font-weight: 900; color: var(--blue-electric); margin-bottom: 4px; text-transform: uppercase; letter-spacing: -0.5px; }
+    .auth-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 22px; font-weight: 600; }
+    .auth-input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 1rem; font-weight: 700; text-align: center; margin-bottom: 14px; outline: none; }
+    .auth-input:focus { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.2); }
 
-    /* LAYOUT PRINCIPAL */
-    .app-container { display: none; flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; background: var(--blue-dark); min-height: 100vh; }
+    /* APP CONTAINER */
+    .app-container { display: none; flex: 1; max-width: 1150px; width: 100%; margin: 0 auto; background: #003075; min-height: 100vh; }
     .app-container.visible { display: flex; }
 
-    sidebar { width: 230px; background: var(--blue-electric); color: #FFF; padding: 20px 14px; display: flex; flex-direction: column; gap: 10px; border-right: 3px solid var(--yellow-vivid); }
-    .logo-box { display: flex; align-items: center; gap: 12px; padding: 10px; margin-bottom: 15px; }
-    .logo-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
-    .logo-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
+    /* BARRA LATERAL RENOVADA (NUEVA TIPOGRAFÍA Y ESTILO) */
+    sidebar { width: 250px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .logo-box { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin-bottom: 20px; }
+    .logo-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
+    .logo-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
     .logo-title span { color: var(--yellow-vivid); }
 
-    .nav-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; border: none; background: none; width: 100%; text-align: left; }
-    .nav-btn:hover, .nav-btn.active { background: var(--yellow-vivid); color: var(--text-dark); font-weight: 800; transform: translateX(3px); }
-    .btn-notify { background: var(--blue-bright) !important; color: #FFF !important; margin-top: auto; }
-    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; }
+    /* MENÚ LATERAL MEJORADO */
+    .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none; background: none; width: 100%; text-align: left; letter-spacing: 0.2px; }
+    .nav-btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(3px); }
+    .nav-btn.active { background: var(--yellow-vivid); color: #002255; font-weight: 900; box-shadow: 0 4px 15px rgba(255, 208, 0, 0.3); }
+    
+    .btn-notify { background: #0088FF !important; color: #FFF !important; margin-top: auto; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
+    .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
 
-    .content-area { flex: 1; display: flex; flex-direction: column; background: #0E223D; overflow-y: auto; }
-    .header-banner { background: linear-gradient(135deg, var(--blue-electric) 0%, #002D62 100%); padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
-    .banner-title { font-size: 1.1rem; font-weight: 800; color: #FFF; text-transform: uppercase; letter-spacing: 1px; }
+    /* ÁREA DE CONTENIDO */
+    .content-area { flex: 1; display: flex; flex-direction: column; background: #002255; overflow-y: auto; }
+    .header-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
+    .banner-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-weight: 800; font-size: 0.82rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4); }
+    .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4); }
 
-    /* CARDS */
-    .main-body { padding: 22px; max-width: 700px; margin: 0 auto; width: 100%; }
+    /* CARDS Y CONTENIDO */
+    .main-body { padding: 22px; max-width: 800px; margin: 0 auto; width: 100%; }
     .tab-section { display: none; }
-    .tab-section.active { display: block; animation: slideIn 0.2s ease-out; }
+    .tab-section.active { display: block; animation: slideUp 0.25s ease-out; }
 
-    @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .card { background: var(--card-white); border-radius: 18px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
-    .card-title { font-size: 1.25rem; font-weight: 800; color: var(--blue-electric); margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .card { background: var(--card-white); border-radius: 20px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
+    .card-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: #0040A0; margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
+    /* ESTILOS ESPECÍFICOS SECCIÓN "MI DÍA" */
+    .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
+    .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
+    .welcome-date { font-size: 0.9rem; font-weight: 600; opacity: 0.85; margin-top: 4px; }
+    
+    /* Barra de Progreso Diario */
+    .progress-box { margin-top: 15px; background: rgba(255,255,255,0.1); padding: 14px; border-radius: 14px; }
+    .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--yellow-vivid); border-radius: 10px; transition: width 0.4s ease; }
+
+    /* Baste/Quick Notes */
+    .ideas-textarea { width: 100%; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); min-height: 90px; }
+
+    /* FORMULARIOS */
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 10px; border: 2px solid var(--border); font-family: var(--font-social); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
-    input:focus, textarea:focus, select:focus { border-color: var(--blue-electric); background: #FFF; box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2); }
+    input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
+    input:focus, textarea:focus, select:focus { border-color: #0052CC; background: #FFF; box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15); }
 
-    .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 14px rgba(230, 0, 0, 0.4); }
+    .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 14px; font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4); }
+    .btn-submit:active { transform: scale(0.98); }
 
-    .section-label { font-size: 0.88rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
+    .section-label { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
     ul { list-style: none; }
-    li { background: var(--card-white); color: var(--text-dark); border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 5px solid var(--blue-bright); }
+    li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); }
 
     .super-item { display: flex; align-items: center; gap: 14px; width: 100%; font-weight: 700; }
     .super-item.completed span { text-decoration: line-through; opacity: 0.4; }
     .super-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--red-vivid); cursor: pointer; }
 
-    .btn-delete { background: var(--red-vivid); color: #FFF; border: none; padding: 6px 10px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
+    .btn-delete { background: var(--red-vivid); color: #FFF; border: none; padding: 6px 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
 
-    @media (max-width: 650px) {
+    @media (max-width: 700px) {
       .app-container.visible { flex-direction: column; }
-      sidebar { width: 100%; flex-direction: row; border-right: none; border-bottom: 3px solid var(--yellow-vivid); padding: 10px; overflow-x: auto; }
+      sidebar { width: 100%; flex-direction: row; border-bottom: 3px solid var(--yellow-vivid); padding: 10px; overflow-x: auto; }
       .logo-box { display: none; }
-      .nav-btn { padding: 10px 12px; font-size: 0.85rem; white-space: nowrap; justify-content: center; }
+      .nav-btn { padding: 10px 14px; font-size: 0.9rem; white-space: nowrap; justify-content: center; }
       .header-banner { padding: 12px 15px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTENTICACIÓN -->
+  <!-- AUTH OVERLAY -->
   <div id="authOverlay" class="auth-overlay">
     <div class="auth-card">
       <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" class="auth-logo" alt="Logo">
@@ -120,18 +141,21 @@
     </div>
   </div>
 
-  <!-- APP PRINCIPAL -->
+  <!-- APP CONTAINER -->
   <div id="appContainer" class="app-container">
     
+    <!-- BARRA LATERAL CON NUEVA TIPOGRAFÍA -->
     <sidebar>
       <div class="logo-box">
         <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo" class="logo-img">
         <div class="logo-title">Condo<span>App</span></div>
       </div>
-      <button class="nav-btn active" onclick="switchTab('horario', this)">📅 Agenda</button>
+      <button class="nav-btn active" onclick="switchTab('midia', this)">☀️ Mi Día</button>
+      <button class="nav-btn" onclick="switchTab('horario', this)">📅 Agenda</button>
       <button class="nav-btn" onclick="switchTab('super', this)">🛒 Súper</button>
       <button class="nav-btn" onclick="switchTab('migranas', this)">🌿 Migrañas</button>
       <button class="nav-btn" onclick="switchTab('devocional', this)">📖 Devocional</button>
+      
       <button class="nav-btn btn-notify" onclick="requestNotificationPermission()">🔔 Activar Avisos</button>
       <button class="nav-btn btn-logout" onclick="logout()">🔒 Salir / Bloquear</button>
     </sidebar>
@@ -144,8 +168,72 @@
 
       <div class="main-body">
 
+        <!-- NUEVA SECCIÓN PRINCIPAL: MI DÍA -->
+        <section id="tab-midia" class="tab-section active">
+          
+          <!-- TARJETA SALUDO Y RELOJ -->
+          <div class="card welcome-card">
+            <div class="welcome-header">
+              <div>
+                <h2 id="greetingTitle" style="font-size: 1.5rem; font-family: var(--font-display);">¡Hola de nuevo!</h2>
+                <div id="currentDateText" class="welcome-date">Cargando fecha...</div>
+              </div>
+              <div id="liveClock" class="welcome-time">00:00</div>
+            </div>
+
+            <!-- PORCENTAJE DE AVANCE DIARIO -->
+            <div class="progress-box">
+              <div class="progress-info">
+                <span>Progreso del Día</span>
+                <span id="progressPercent">0%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="progressBarFill" class="progress-bar-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAREAS PRIORITARIAS DEL DÍA -->
+          <div class="card">
+            <div class="card-title">Tareas Prioritarias de Hoy 🎯</div>
+            <ul id="myDayTaskList"></ul>
+          </div>
+
+          <!-- HÁBITOS PENDIENTES DE HOY -->
+          <div class="card">
+            <div class="card-title">Hábitos Diarios ⚡</div>
+            <ul id="myDayHabitsList">
+              <li>
+                <div class="super-item">
+                  <input type="checkbox" onchange="updateProgress()">
+                  <span>Tomar agua (2 Litros)</span>
+                </div>
+              </li>
+              <li>
+                <div class="super-item">
+                  <input type="checkbox" onchange="updateProgress()">
+                  <span>Realizar lectura o devocional</span>
+                </div>
+              </li>
+              <li>
+                <div class="super-item">
+                  <input type="checkbox" onchange="updateProgress()">
+                  <span>Pausa activa sin pantallas</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- IDEAS RÁPIDAS / NOTAS AL INSTANTE -->
+          <div class="card">
+            <div class="card-title">Ideas Rápidas 💡</div>
+            <textarea id="quickNotes" class="ideas-textarea" placeholder="Anota un pensamiento o idea veloz..." oninput="saveQuickNotes()"></textarea>
+          </div>
+
+        </section>
+
         <!-- AGENDA -->
-        <section id="tab-horario" class="tab-section active">
+        <section id="tab-horario" class="tab-section">
           <div class="card">
             <div class="card-title">Agenda & Horario</div>
             <div class="form-group">
@@ -225,12 +313,57 @@
       checkAuthStatus();
       registerSW();
       checkActiveSession();
+      initLiveClock();
+      loadQuickNotes();
     });
 
     function registerSW() {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       }
+    }
+
+    /* RELOJ EN VIVO Y FECHA */
+    function initLiveClock() {
+      function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('liveClock').innerText = `${hours}:${minutes}`;
+
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        document.getElementById('currentDateText').innerText = now.toLocaleDateString('es-ES', options);
+
+        // Saludo según hora
+        const hr = now.getHours();
+        let greeting = '¡Buenos días!';
+        if (hr >= 12 && hr < 19) greeting = '¡Buenas tardes!';
+        if (hr >= 19 || hr < 6) greeting = '¡Buenas noches!';
+        document.getElementById('greetingTitle').innerText = greeting;
+      }
+      updateClock();
+      setInterval(updateClock, 10000);
+    }
+
+    /* PROGRESO DIARIO Y NOTAS RÁPIDAS */
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('#myDayHabitsList input[type="checkbox"]');
+      let checkedCount = 0;
+      checkboxes.forEach(cb => { if(cb.checked) checkedCount++; });
+
+      const percent = checkboxes.length ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
+      document.getElementById('progressPercent').innerText = `${percent}%`;
+      document.getElementById('progressBarFill').style.width = `${percent}%`;
+    }
+
+    function saveQuickNotes() {
+      const notes = document.getElementById('quickNotes').value;
+      localStorage.setItem('app_quickNotes', notes);
+    }
+
+    function loadQuickNotes() {
+      const saved = localStorage.getItem('app_quickNotes') || '';
+      document.getElementById('quickNotes').value = saved;
     }
 
     /* PERSISTENCIA DE SESIÓN */
@@ -241,14 +374,13 @@
       }
     }
 
-    /* NOTIFICACIONES Y RECORDATORIOS */
     function requestNotificationPermission() {
       if (!("Notification" in window)) {
         return alert("Tu navegador no soporta notificaciones.");
       }
       Notification.requestPermission().then(permission => {
         if (permission === "granted") {
-          alert("¡Notificaciones activadas con éxito! Te avisaremos con tus tareas.");
+          alert("¡Notificaciones activadas con éxito!");
         } else {
           alert("Permiso de notificaciones denegado.");
         }
@@ -423,9 +555,16 @@
 
     function renderAll() {
       const tasks = getStore('app_tasks');
+      
+      // Render Lista Agenda
       document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
         <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div><button class="btn-delete" onclick="removeItem('app_tasks', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin tareas registradas.</li>';
+
+      // Render Lista Tareas en Mi Día
+      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t, i) => `
+        <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div></li>
+      `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes tareas pendientes para hoy.</li>';
 
       const superItems = getStore('app_super');
       document.getElementById('superList').innerHTML = superItems.length ? superItems.map((s, i) => `
@@ -447,6 +586,8 @@
       document.getElementById('devotionalList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
         <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small style="color:var(--text-muted);">${d.notes}</small></div><button class="btn-delete" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin notas guardadas.</li>';
+
+      updateProgress();
     }
   </script>
 </body>
