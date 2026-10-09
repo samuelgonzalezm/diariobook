@@ -97,21 +97,28 @@
     input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
     input:focus, textarea:focus, select:focus { border-color: #0052CC; background: #FFF; box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15); }
 
+    /* CHECKBOX GROUP FOR SYMPTOMS & TRIGGERS */
+    .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--text-dark); background: #F1F5F9; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); }
+    .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--blue-electric); cursor: pointer; }
+
     .btn-submit { width: 100%; padding: 15px; background: var(--red-vivid); color: #FFF; border: none; border-radius: 14px; font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4); }
     .btn-submit:active { transform: scale(0.98); }
 
     .section-label { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
     ul { list-style: none; }
-    
-    /* AGENDA ITEMS */
-    li.agenda-card { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); position: relative; }
-    li.agenda-card.prioridad-alta { border-left-color: var(--red-vivid); }
-    li.agenda-card.prioridad-media { border-left-color: var(--yellow-vivid); }
 
-    .agenda-header-info { display: flex; justify-content: space-between; width: 100%; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-    .agenda-type-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: #E2E8F0; color: var(--text-dark); }
-    .agenda-title { font-size: 1.05rem; font-weight: 800; color: #0040A0; margin-top: 4px; }
-    .agenda-details { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+    /* KPIS MIGRAÑA */
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-card { background: #F8FAFC; border: 2px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; }
+    .stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: #0052CC; line-height: 1; }
+    .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+
+    /* CARD MIGRAÑA ITEM */
+    li.migraine-card { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid #8B5CF6; position: relative; }
+    .migraine-title { font-size: 1rem; font-weight: 800; color: #0040A0; display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .migraine-detail { font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
+    .migraine-tag { font-size: 0.75rem; background: #EDF2F7; padding: 3px 8px; border-radius: 6px; font-weight: 700; color: #4A5568; display: inline-block; margin-top: 4px; }
 
     .btn-delete-item { position: absolute; top: 14px; right: 14px; background: var(--red-vivid); color: #FFF; border: none; padding: 4px 9px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.8rem; }
 
@@ -130,7 +137,7 @@
       .app-container.visible { flex-direction: row; }
       .btn-hamburger { display: flex; }
       .btn-close-sidebar { display: flex; }
-      .grid-2 { grid-template-columns: 1fr; gap: 0; }
+      .grid-2, .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
 
       sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 270px; transform: translateX(-100%); box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
       sidebar.open { transform: translateX(0); }
@@ -214,12 +221,11 @@
 
         </section>
 
-        <!-- 2. AGENDA CON FORMULARIO DINÁMICO POR CATEGORÍA -->
+        <!-- 2. AGENDA ESTUDIANTIL -->
         <section id="tab-horario" class="tab-section">
           <div class="card">
             <div class="card-title">Agendar Evento / Registro 📝</div>
             
-            <!-- SELECTOR DE CATEGORÍA -->
             <div class="form-group">
               <label for="taskType">Tipo de Registro</label>
               <select id="taskType" onchange="renderDynamicForm()">
@@ -231,7 +237,6 @@
               </select>
             </div>
 
-            <!-- CONTENEDOR DE CAMPOS DINÁMICOS -->
             <div id="dynamicFormContainer"></div>
 
             <button class="btn-submit" onclick="addAcademicTask()">+ Guardar en Agenda</button>
@@ -269,25 +274,82 @@
           <ul id="superList"></ul>
         </section>
 
-        <!-- 5. MIGRAÑA -->
+        <!-- 5. REGISTRO DE MIGRAÑA COMPLETO -->
         <section id="tab-migranas" class="tab-section">
-          <div class="card">
-            <div class="card-title">Registro de Migraña</div>
-            <div class="form-group">
-              <label for="migraineLevel">Intensidad del Dolor</label>
-              <select id="migraineLevel">
-                <option value="Leve">Leve (1-3)</option>
-                <option value="Moderado">Moderado (4-6)</option>
-                <option value="Severo">Severo (7-10)</option>
-              </select>
+          
+          <!-- REPORTE/ESTADÍSTICAS RÁPIDAS -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div id="statMigraineCount" class="stat-value">0</div>
+              <div class="stat-label">Episodios Registrados</div>
             </div>
-            <div class="form-group">
-              <label for="migraineTrigger">Detonante Probable</label>
-              <input type="text" id="migraineTrigger" placeholder="Ej: Pantalla, estrés, café...">
+            <div class="stat-card">
+              <div id="statMigraineAvg" class="stat-value">0</div>
+              <div class="stat-label">Promedio Intensidad</div>
             </div>
-            <button class="btn-submit" onclick="addMigraine()">+ Registrar Episodio</button>
           </div>
-          <div class="section-label">Historial de Dolor</div>
+
+          <div class="card">
+            <div class="card-title">Registrar Nuevo Episodio 🌿</div>
+            
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="migraineDate">Fecha del Episodio</label>
+                <input type="date" id="migraineDate">
+              </div>
+              <div class="form-group">
+                <label for="migraineTime">Hora de Inicio</label>
+                <input type="time" id="migraineTime">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="migraineLevel">Intensidad del Dolor (1 a 10)</label>
+                <select id="migraineLevel">
+                  <option value="1 - Muy Leve">1 - Muy Leve</option>
+                  <option value="3 - Leve">3 - Leve</option>
+                  <option value="5 - Moderado" selected>5 - Moderado</option>
+                  <option value="7 - Severo">7 - Severo</option>
+                  <option value="10 - Incapacitante">10 - Incapacitante</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="migraineDuration">Duración Estimada</label>
+                <input type="text" id="migraineDuration" placeholder="Ej: 2 horas, todo el día...">
+              </div>
+            </div>
+
+            <!-- SEGUIMIENTO DE SÍNTOMAS -->
+            <label>Síntomas Experimentados</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" value="Náuseas" class="sym-check"> 🤢 Náuseas</label>
+              <label class="checkbox-item"><input type="checkbox" value="Aura / Visión Borrosa" class="sym-check"> ✨ Aura / Visión</label>
+              <label class="checkbox-item"><input type="checkbox" value="Sensibilidad a Luz" class="sym-check"> ☀️ Sensibilidad Luz</label>
+              <label class="checkbox-item"><input type="checkbox" value="Sensibilidad a Ruido" class="sym-check"> 🔊 Sensibilidad Ruido</label>
+              <label class="checkbox-item"><input type="checkbox" value="Mareos / Vértigo" class="sym-check"> 💫 Mareos / Vértigo</label>
+            </div>
+
+            <!-- DESENCADENANTES -->
+            <label>Posibles Desencadenantes</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" value="Estrés" class="trig-check"> 🤯 Estrés</label>
+              <label class="checkbox-item"><input type="checkbox" value="Falta de Sueño" class="trig-check"> 😴 Falta de Sueño</label>
+              <label class="checkbox-item"><input type="checkbox" value="Pantallas / Luz" class="trig-check"> 💻 Pantallas</label>
+              <label class="checkbox-item"><input type="checkbox" value="Falta de Agua" class="trig-check"> 💧 Deshidratación</label>
+              <label class="checkbox-item"><input type="checkbox" value="Cambio de Clima" class="trig-check"> 🌩️ Clima</label>
+            </div>
+
+            <!-- MEDICAMENTOS -->
+            <div class="form-group">
+              <label for="migraineMeds">Medicamentos Utilizados</label>
+              <input type="text" id="migraineMeds" placeholder="Ej: Ibuprofeno 400mg, Paracetamol...">
+            </div>
+
+            <button class="btn-submit" onclick="addFullMigraine()">+ Guardar Episodio en Diario</button>
+          </div>
+
+          <div class="section-label">Diario e Historial de Episodios</div>
           <ul id="migraineList"></ul>
         </section>
 
@@ -359,7 +421,6 @@
       setInterval(updateClock, 10000);
     }
 
-    /* RENDERIZADO DINÁMICO DE FORMULARIO POR CATEGORÍA */
     function renderDynamicForm() {
       const type = document.getElementById('taskType').value;
       const container = document.getElementById('dynamicFormContainer');
@@ -533,6 +594,31 @@
       renderAll();
     }
 
+    /* REGISTRO COMPLETO DE MIGRAÑA */
+    function addFullMigraine() {
+      const date = document.getElementById('migraineDate').value;
+      const time = document.getElementById('migraineTime').value;
+      const level = document.getElementById('migraineLevel').value;
+      const duration = document.getElementById('migraineDuration').value.trim();
+      const meds = document.getElementById('migraineMeds').value.trim();
+
+      const symptoms = Array.from(document.querySelectorAll('.sym-check:checked')).map(cb => cb.value);
+      const triggers = Array.from(document.querySelectorAll('.trig-check:checked')).map(cb => cb.value);
+
+      if(!date || !time) return alert('Ingresa fecha y hora de inicio.');
+
+      const store = getStore('app_migraines');
+      store.unshift({ date, time, level, duration, symptoms, triggers, meds, id: Date.now() });
+      setStore('app_migraines', store);
+
+      // Limpiar inputs
+      document.getElementById('migraineDuration').value = '';
+      document.getElementById('migraineMeds').value = '';
+      document.querySelectorAll('.sym-check, .trig-check').forEach(cb => cb.checked = false);
+
+      renderAll();
+    }
+
     /* HÁBITOS */
     function addHabit() {
       const name = document.getElementById('habitName').value.trim();
@@ -657,17 +743,6 @@
       renderAll();
     }
 
-    function addMigraine() {
-      const level = document.getElementById('migraineLevel').value;
-      const trigger = document.getElementById('migraineTrigger').value.trim() || 'Sin detonante';
-      const store = getStore('app_migraines');
-      const date = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-      store.unshift({ level, trigger, date });
-      setStore('app_migraines', store);
-      document.getElementById('migraineTrigger').value = '';
-      renderAll();
-    }
-
     function saveDevotional() {
       const passage = document.getElementById('devPassage').value.trim();
       const notes = document.getElementById('devNotes').value.trim();
@@ -682,14 +757,10 @@
     }
 
     function renderAll() {
-      // Agenda Render
+      // Agenda
       const tasks = getStore('app_tasks');
-      const taskListHTML = tasks.length ? tasks.map((t, i) => {
+      document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => {
         const priorityClass = `prioridad-${t.priority ? t.priority.toLowerCase() : 'media'}`;
-        const endText = t.timeEnd ? ` a ${t.timeEnd}` : '';
-        const durationText = t.duration ? ` | ⏱️ Medido: ${t.duration}` : '';
-        const extraText = t.extra ? ` | 👤 ${t.extra}` : '';
-        
         return `
           <li class="agenda-card ${priorityClass}">
             <button class="btn-delete-item" onclick="removeItem('app_tasks', ${i})">✕</button>
@@ -700,24 +771,43 @@
             <div class="agenda-title">${t.desc}</div>
             <div class="agenda-details">
               <span>📚 <strong>${t.subject}</strong></span>
-              <span>⏰ <strong>${t.timeStart}${endText}</strong></span>
-              ${durationText ? `<span>${durationText}</span>` : ''}
-              ${extraText ? `<span>${extraText}</span>` : ''}
+              <span>⏰ <strong>${t.timeStart}${t.timeEnd ? ' a '+t.timeEnd : ''}</strong></span>
             </div>
           </li>
         `;
       }).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin eventos o entregas programadas.</li>';
 
-      document.getElementById('taskList').innerHTML = taskListHTML;
-
-      // Mi Día Render
       document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
         <li style="border-left: 5px solid var(--blue-bright);">
-          <div>
-            <strong>📅 ${t.date} (${t.timeStart})</strong> — ${t.desc} [${t.subject}]
-          </div>
+          <div><strong>📅 ${t.date} (${t.timeStart})</strong> — ${t.desc} [${t.subject}]</div>
         </li>
       `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes próximas entregas agendadas.</li>';
+
+      // Migrañas Render
+      const migraines = getStore('app_migraines');
+      document.getElementById('statMigraineCount').innerText = migraines.length;
+      
+      let levelSum = 0;
+      migraines.forEach(m => {
+        const val = parseInt(m.level) || 5;
+        levelSum += val;
+      });
+      const avg = migraines.length ? (levelSum / migraines.length).toFixed(1) : 0;
+      document.getElementById('statMigraineAvg').innerText = avg;
+
+      document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
+        <li class="migraine-card">
+          <button class="btn-delete-item" onclick="removeItem('app_migraines', ${i})">✕</button>
+          <div class="migraine-title">
+            <span>📅 ${m.date} (${m.time})</span>
+            <span style="color:var(--red-vivid);">Intensidad: ${m.level}</span>
+          </div>
+          ${m.duration ? `<div class="migraine-detail">⏱️ Duración: ${m.duration}</div>` : ''}
+          ${m.symptoms && m.symptoms.length ? `<div class="migraine-detail">🤢 Síntomas: ${m.symptoms.join(', ')}</div>` : ''}
+          ${m.triggers && m.triggers.length ? `<div class="migraine-detail">🤯 Desencadenantes: ${m.triggers.join(', ')}</div>` : ''}
+          ${m.meds ? `<div class="migraine-tag">💊 Medicamento: ${m.meds}</div>` : ''}
+        </li>
+      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin episodios registrados en el diario.</li>';
 
       // Hábitos
       const habits = getStore('app_habits');
@@ -742,12 +832,6 @@
           <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_super', ${i})">✕</button>
         </li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Lista de compras vacía.</li>';
-
-      // Migraña
-      const migraines = getStore('app_migraines');
-      document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
-        <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_migraines', ${i})">✕</button></li>
-      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin registros.</li>';
 
       // Devocional
       const devotionals = getStore('app_devotionals');
