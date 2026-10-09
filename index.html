@@ -358,7 +358,6 @@
   </div>
 
   <script>
-    // CONFIGURACIÓN OBTENIDA DE TU CAPTURA DE PANTALLA DE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
       authDomain: "condoapp-d1729.firebaseapp.com",
@@ -366,7 +365,7 @@
       projectId: "condoapp-d1729",
       storageBucket: "condoapp-d1729.firebasestorage.app",
       messagingSenderId: "834784357986",
-      appId: "1:834784357986:web:2a88a0322df771895a123d"
+      appId: "1:834784357986:web:90855a08e0c5399d8aeb3b"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -405,37 +404,31 @@
       location.reload();
     }
 
-    /* ESCUCHAR BASE DE DATOS EN TIEMPO REAL */
     function listenToDatabase() {
-      // Devocionales
       db.ref(`${userKey}/devotionals`).on('value', snapshot => {
         const data = snapshot.val() || {};
         const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         renderDevotionals(list);
       });
 
-      // Agenda / Tareas
       db.ref(`${userKey}/tasks`).on('value', snapshot => {
         const data = snapshot.val() || {};
         const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         renderTasks(list);
       });
 
-      // Hábitos
       db.ref(`${userKey}/habits`).on('value', snapshot => {
         const data = snapshot.val() || {};
         const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         renderHabits(list);
       });
 
-      // Súper
       db.ref(`${userKey}/super`).on('value', snapshot => {
         const data = snapshot.val() || {};
         const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
         renderSuper(list);
       });
 
-      // Migrañas
       db.ref(`${userKey}/migraines`).on('value', snapshot => {
         const data = snapshot.val() || {};
         const list = Object.keys(data).map(key => ({ id: key, ...data[key] }));
@@ -443,7 +436,6 @@
       });
     }
 
-    /* OPERACIONES DE GUARDADO */
     function saveDevotional() {
       const title = document.getElementById('devTitle').value.trim();
       const category = document.getElementById('devCategory').value.trim() || 'General';
@@ -517,7 +509,6 @@
       db.ref(`${userKey}/${path}/${id}`).update({ done: !currentStatus });
     }
 
-    /* RENDERS DESDE FIREBASE */
     function renderDevotionals(items) {
       document.getElementById('devotionalIndexList').innerHTML = items.length ? items.map(d => `
         <li style="background:#F8FAFC; border-radius:12px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid #0052CC;">
