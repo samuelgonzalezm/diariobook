@@ -30,13 +30,13 @@
       --card-white: #FFFFFF;
       --text-dark: #0F172A;
       --text-muted: #64748B;
-      --border: #E2E8F0;
+      --border: #CBD5E1;
       --font-display: 'Outfit', sans-serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: var(--font-body); background-color: #003B8E; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; }
+    body { font-family: var(--font-body); background-color: #003B8E; color: #FFFFFF; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
     /* AUTH OVERLAY */
     .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #002B66; z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
@@ -48,15 +48,21 @@
     .auth-input:focus { border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.2); }
 
     /* APP CONTAINER */
-    .app-container { display: none; flex: 1; max-width: 1150px; width: 100%; margin: 0 auto; background: #003075; min-height: 100vh; }
+    .app-container { display: none; flex: 1; max-width: 1150px; width: 100%; margin: 0 auto; background: #003075; min-height: 100vh; position: relative; }
     .app-container.visible { display: flex; }
 
-    /* BARRA LATERAL */
-    sidebar { width: 250px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; }
-    .logo-box { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin-bottom: 20px; }
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 190; display: none; opacity: 0; transition: opacity 0.3s ease; }
+    .sidebar-overlay.active { display: block; opacity: 1; }
+
+    /* SIDEBAR */
+    sidebar { width: 260px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; z-index: 200; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .logo-box { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; margin-bottom: 15px; }
+    .logo-content { display: flex; align-items: center; gap: 12px; }
     .logo-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
     .logo-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
     .logo-title span { color: var(--yellow-vivid); }
+
+    .btn-close-sidebar { display: none; background: rgba(255, 255, 255, 0.15); border: none; color: #FFF; font-size: 1.2rem; font-weight: 800; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; justify-content: center; align-items: center; }
 
     .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none; background: none; width: 100%; text-align: left; }
     .nav-btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(3px); }
@@ -65,9 +71,12 @@
     .btn-notify { background: #0088FF !important; color: #FFF !important; margin-top: auto; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
     .btn-logout { background: var(--red-vivid) !important; color: #FFF !important; border-radius: 16px; justify-content: center; font-size: 0.95rem; }
 
-    /* ÁREA DE CONTENIDO */
+    /* CONTENT AREA */
     .content-area { flex: 1; display: flex; flex-direction: column; background: #002255; overflow-y: auto; }
-    .header-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
+    .header-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--red-vivid); }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .btn-hamburger { display: none; background: var(--yellow-vivid); color: #002255; border: none; font-size: 1.2rem; font-weight: 900; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     .banner-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #FFF; text-transform: uppercase; letter-spacing: 0.5px; }
 
     .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4); }
@@ -82,30 +91,8 @@
     .card { background: var(--card-white); border-radius: 20px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
     .card-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: #0040A0; margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
-    /* METRICAS / KPIS HÁBITOS */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
-    .stat-card { background: #F8FAFC; border: 2px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; }
-    .stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: #0052CC; line-height: 1; }
-    .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
-
-    /* GRÁFICA */
-    .chart-box { background: #FAFAFA; border: 2px solid var(--border); border-radius: 16px; padding: 15px; text-align: center; margin-bottom: 20px; }
-    canvas { width: 100% !important; height: 160px !important; }
-
-    /* BIENVENIDA MI DÍA */
-    .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
-    .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-    .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
-    .welcome-date { font-size: 0.9rem; font-weight: 600; opacity: 0.85; margin-top: 4px; }
-    
-    .progress-box { margin-top: 15px; background: rgba(255,255,255,0.1); padding: 14px; border-radius: 14px; }
-    .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
-    .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; width: 0%; background: var(--yellow-vivid); border-radius: 10px; transition: width 0.4s ease; }
-
-    .ideas-textarea { width: 100%; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); min-height: 90px; }
-
-    /* FORMULARIOS */
+    /* FORMULARIOS Y GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
     input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 12px; border: 2px solid var(--border); font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); }
@@ -116,25 +103,39 @@
 
     .section-label { font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; color: var(--yellow-vivid); text-transform: uppercase; letter-spacing: 1px; margin: 25px 0 12px 4px; }
     ul { list-style: none; }
-    li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); }
+    li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); }
 
-    .streak-badge { font-size: 0.75rem; font-weight: 800; background: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 8px; margin-left: 8px; }
+    .agenda-card { flex-direction: column; align-items: flex-start; gap: 8px; border-left: 6px solid var(--blue-bright); position: relative; }
+    .agenda-card.prioridad-alta { border-left-color: var(--red-vivid); }
+    .agenda-card.prioridad-media { border-left-color: var(--yellow-vivid); }
+    
+    .agenda-header-info { display: flex; justify-content: space-between; width: 100%; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .agenda-type-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: #E2E8F0; color: var(--text-dark); }
+    .agenda-title { font-size: 1.05rem; font-weight: 800; color: #0040A0; margin-top: 4px; }
+    .agenda-details { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+    
+    .btn-delete-item { position: absolute; top: 14px; right: 14px; background: var(--red-vivid); color: #FFF; border: none; padding: 4px 9px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.8rem; }
+
+    /* MI DÍA Y OTROS */
+    .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
+    .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+    .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
+    .welcome-date { font-size: 0.9rem; font-weight: 600; opacity: 0.85; margin-top: 4px; }
+
+    .ideas-textarea { width: 100%; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); min-height: 90px; }
 
     .super-item { display: flex; align-items: center; gap: 14px; width: 100%; font-weight: 700; }
     .super-item.completed span { text-decoration: line-through; opacity: 0.4; }
     .super-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--red-vivid); cursor: pointer; }
 
-    .btn-delete { background: var(--red-vivid); color: #FFF; border: none; padding: 6px 11px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
+    @media (max-width: 768px) {
+      .app-container.visible { flex-direction: row; }
+      .btn-hamburger { display: flex; }
+      .btn-close-sidebar { display: flex; }
+      .grid-2 { grid-template-columns: 1fr; gap: 0; }
 
-    @media (max-width: 700px) {
-      .app-container.visible { flex-direction: column; }
-      sidebar { width: 100%; flex-direction: row; border-bottom: 3px solid var(--yellow-vivid); padding: 10px; overflow-x: auto; }
-      .logo-box { display: none; }
-      .nav-btn { padding: 10px 14px; font-size: 0.9rem; white-space: nowrap; justify-content: center; }
-      .header-banner { padding: 12px 15px; }
-      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .stat-card { padding: 10px; }
-      .stat-value { font-size: 1.4rem; }
+      sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 270px; transform: translateX(-100%); box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+      sidebar.open { transform: translateX(0); }
     }
   </style>
 </head>
@@ -154,17 +155,23 @@
     </div>
   </div>
 
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
   <!-- APP CONTAINER -->
   <div id="appContainer" class="app-container">
     
-    <sidebar>
+    <sidebar id="sidebar">
       <div class="logo-box">
-        <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo" class="logo-img">
-        <div class="logo-title">Condo<span>App</span></div>
+        <div class="logo-content">
+          <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo" class="logo-img">
+          <div class="logo-title">Condo<span>App</span></div>
+        </div>
+        <button class="btn-close-sidebar" onclick="closeSidebar()">✕</button>
       </div>
+
       <button class="nav-btn active" onclick="switchTab('midia', this)">☀️ Mi Día</button>
+      <button class="nav-btn" onclick="switchTab('horario', this)">📅 Agenda Estudiantil</button>
       <button class="nav-btn" onclick="switchTab('habitos', this)">🔥 Hábitos</button>
-      <button class="nav-btn" onclick="switchTab('horario', this)">📅 Agenda</button>
       <button class="nav-btn" onclick="switchTab('super', this)">🛒 Súper</button>
       <button class="nav-btn" onclick="switchTab('migranas', this)">🌿 Migrañas</button>
       <button class="nav-btn" onclick="switchTab('devocional', this)">📖 Devocional</button>
@@ -175,7 +182,10 @@
 
     <div class="content-area">
       <div class="header-banner">
-        <span class="banner-title">CondoApp — Tu Espacio</span>
+        <div class="header-left">
+          <button class="btn-hamburger" onclick="openSidebar()">☰</button>
+          <span class="banner-title">CondoApp — Tu Espacio</span>
+        </div>
         <button id="pwaBtn" class="btn-install" onclick="installApp()">📲 Instalar en Celular</button>
       </div>
 
@@ -192,31 +202,13 @@
               </div>
               <div id="liveClock" class="welcome-time">00:00</div>
             </div>
-
-            <div class="progress-box">
-              <div class="progress-info">
-                <span>Progreso del Día</span>
-                <span id="progressPercent">0%</span>
-              </div>
-              <div class="progress-bar-bg">
-                <div id="progressBarFill" class="progress-bar-fill"></div>
-              </div>
-            </div>
           </div>
 
-          <!-- TAREAS PRIORITARIAS -->
           <div class="card">
-            <div class="card-title">Tareas Prioritarias de Hoy 🎯</div>
+            <div class="card-title">Próximas Entregas y Eventos 🎯</div>
             <ul id="myDayTaskList"></ul>
           </div>
 
-          <!-- HÁBITOS ACTIVOS -->
-          <div class="card">
-            <div class="card-title">Hábitos del Día 🔥</div>
-            <ul id="myDayHabitsList"></ul>
-          </div>
-
-          <!-- IDEAS RÁPIDAS -->
           <div class="card">
             <div class="card-title">Ideas Rápidas 💡</div>
             <textarea id="quickNotes" class="ideas-textarea" placeholder="Anota un pensamiento o idea veloz..." oninput="saveQuickNotes()"></textarea>
@@ -224,76 +216,89 @@
 
         </section>
 
-        <!-- 2. NUEVA SECCIÓN: SEGUIMIENTO DE HÁBITOS -->
-        <section id="tab-habitos" class="tab-section">
-          
-          <!-- RESUMEN / KPIS -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div id="statActiveHabits" class="stat-value">0</div>
-              <div class="stat-label">Activos</div>
-            </div>
-            <div class="stat-card">
-              <div id="statCompletedHabits" class="stat-value">0</div>
-              <div class="stat-label">Completados</div>
-            </div>
-            <div class="stat-card">
-              <div id="statPendingHabits" class="stat-value">0</div>
-              <div class="stat-label">Pendientes</div>
-            </div>
-          </div>
-
-          <!-- GRÁFICA DE EVOLUCIÓN -->
+        <!-- 2. AGENDA ESTUDIANTIL COMPLETA (TIPO AGENDA FÍSICA) -->
+        <section id="tab-horario" class="tab-section">
           <div class="card">
-            <div class="card-title">Evolución de Cumplimiento 📊</div>
-            <div class="chart-box">
-              <canvas id="habitsChart"></canvas>
+            <div class="card-title">Nueva Entrega / Cita / Actividad 📝</div>
+            
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="taskType">Tipo de Registro</label>
+                <select id="taskType">
+                  <option value="Tarea / Proyecto">📘 Tarea / Proyecto</option>
+                  <option value="Examen / Evaluación">📝 Examen / Evaluación</option>
+                  <option value="Clase / Conferencia">🏫 Clase / Conferencia</option>
+                  <option value="Cita / Reunión">🤝 Cita / Reunión</option>
+                  <option value="Actividad Personal">⭐ Actividad Personal</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="taskSubject">Materia / Asignatura</label>
+                <input type="text" id="taskSubject" placeholder="Ej: Matemáticas, Historia...">
+              </div>
             </div>
+
+            <div class="form-group">
+              <label for="taskDesc">Título o Descripción de la Actividad</label>
+              <input type="text" id="taskDesc" placeholder="Ej: Entregar ensayo, Examen Parcial 1...">
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="taskDate">Fecha de Evento / Entrega</label>
+                <input type="date" id="taskDate">
+              </div>
+
+              <div class="form-group">
+                <label for="taskPriority">Nivel de Prioridad</label>
+                <select id="taskPriority">
+                  <option value="Alta">🔴 Alta Prioridad</option>
+                  <option value="Media" selected>🟡 Prioridad Media</option>
+                  <option value="Baja">🔵 Baja Prioridad</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="taskTimeStart">Hora Inicio / Entrega</label>
+                <input type="time" id="taskTimeStart">
+              </div>
+
+              <div class="form-group">
+                <label for="taskTimeEnd">Hora Fin (Opcional)</label>
+                <input type="time" id="taskTimeEnd">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="taskDuration">Tiempo Medido / Invertido (Opcional)</label>
+              <input type="text" id="taskDuration" placeholder="Ej: 45 min, 2 horas...">
+            </div>
+
+            <button class="btn-submit" onclick="addAcademicTask()">+ Guardar en Agenda</button>
           </div>
 
-          <!-- CREAR HÁBITO -->
+          <div class="section-label">Registro de Agenda Personal & Estudiantil</div>
+          <ul id="taskList"></ul>
+        </section>
+
+        <!-- 3. HÁBITOS -->
+        <section id="tab-habitos" class="tab-section">
           <div class="card">
             <div class="card-title">Crear Nuevo Hábito ⚡</div>
             <div class="form-group">
               <label for="habitName">Nombre del Hábito</label>
               <input type="text" id="habitName" placeholder="Ej: Entrenar, Leer 20 min, Meditar...">
             </div>
-            <div class="form-group">
-              <label for="habitTarget">Meta Semanal (Días por semana)</label>
-              <select id="habitTarget">
-                <option value="7">Todos los días (7/7)</option>
-                <option value="5">5 días a la semana</option>
-                <option value="3">3 días a la semana</option>
-                <option value="1">1 día a la semana</option>
-              </select>
-            </div>
             <button class="btn-submit" onclick="addHabit()">+ Guardar Hábito</button>
           </div>
-
-          <div class="section-label">Mis Hábitos Personalizados</div>
+          <div class="section-label">Mis Hábitos</div>
           <ul id="habitsList"></ul>
-
         </section>
 
-        <!-- AGENDA -->
-        <section id="tab-horario" class="tab-section">
-          <div class="card">
-            <div class="card-title">Agenda & Horario</div>
-            <div class="form-group">
-              <label for="taskTime">Hora de la Actividad</label>
-              <input type="time" id="taskTime">
-            </div>
-            <div class="form-group">
-              <label for="taskDesc">Descripción de la Tarea</label>
-              <input type="text" id="taskDesc" placeholder="Ej: Gimnasio, trabajo, llamada...">
-            </div>
-            <button class="btn-submit" onclick="addTask()">+ Agregar a la Agenda</button>
-          </div>
-          <div class="section-label">Actividades Registradas</div>
-          <ul id="taskList"></ul>
-        </section>
-
-        <!-- SÚPER -->
+        <!-- 4. SÚPER -->
         <section id="tab-super" class="tab-section">
           <div class="card">
             <div class="card-title">Lista del Súper 🛒</div>
@@ -307,7 +312,7 @@
           <ul id="superList"></ul>
         </section>
 
-        <!-- MIGRAÑA -->
+        <!-- 5. MIGRAÑA -->
         <section id="tab-migranas" class="tab-section">
           <div class="card">
             <div class="card-title">Registro de Migraña</div>
@@ -329,7 +334,7 @@
           <ul id="migraineList"></ul>
         </section>
 
-        <!-- DEVOCIONAL -->
+        <!-- 6. DEVOCIONAL -->
         <section id="tab-devocional" class="tab-section">
           <div class="card">
             <div class="card-title">Devocional Personal</div>
@@ -358,8 +363,17 @@
       checkActiveSession();
       initLiveClock();
       loadQuickNotes();
-      initDefaultHabits();
     });
+
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('active');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
 
     function registerSW() {
       if ('serviceWorker' in navigator) {
@@ -367,7 +381,6 @@
       }
     }
 
-    /* RELOJ EN VIVO */
     function initLiveClock() {
       function updateClock() {
         const now = new Date();
@@ -388,28 +401,41 @@
       setInterval(updateClock, 10000);
     }
 
-    /* SISTEMA DE HÁBITOS Y RACHAS */
-    function initDefaultHabits() {
-      const habits = getStore('app_habits');
-      if (habits.length === 0) {
-        const defaults = [
-          { id: 1, name: 'Tomar agua (2 Litros)', target: 7, streak: 3, doneToday: false },
-          { id: 2, name: 'Lectura o Devocional', target: 7, streak: 5, doneToday: false },
-          { id: 3, name: 'Pausa activa sin pantallas', target: 5, streak: 2, doneToday: false }
-        ];
-        setStore('app_habits', defaults);
+    /* AGENDA ESTUDIANTIL */
+    function addAcademicTask() {
+      const type = document.getElementById('taskType').value;
+      const subject = document.getElementById('taskSubject').value.trim() || 'General';
+      const desc = document.getElementById('taskDesc').value.trim();
+      const date = document.getElementById('taskDate').value;
+      const priority = document.getElementById('taskPriority').value;
+      const timeStart = document.getElementById('taskTimeStart').value;
+      const timeEnd = document.getElementById('taskTimeEnd').value;
+      const duration = document.getElementById('taskDuration').value.trim();
+
+      if (!desc || !date || !timeStart) {
+        return alert('Por favor completa al menos la descripción, fecha y hora de inicio.');
       }
+
+      const store = getStore('app_tasks');
+      store.unshift({ type, subject, desc, date, priority, timeStart, timeEnd, duration, id: Date.now() });
+      setStore('app_tasks', store);
+
+      // Limpiar inputs
+      document.getElementById('taskDesc').value = '';
+      document.getElementById('taskSubject').value = '';
+      document.getElementById('taskTimeEnd').value = '';
+      document.getElementById('taskDuration').value = '';
+
+      renderAll();
     }
 
+    /* HÁBITOS */
     function addHabit() {
       const name = document.getElementById('habitName').value.trim();
-      const target = parseInt(document.getElementById('habitTarget').value);
       if(!name) return alert('Ingresa el nombre del hábito.');
-
       const habits = getStore('app_habits');
-      habits.unshift({ id: Date.now(), name, target, streak: 0, doneToday: false });
+      habits.unshift({ id: Date.now(), name, doneToday: false });
       setStore('app_habits', habits);
-
       document.getElementById('habitName').value = '';
       renderAll();
     }
@@ -417,34 +443,8 @@
     function toggleHabit(idx) {
       const habits = getStore('app_habits');
       habits[idx].doneToday = !habits[idx].doneToday;
-      if(habits[idx].doneToday) {
-        habits[idx].streak += 1;
-      } else {
-        habits[idx].streak = Math.max(0, habits[idx].streak - 1);
-      }
       setStore('app_habits', habits);
       renderAll();
-    }
-
-    function drawChart(completed, pending) {
-      const canvas = document.getElementById('habitsChart');
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const total = completed + pending || 1;
-      const compRatio = completed / total;
-
-      // Dibujar barra de resumen
-      ctx.fillStyle = '#E2E8F0';
-      ctx.fillRect(20, 60, 260, 25);
-
-      ctx.fillStyle = '#10B981';
-      ctx.fillRect(20, 60, 260 * compRatio, 25);
-
-      ctx.fillStyle = '#0F172A';
-      ctx.font = 'bold 12px Plus Jakarta Sans';
-      ctx.fillText(`Completado: ${Math.round(compRatio * 100)}%`, 20, 45);
     }
 
     function saveQuickNotes() {
@@ -455,7 +455,6 @@
       document.getElementById('quickNotes').value = localStorage.getItem('app_quickNotes') || '';
     }
 
-    /* PERSISTENCIA DE SESIÓN */
     function checkActiveSession() {
       if (localStorage.getItem('condo_isLoggedIn') === 'true') {
         unlockApp();
@@ -469,7 +468,6 @@
       });
     }
 
-    /* AUTHENTICATION */
     function checkAuthStatus() {
       const storedReg = localStorage.getItem('condo_regNumber');
       const storedPass = localStorage.getItem('condo_passKey');
@@ -520,12 +518,12 @@
       document.getElementById('passKeyInput').value = '';
     }
 
-    /* PESTAÑAS */
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(`tab-${tabId}`).classList.add('active');
       btn.classList.add('active');
+      closeSidebar();
     }
 
     function getStore(k) { return JSON.parse(localStorage.getItem(k) || '[]'); }
@@ -535,20 +533,6 @@
       const store = getStore(k);
       store.splice(idx, 1);
       setStore(k, store);
-      renderAll();
-    }
-
-    function addTask() {
-      const time = document.getElementById('taskTime').value;
-      const desc = document.getElementById('taskDesc').value.trim();
-      if(!time || !desc) return alert('Ingresa hora y descripción.');
-      
-      const store = getStore('app_tasks');
-      store.unshift({ time, desc });
-      setStore('app_tasks', store);
-
-      document.getElementById('taskTime').value = '';
-      document.getElementById('taskDesc').value = '';
       renderAll();
     }
 
@@ -594,49 +578,53 @@
     }
 
     function renderAll() {
-      // Agenda
+      // Agenda Render
       const tasks = getStore('app_tasks');
-      document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
-        <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div><button class="btn-delete" onclick="removeItem('app_tasks', ${i})">✕</button></li>
-      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin tareas registradas.</li>';
-
-      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
-        <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div></li>
-      `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes tareas pendientes para hoy.</li>';
-
-      // Hábitos
-      const habits = getStore('app_habits');
-      let completedCount = 0;
-
-      const habitsHTML = habits.map((h, i) => {
-        if(h.doneToday) completedCount++;
+      const taskListHTML = tasks.length ? tasks.map((t, i) => {
+        const priorityClass = `prioridad-${t.priority ? t.priority.toLowerCase() : 'media'}`;
+        const endText = t.timeEnd ? ` a ${t.timeEnd}` : '';
+        const durationText = t.duration ? ` | ⏱️ Medido: ${t.duration}` : '';
+        
         return `
-          <li>
-            <div class="super-item ${h.doneToday ? 'completed' : ''}">
-              <input type="checkbox" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${i})">
-              <span>${h.name}</span>
-              <span class="streak-badge">🔥 ${h.streak} días</span>
+          <li class="agenda-card ${priorityClass}">
+            <button class="btn-delete-item" onclick="removeItem('app_tasks', ${i})">✕</button>
+            <div class="agenda-header-info">
+              <span class="agenda-type-badge">${t.type || 'Evento'}</span>
+              <span style="font-size:0.8rem; font-weight:700; color:#0052CC;">📅 ${t.date}</span>
             </div>
-            <button class="btn-delete" onclick="removeItem('app_habits', ${i})">✕</button>
+            <div class="agenda-title">${t.desc}</div>
+            <div class="agenda-details">
+              <span>📚 <strong>${t.subject}</strong></span>
+              <span>⏰ <strong>${t.timeStart}${endText}</strong></span>
+              ${durationText ? `<span>${durationText}</span>` : ''}
+              <span>🚨 Prioridad: <strong>${t.priority || 'Media'}</strong></span>
+            </div>
           </li>
         `;
-      }).join('');
+      }).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin eventos o entregas programadas.</li>';
 
-      document.getElementById('habitsList').innerHTML = habitsHTML || '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin hábitos registrados.</li>';
-      document.getElementById('myDayHabitsList').innerHTML = habitsHTML || '<li style="color:var(--text-muted); background:transparent; box-shadow:none;">Sin hábitos para hoy.</li>';
+      document.getElementById('taskList').innerHTML = taskListHTML;
 
-      // KPIs Hábitos
-      document.getElementById('statActiveHabits').innerText = habits.length;
-      document.getElementById('statCompletedHabits').innerText = completedCount;
-      document.getElementById('statPendingHabits').innerText = habits.length - completedCount;
+      // Mi Día Render (Muestra las 3 entregas más próximas)
+      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
+        <li style="border-left: 5px solid var(--blue-bright);">
+          <div>
+            <strong>📅 ${t.date} (${t.timeStart})</strong> — ${t.desc} [${t.subject}]
+          </div>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes próximas entregas agendadas.</li>';
 
-      // Porcentaje Mi Día
-      const totalHabits = habits.length || 1;
-      const percent = Math.round((completedCount / totalHabits) * 100);
-      document.getElementById('progressPercent').innerText = `${percent}%`;
-      document.getElementById('progressBarFill').style.width = `${percent}%`;
-
-      drawChart(completedCount, habits.length - completedCount);
+      // Hábitos Render
+      const habits = getStore('app_habits');
+      document.getElementById('habitsList').innerHTML = habits.length ? habits.map((h, i) => `
+        <li>
+          <div class="super-item ${h.doneToday ? 'completed' : ''}">
+            <input type="checkbox" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${i})">
+            <span>${h.name}</span>
+          </div>
+          <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_habits', ${i})">✕</button>
+        </li>
+      `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin hábitos registrados.</li>';
 
       // Súper
       const superItems = getStore('app_super');
@@ -646,20 +634,20 @@
             <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSuper(${i})">
             <span>${s.name}</span>
           </div>
-          <button class="btn-delete" onclick="removeItem('app_super', ${i})">✕</button>
+          <button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_super', ${i})">✕</button>
         </li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Lista de compras vacía.</li>';
 
       // Migraña
       const migraines = getStore('app_migraines');
       document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
-        <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-delete" onclick="removeItem('app_migraines', ${i})">✕</button></li>
+        <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_migraines', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin registros.</li>';
 
       // Devocional
       const devotionals = getStore('app_devotionals');
       document.getElementById('devotionalList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
-        <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small style="color:var(--text-muted);">${d.notes}</small></div><button class="btn-delete" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
+        <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small style="color:var(--text-muted);">${d.notes}</small></div><button class="btn-delete-item" style="position:relative; top:0; right:0;" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin notas guardadas.</li>';
     }
 
