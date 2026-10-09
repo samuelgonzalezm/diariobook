@@ -373,6 +373,16 @@
 
     let userKey = "usuario_default";
 
+    function updateDateDisplay() {
+      const dateElem = document.getElementById('currentDateText');
+      if (dateElem) {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('es-ES', options);
+        dateElem.innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      }
+    }
+
     function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('active'); }
     function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
 
@@ -396,6 +406,7 @@
     function unlockApp() {
       document.getElementById('authOverlay').style.display = 'none';
       document.getElementById('appContainer').classList.add('visible');
+      updateDateDisplay();
       listenToDatabase();
     }
 
@@ -545,7 +556,7 @@
       `).join('') : '<li style="color:#FFF;">Sin actividades agendadas.</li>';
 
       document.getElementById('myDayTaskList').innerHTML = items.length ? items.slice(0, 3).map(t => `
-        <li style="border-left: 4px solid var(--blue-bright);">📅 <strong>${t.date}</strong> — ${t.desc}</li>
+        <li style="border-left: 4px solid var(--blue-bright); padding: 8px 12px; margin-bottom: 6px; background: #F8FAFC; border-radius: 8px; color: #0F172A;">📅 <strong>${t.date}</strong> — ${t.desc}</li>
       `).join('') : '<li style="color:#64748B;">No tienes próximas entregas agendadas.</li>';
     }
 
