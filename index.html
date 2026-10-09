@@ -103,8 +103,8 @@
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
     .card-title { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
 
-    /* BOTÓN PARA ABRIR EL DRAWER EN CUALQUIER TAMAÑO DE PANTALLA */
-    .agenda-drawer-btn { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; margin-bottom: 14px; font-family: var(--font-main); }
+    /* BOTÓN DE DRAWER */
+    .drawer-open-btn { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; margin-bottom: 14px; font-family: var(--font-main); }
 
     /* DRAWER LATERAL DERECHO */
     .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
@@ -120,7 +120,7 @@
     .drawer-item { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-color); background: #FAFAFC; color: var(--text-dark); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left; transition: all 0.2s; font-family: var(--font-main); display: flex; align-items: center; gap: 10px; }
     .drawer-item.active { background: var(--primary-blue); color: #FFF; border-color: var(--primary-blue); }
 
-    /* CALENDARIO AJUSTADO A MÓVIL */
+    /* CALENDARIO */
     .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 6px; }
     .cal-header button { padding: 6px 10px; font-size: 0.75rem; border-radius: 8px; }
     .cal-header h3 { font-size: 0.95rem; text-align: center; white-space: nowrap; }
@@ -130,6 +130,14 @@
     .cal-day-cell { padding: 6px 2px; border-radius: 8px; background: #FAFAFC; border: 1px solid var(--border-color); font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
     .cal-day-cell.active-day { background: var(--primary-blue); color: #FFF; }
     .cal-task-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red-accent); margin-top: 2px; }
+
+    /* ESTILOS PRODUCTOS SÚPER */
+    .super-product-item { background: #FFF; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .super-product-item.completed span.product-name { text-decoration: line-through; opacity: 0.5; }
+    .product-details { display: flex; flex-direction: column; gap: 2px; }
+    .product-name { font-weight: 700; font-size: 0.9rem; }
+    .product-meta { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+    .product-badge { background: #EFEFEF; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: var(--primary-blue); }
 
     /* FORMS & INPUTS */
     .form-group { margin-bottom: 12px; text-align: left; }
@@ -309,12 +317,11 @@
 
         <!-- 2. AGENDA CON DRAWER LATERAL -->
         <section id="tab-agenda" class="tab-section" style="display:none;">
-          
-          <button class="agenda-drawer-btn" onclick="toggleAgendaDrawer(true)">
-            <span>⚙️</span> Opciones de Agenda
+          <button class="drawer-open-btn" onclick="toggleAgendaDrawer(true)">
+            <span>⚙️</span> Vistas de Agenda
           </button>
 
-          <!-- DRAWER DERECHO CON LAS 6 OPCIONES -->
+          <!-- DRAWER DERECHO -->
           <div id="agendaDrawerOverlay" class="drawer-overlay" onclick="toggleAgendaDrawer(false)">
             <div class="drawer-panel" onclick="event.stopPropagation()">
               <div class="drawer-header">
@@ -330,7 +337,7 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 1: CALENDARIO MENSUAL -->
+          <!-- SUBSECCIONES AGENDA -->
           <div id="agSubtab-cal" class="ag-subtab">
             <div class="card">
               <div class="cal-header">
@@ -347,7 +354,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 2: PLAN SEMANAL -->
           <div id="agSubtab-semana" class="ag-subtab" style="display:none;">
             <div class="card">
               <div class="card-title">Planificación Semanal</div>
@@ -355,7 +361,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 3: HORARIO DIARIO -->
           <div id="agSubtab-horario" class="ag-subtab" style="display:none;">
             <div class="card">
               <div class="card-title">Bloques de Horario para Hoy</div>
@@ -368,7 +373,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 4: TAREAS & PRIORIDADES -->
           <div id="agSubtab-tareas" class="ag-subtab" style="display:none;">
             <div class="card">
               <div class="card-title" style="margin-bottom:12px;">Nueva Tarea con Prioridad</div>
@@ -399,7 +403,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 5: METAS & OBJETIVOS -->
           <div id="agSubtab-metas" class="ag-subtab" style="display:none;">
             <div class="card">
               <div class="card-title">Registrar Nueva Meta</div>
@@ -426,7 +429,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIÓN 6: NOTAS & RECORDATORIOS -->
           <div id="agSubtab-notas" class="ag-subtab" style="display:none;">
             <div class="card">
               <div class="card-title">Notas y Recordatorios</div>
@@ -447,20 +449,57 @@
 
         </section>
 
-        <!-- 3. SÚPER -->
+        <!-- 3. SÚPER REESTRUCTURADO POR TIENDAS CON DRAWER -->
         <section id="tab-super" class="tab-section" style="display:none;">
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">Agregar producto</div>
-            <div class="form-group">
-              <input type="text" id="superItem" placeholder="Nombre del producto...">
+          
+          <button class="drawer-open-btn" onclick="toggleStoreDrawer(true)">
+            <span>🛒</span> Tiendas de Compras
+          </button>
+
+          <!-- DRAWER DERECHO TIENDAS -->
+          <div id="storeDrawerOverlay" class="drawer-overlay" onclick="toggleStoreDrawer(false)">
+            <div class="drawer-panel" onclick="event.stopPropagation()">
+              <div class="drawer-header">
+                <span class="drawer-title">Mis Tiendas</span>
+                <button class="drawer-close" onclick="toggleStoreDrawer(false)">✕</button>
+              </div>
+              <button class="drawer-item active" onclick="selectStoreTab('mercado', '🥬 Mercado', this)"><span>🥬</span> Mercado</button>
+              <button class="drawer-item" onclick="selectStoreTab('costco', '🛒 Costco', this)"><span>🛒</span> Costco</button>
+              <button class="drawer-item" onclick="selectStoreTab('sams', '📦 Sam\'s Club', this)"><span>📦</span> Sam's Club</button>
+              <button class="drawer-item" onclick="selectStoreTab('zorro', '🦊 El Zorro', this)"><span>🦊</span> El Zorro</button>
             </div>
-            <button class="btn-primary" onclick="addSuperItem()">+ Agregar a la lista</button>
           </div>
 
+          <!-- CONTENEDOR PRINCIPAL DE COMPRAS -->
           <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">Lista de compras</div>
-            <ul id="superList"></ul>
+            <div class="card-title" id="currentStoreTitle" style="margin-bottom:14px; color:var(--primary-blue);">
+              🥬 Mercado
+            </div>
+
+            <!-- FORMULARIO AGREGAR PRODUCTO -->
+            <div style="background:#FAFAFC; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px;">
+              <div class="form-group">
+                <label>Nombre del Producto</label>
+                <input type="text" id="storeProdName" placeholder="Ej: Jitomate...">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div class="form-group">
+                  <label>Cantidad</label>
+                  <input type="text" id="storeProdQty" placeholder="Ej: 1 kg, 2 piezas">
+                </div>
+                <div class="form-group">
+                  <label>Precio Est. ($)</label>
+                  <input type="number" id="storeProdPrice" placeholder="Opcional">
+                </div>
+              </div>
+              <button class="btn-primary" onclick="addStoreProduct()">+ AGREGAR A LA LISTA</button>
+            </div>
+
+            <!-- LISTA DE PRODUCTOS DE LA TIENDA -->
+            <div class="card-title" style="font-size:0.95rem; margin-bottom:10px;">Lista de compras</div>
+            <div id="storeProductsList"></div>
           </div>
+
         </section>
 
         <!-- 4. MIGRAÑA -->
@@ -571,6 +610,70 @@
     let currentUserData = {};
     let currentCalDate = new Date();
     let loadedTasks = [];
+    let currentStoreKey = "mercado";
+
+    // LISTA BASE DE TIENDAS Y PRODUCTOS
+    const defaultStoreLists = {
+      mercado: [
+        { name: "Quesillo", qty: "1/2 kg", price: "", done: false },
+        { name: "Yogurt", qty: "1 lt", price: "", done: false },
+        { name: "Jitomate", qty: "1 kg", price: "", done: false },
+        { name: "Cebolla", qty: "1 kg", price: "", done: false },
+        { name: "Calabaza", qty: "1/2 kg", price: "", done: false },
+        { name: "Zanahoria", qty: "1/2 kg", price: "", done: false },
+        { name: "Tomatillo", qty: "1/2 kg", price: "", done: false },
+        { name: "Lechuga italiana", qty: "1 pza", price: "", done: false },
+        { name: "Lechuga romana", qty: "1 pza", price: "", done: false },
+        { name: "Cilantro", qty: "1 manojo", price: "", done: false },
+        { name: "Nopales", qty: "1 bolsa", price: "", done: false },
+        { name: "Ajos", qty: "1 cabeza", price: "", done: false },
+        { name: "Papas", qty: "1 kg", price: "", done: false },
+        { name: "Manzana", qty: "1 kg", price: "", done: false },
+        { name: "Plátano", qty: "1 kg", price: "", done: false },
+        { name: "Papaya", qty: "1 pza", price: "", done: false },
+        { name: "Piña", qty: "1 pza", price: "", done: false },
+        { name: "Pierna con muslo", qty: "1 kg", price: "", done: false },
+        { name: "Pechuga", qty: "1 pza", price: "", done: false },
+        { name: "Tortilla", qty: "1 kg", price: "", done: false },
+        { name: "Huevo", qty: "1 casillero", price: "", done: false }
+      ],
+      costco: [
+        { name: "Carne molida", qty: "1 paquete", price: "", done: false },
+        { name: "Mantequilla", qty: "1 paquete", price: "", done: false },
+        { name: "Tortillas de harina", qty: "1 paquete", price: "", done: false },
+        { name: "Lechuga", qty: "1 domo", price: "", done: false }
+      ],
+      sams: [
+        { name: "Café", qty: "1 frasco", price: "", done: false },
+        { name: "Pescado / atún", qty: "1 paquete", price: "", done: false },
+        { name: "Catsup", qty: "1 pza", price: "", done: false },
+        { name: "Crema", qty: "1 lt", price: "", done: false },
+        { name: "Servilletas", qty: "1 paquete", price: "", done: false },
+        { name: "Servitoallas", qty: "1 paquete", price: "", done: false },
+        { name: "Jabón para trastes", qty: "1 galón", price: "", done: false },
+        { name: "Suavitel", qty: "1 lt", price: "", done: false },
+        { name: "Jabón para ropa", qty: "1 paquete", price: "", done: false },
+        { name: "Pan molido", qty: "1 pza", price: "", done: false },
+        { name: "Pino", qty: "1 galón", price: "", done: false },
+        { name: "Queso americano", qty: "1 paquete", price: "", done: false },
+        { name: "Windex", qty: "1 pza", price: "", done: false }
+      ],
+      zorro: [
+        { name: "Arroz", qty: "1 bolsa", price: "", done: false },
+        { name: "Leche", qty: "1 caja", price: "", done: false },
+        { name: "Harina", qty: "1 bolsa", price: "", done: false },
+        { name: "Sal (bolsa)", qty: "1 bolsa", price: "", done: false },
+        { name: "Jamón", qty: "1/2 kg", price: "", done: false },
+        { name: "Aceite", qty: "1 botella", price: "", done: false },
+        { name: "Espagueti", qty: "1 paquete", price: "", done: false },
+        { name: "Sopa surtida", qty: "5 paquetes", price: "", done: false },
+        { name: "Azúcar", qty: "1 kg", price: "", done: false },
+        { name: "Pasta de dientes", qty: "1 pza", price: "", done: false },
+        { name: "Zote", qty: "1 pza", price: "", done: false },
+        { name: "Saladitas", qty: "1 paquete", price: "", done: false },
+        { name: "Mayonesa", qty: "1 frasco", price: "", done: false }
+      ]
+    };
 
     function switchAuthTab(tab) {
       const loginBtn = document.getElementById('tabBtnLogin');
@@ -687,6 +790,7 @@
       updateDateDisplay();
       updateProfileUI();
       renderCalendar();
+      initDefaultStoreData();
       listenToDatabase();
     }
 
@@ -709,6 +813,83 @@
       toggleAgendaDrawer(false);
     }
 
+    function toggleStoreDrawer(open) {
+      const drawer = document.getElementById('storeDrawerOverlay');
+      if(open) drawer.classList.add('open');
+      else drawer.classList.remove('open');
+    }
+
+    function selectStoreTab(storeKey, storeTitle, btn) {
+      currentStoreKey = storeKey;
+      document.getElementById('currentStoreTitle').innerText = storeTitle;
+      document.querySelectorAll('#storeDrawerOverlay .drawer-item').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      toggleStoreDrawer(false);
+      listenToStoreProducts();
+    }
+
+    function initDefaultStoreData() {
+      db.ref(`${userKey}/stores`).once('value', snapshot => {
+        if(!snapshot.exists()) {
+          db.ref(`${userKey}/stores`).set(defaultStoreLists);
+        }
+      });
+    }
+
+    function listenToStoreProducts() {
+      db.ref(`${userKey}/stores/${currentStoreKey}`).on('value', snapshot => {
+        const data = snapshot.val() || [];
+        renderStoreProducts(data);
+      });
+    }
+
+    function renderStoreProducts(products) {
+      const container = document.getElementById('storeProductsList');
+      if(!products || products.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay productos en esta tienda.</p>';
+        return;
+      }
+
+      let html = '';
+      Object.keys(products).forEach(key => {
+        const p = products[key];
+        html += `
+          <div class="super-product-item ${p.done ? 'completed' : ''}">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="checkbox" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
+              <div class="product-details">
+                <span class="product-name">${p.name}</span>
+                <span class="product-meta">${p.qty ? 'Cant: ' + p.qty : ''} ${p.price ? ' | $' + p.price : ''}</span>
+              </div>
+            </div>
+            <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteStoreProduct('${key}')">✕</button>
+          </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function addStoreProduct() {
+      const name = document.getElementById('storeProdName').value.trim();
+      const qty = document.getElementById('storeProdQty').value.trim();
+      const price = document.getElementById('storeProdPrice').value.trim();
+
+      if(!name) return alert('Ingresa el nombre del producto.');
+
+      db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty, price, done: false });
+      document.getElementById('storeProdName').value = '';
+      document.getElementById('storeProdQty').value = '';
+      document.getElementById('storeProdPrice').value = '';
+    }
+
+    function toggleStoreProduct(key, currentDone) {
+      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ done: !currentDone });
+    }
+
+    function deleteStoreProduct(key) {
+      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
+    }
+
     function renderCalendar() {
       const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
       const year = currentCalDate.getFullYear();
@@ -728,7 +909,6 @@
       for (let day = 1; day <= totalDays; day++) {
         const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
         const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        
         const hasTask = loadedTasks.some(t => t.date === dateString);
 
         grid.innerHTML += `
@@ -768,14 +948,11 @@
         const data = snapshot.val() || {};
         renderTimeBlocks(Object.keys(data).map(k => ({ id: k, ...data[k] })));
       });
-      db.ref(`${userKey}/super`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderSuper(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
       db.ref(`${userKey}/migraines`).on('value', snapshot => {
         const data = snapshot.val() || {};
         renderMigraines(Object.keys(data).map(k => ({ id: k, ...data[k] })));
       });
+      listenToStoreProducts();
     }
 
     function addAcademicTask() {
@@ -794,7 +971,7 @@
       const progress = document.getElementById('goalProgress').value || 0;
       const deadline = document.getElementById('goalDeadline').value;
 
-      if(!title) return alert('Ingresa un título para la meta.');
+      if(!title) return alert('Ingresa un título.');
 
       db.ref(`${userKey}/goals`).push({ title, progress: parseInt(progress), deadline });
       document.getElementById('goalTitle').value = '';
@@ -821,13 +998,6 @@
       document.getElementById('timeBlockActivity').value = '';
     }
 
-    function addSuperItem() {
-      const name = document.getElementById('superItem').value.trim();
-      if(!name) return alert('Ingresa un producto.');
-      db.ref(`${userKey}/super`).push({ name, done: false });
-      document.getElementById('superItem').value = '';
-    }
-
     function addFullMigraine() {
       const date = document.getElementById('migraineDate').value;
       const time = document.getElementById('migraineTime').value;
@@ -838,10 +1008,6 @@
 
     function deleteItem(path, id) {
       db.ref(`${userKey}/${path}/${id}`).remove();
-    }
-
-    function toggleItem(path, id, currentStatus) {
-      db.ref(`${userKey}/${path}/${id}`).update({ done: !currentStatus });
     }
 
     function renderTasks(items) {
@@ -891,18 +1057,6 @@
           <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('timeblocks', '${b.id}')">✕</button>
         </li>
       `).join('') : '<li style="color:var(--text-muted);">Sin bloques de horario.</li>';
-    }
-
-    function renderSuper(items) {
-      document.getElementById('superList').innerHTML = items.length ? items.map(s => `
-        <li class="item-row">
-          <label style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleItem('super', '${s.id}', ${s.done})">
-            <span>${s.name}</span>
-          </label>
-          <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteItem('super', '${s.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Lista vacía.</li>';
     }
 
     function renderMigraines(items) {
