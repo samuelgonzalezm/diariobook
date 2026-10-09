@@ -14,7 +14,7 @@
   <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza">
   <link rel="manifest" href="./manifest.json">
 
-  <!-- Tipografías de Alto Impacto / Estilo Red Social Moderna (Plus Jakarta Sans & Outfit) -->
+  <!-- Tipografías de Alto Impacto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -26,6 +26,7 @@
       --blue-bright: #0072FF;
       --red-vivid: #FF0000;
       --yellow-vivid: #FFD000;
+      --green-vivid: #10B981;
       --card-white: #FFFFFF;
       --text-dark: #0F172A;
       --text-muted: #64748B;
@@ -50,15 +51,14 @@
     .app-container { display: none; flex: 1; max-width: 1150px; width: 100%; margin: 0 auto; background: #003075; min-height: 100vh; }
     .app-container.visible { display: flex; }
 
-    /* BARRA LATERAL RENOVADA (NUEVA TIPOGRAFÍA Y ESTILO) */
+    /* BARRA LATERAL */
     sidebar { width: 250px; background: #004BB5; color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 12px; }
     .logo-box { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin-bottom: 20px; }
     .logo-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-vivid); background: #FFF; }
     .logo-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px; color: #FFF; text-transform: uppercase; }
     .logo-title span { color: var(--yellow-vivid); }
 
-    /* MENÚ LATERAL MEJORADO */
-    .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none; background: none; width: 100%; text-align: left; letter-spacing: 0.2px; }
+    .nav-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px; color: #FFFFFF; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border: none; background: none; width: 100%; text-align: left; }
     .nav-btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateX(3px); }
     .nav-btn.active { background: var(--yellow-vivid); color: #002255; font-weight: 900; box-shadow: 0 4px 15px rgba(255, 208, 0, 0.3); }
     
@@ -72,7 +72,7 @@
 
     .btn-install { background: var(--red-vivid); color: #FFF; border: none; padding: 10px 18px; border-radius: 25px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4); }
 
-    /* CARDS Y CONTENIDO */
+    /* CARDS */
     .main-body { padding: 22px; max-width: 800px; margin: 0 auto; width: 100%; }
     .tab-section { display: none; }
     .tab-section.active { display: block; animation: slideUp 0.25s ease-out; }
@@ -82,19 +82,27 @@
     .card { background: var(--card-white); border-radius: 20px; padding: 24px; color: var(--text-dark); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 2px solid var(--border); margin-bottom: 22px; }
     .card-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; color: #0040A0; margin-bottom: 18px; border-bottom: 3px solid var(--yellow-vivid); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
-    /* ESTILOS ESPECÍFICOS SECCIÓN "MI DÍA" */
+    /* METRICAS / KPIS HÁBITOS */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-card { background: #F8FAFC; border: 2px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; }
+    .stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: #0052CC; line-height: 1; }
+    .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+
+    /* GRÁFICA */
+    .chart-box { background: #FAFAFA; border: 2px solid var(--border); border-radius: 16px; padding: 15px; text-align: center; margin-bottom: 20px; }
+    canvas { width: 100% !important; height: 160px !important; }
+
+    /* BIENVENIDA MI DÍA */
     .welcome-card { background: linear-gradient(135deg, #0052CC 0%, #002D62 100%); color: #FFF; border: none; padding: 25px; }
     .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
     .welcome-time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--yellow-vivid); line-height: 1; }
     .welcome-date { font-size: 0.9rem; font-weight: 600; opacity: 0.85; margin-top: 4px; }
     
-    /* Barra de Progreso Diario */
     .progress-box { margin-top: 15px; background: rgba(255,255,255,0.1); padding: 14px; border-radius: 14px; }
     .progress-info { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
     .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
     .progress-bar-fill { height: 100%; width: 0%; background: var(--yellow-vivid); border-radius: 10px; transition: width 0.4s ease; }
 
-    /* Baste/Quick Notes */
     .ideas-textarea { width: 100%; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; outline: none; background: #F8FAFC; color: var(--text-dark); min-height: 90px; }
 
     /* FORMULARIOS */
@@ -110,6 +118,8 @@
     ul { list-style: none; }
     li { background: var(--card-white); color: var(--text-dark); border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-left: 6px solid var(--blue-bright); }
 
+    .streak-badge { font-size: 0.75rem; font-weight: 800; background: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 8px; margin-left: 8px; }
+
     .super-item { display: flex; align-items: center; gap: 14px; width: 100%; font-weight: 700; }
     .super-item.completed span { text-decoration: line-through; opacity: 0.4; }
     .super-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--red-vivid); cursor: pointer; }
@@ -122,6 +132,9 @@
       .logo-box { display: none; }
       .nav-btn { padding: 10px 14px; font-size: 0.9rem; white-space: nowrap; justify-content: center; }
       .header-banner { padding: 12px 15px; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-card { padding: 10px; }
+      .stat-value { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -144,13 +157,13 @@
   <!-- APP CONTAINER -->
   <div id="appContainer" class="app-container">
     
-    <!-- BARRA LATERAL CON NUEVA TIPOGRAFÍA -->
     <sidebar>
       <div class="logo-box">
         <img src="https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza" alt="Logo" class="logo-img">
         <div class="logo-title">Condo<span>App</span></div>
       </div>
       <button class="nav-btn active" onclick="switchTab('midia', this)">☀️ Mi Día</button>
+      <button class="nav-btn" onclick="switchTab('habitos', this)">🔥 Hábitos</button>
       <button class="nav-btn" onclick="switchTab('horario', this)">📅 Agenda</button>
       <button class="nav-btn" onclick="switchTab('super', this)">🛒 Súper</button>
       <button class="nav-btn" onclick="switchTab('migranas', this)">🌿 Migrañas</button>
@@ -168,10 +181,9 @@
 
       <div class="main-body">
 
-        <!-- NUEVA SECCIÓN PRINCIPAL: MI DÍA -->
+        <!-- 1. SECCIÓN MI DÍA -->
         <section id="tab-midia" class="tab-section active">
           
-          <!-- TARJETA SALUDO Y RELOJ -->
           <div class="card welcome-card">
             <div class="welcome-header">
               <div>
@@ -181,7 +193,6 @@
               <div id="liveClock" class="welcome-time">00:00</div>
             </div>
 
-            <!-- PORCENTAJE DE AVANCE DIARIO -->
             <div class="progress-box">
               <div class="progress-info">
                 <span>Progreso del Día</span>
@@ -193,42 +204,74 @@
             </div>
           </div>
 
-          <!-- TAREAS PRIORITARIAS DEL DÍA -->
+          <!-- TAREAS PRIORITARIAS -->
           <div class="card">
             <div class="card-title">Tareas Prioritarias de Hoy 🎯</div>
             <ul id="myDayTaskList"></ul>
           </div>
 
-          <!-- HÁBITOS PENDIENTES DE HOY -->
+          <!-- HÁBITOS ACTIVOS -->
           <div class="card">
-            <div class="card-title">Hábitos Diarios ⚡</div>
-            <ul id="myDayHabitsList">
-              <li>
-                <div class="super-item">
-                  <input type="checkbox" onchange="updateProgress()">
-                  <span>Tomar agua (2 Litros)</span>
-                </div>
-              </li>
-              <li>
-                <div class="super-item">
-                  <input type="checkbox" onchange="updateProgress()">
-                  <span>Realizar lectura o devocional</span>
-                </div>
-              </li>
-              <li>
-                <div class="super-item">
-                  <input type="checkbox" onchange="updateProgress()">
-                  <span>Pausa activa sin pantallas</span>
-                </div>
-              </li>
-            </ul>
+            <div class="card-title">Hábitos del Día 🔥</div>
+            <ul id="myDayHabitsList"></ul>
           </div>
 
-          <!-- IDEAS RÁPIDAS / NOTAS AL INSTANTE -->
+          <!-- IDEAS RÁPIDAS -->
           <div class="card">
             <div class="card-title">Ideas Rápidas 💡</div>
             <textarea id="quickNotes" class="ideas-textarea" placeholder="Anota un pensamiento o idea veloz..." oninput="saveQuickNotes()"></textarea>
           </div>
+
+        </section>
+
+        <!-- 2. NUEVA SECCIÓN: SEGUIMIENTO DE HÁBITOS -->
+        <section id="tab-habitos" class="tab-section">
+          
+          <!-- RESUMEN / KPIS -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div id="statActiveHabits" class="stat-value">0</div>
+              <div class="stat-label">Activos</div>
+            </div>
+            <div class="stat-card">
+              <div id="statCompletedHabits" class="stat-value">0</div>
+              <div class="stat-label">Completados</div>
+            </div>
+            <div class="stat-card">
+              <div id="statPendingHabits" class="stat-value">0</div>
+              <div class="stat-label">Pendientes</div>
+            </div>
+          </div>
+
+          <!-- GRÁFICA DE EVOLUCIÓN -->
+          <div class="card">
+            <div class="card-title">Evolución de Cumplimiento 📊</div>
+            <div class="chart-box">
+              <canvas id="habitsChart"></canvas>
+            </div>
+          </div>
+
+          <!-- CREAR HÁBITO -->
+          <div class="card">
+            <div class="card-title">Crear Nuevo Hábito ⚡</div>
+            <div class="form-group">
+              <label for="habitName">Nombre del Hábito</label>
+              <input type="text" id="habitName" placeholder="Ej: Entrenar, Leer 20 min, Meditar...">
+            </div>
+            <div class="form-group">
+              <label for="habitTarget">Meta Semanal (Días por semana)</label>
+              <select id="habitTarget">
+                <option value="7">Todos los días (7/7)</option>
+                <option value="5">5 días a la semana</option>
+                <option value="3">3 días a la semana</option>
+                <option value="1">1 día a la semana</option>
+              </select>
+            </div>
+            <button class="btn-submit" onclick="addHabit()">+ Guardar Hábito</button>
+          </div>
+
+          <div class="section-label">Mis Hábitos Personalizados</div>
+          <ul id="habitsList"></ul>
 
         </section>
 
@@ -315,6 +358,7 @@
       checkActiveSession();
       initLiveClock();
       loadQuickNotes();
+      initDefaultHabits();
     });
 
     function registerSW() {
@@ -323,7 +367,7 @@
       }
     }
 
-    /* RELOJ EN VIVO Y FECHA */
+    /* RELOJ EN VIVO */
     function initLiveClock() {
       function updateClock() {
         const now = new Date();
@@ -334,7 +378,6 @@
         const options = { weekday: 'long', day: 'numeric', month: 'long' };
         document.getElementById('currentDateText').innerText = now.toLocaleDateString('es-ES', options);
 
-        // Saludo según hora
         const hr = now.getHours();
         let greeting = '¡Buenos días!';
         if (hr >= 12 && hr < 19) greeting = '¡Buenas tardes!';
@@ -345,88 +388,88 @@
       setInterval(updateClock, 10000);
     }
 
-    /* PROGRESO DIARIO Y NOTAS RÁPIDAS */
-    function updateProgress() {
-      const checkboxes = document.querySelectorAll('#myDayHabitsList input[type="checkbox"]');
-      let checkedCount = 0;
-      checkboxes.forEach(cb => { if(cb.checked) checkedCount++; });
+    /* SISTEMA DE HÁBITOS Y RACHAS */
+    function initDefaultHabits() {
+      const habits = getStore('app_habits');
+      if (habits.length === 0) {
+        const defaults = [
+          { id: 1, name: 'Tomar agua (2 Litros)', target: 7, streak: 3, doneToday: false },
+          { id: 2, name: 'Lectura o Devocional', target: 7, streak: 5, doneToday: false },
+          { id: 3, name: 'Pausa activa sin pantallas', target: 5, streak: 2, doneToday: false }
+        ];
+        setStore('app_habits', defaults);
+      }
+    }
 
-      const percent = checkboxes.length ? Math.round((checkedCount / checkboxes.length) * 100) : 0;
-      document.getElementById('progressPercent').innerText = `${percent}%`;
-      document.getElementById('progressBarFill').style.width = `${percent}%`;
+    function addHabit() {
+      const name = document.getElementById('habitName').value.trim();
+      const target = parseInt(document.getElementById('habitTarget').value);
+      if(!name) return alert('Ingresa el nombre del hábito.');
+
+      const habits = getStore('app_habits');
+      habits.unshift({ id: Date.now(), name, target, streak: 0, doneToday: false });
+      setStore('app_habits', habits);
+
+      document.getElementById('habitName').value = '';
+      renderAll();
+    }
+
+    function toggleHabit(idx) {
+      const habits = getStore('app_habits');
+      habits[idx].doneToday = !habits[idx].doneToday;
+      if(habits[idx].doneToday) {
+        habits[idx].streak += 1;
+      } else {
+        habits[idx].streak = Math.max(0, habits[idx].streak - 1);
+      }
+      setStore('app_habits', habits);
+      renderAll();
+    }
+
+    function drawChart(completed, pending) {
+      const canvas = document.getElementById('habitsChart');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const total = completed + pending || 1;
+      const compRatio = completed / total;
+
+      // Dibujar barra de resumen
+      ctx.fillStyle = '#E2E8F0';
+      ctx.fillRect(20, 60, 260, 25);
+
+      ctx.fillStyle = '#10B981';
+      ctx.fillRect(20, 60, 260 * compRatio, 25);
+
+      ctx.fillStyle = '#0F172A';
+      ctx.font = 'bold 12px Plus Jakarta Sans';
+      ctx.fillText(`Completado: ${Math.round(compRatio * 100)}%`, 20, 45);
     }
 
     function saveQuickNotes() {
-      const notes = document.getElementById('quickNotes').value;
-      localStorage.setItem('app_quickNotes', notes);
+      localStorage.setItem('app_quickNotes', document.getElementById('quickNotes').value);
     }
 
     function loadQuickNotes() {
-      const saved = localStorage.getItem('app_quickNotes') || '';
-      document.getElementById('quickNotes').value = saved;
+      document.getElementById('quickNotes').value = localStorage.getItem('app_quickNotes') || '';
     }
 
     /* PERSISTENCIA DE SESIÓN */
     function checkActiveSession() {
-      const isLogged = localStorage.getItem('condo_isLoggedIn');
-      if (isLogged === 'true') {
+      if (localStorage.getItem('condo_isLoggedIn') === 'true') {
         unlockApp();
       }
     }
 
     function requestNotificationPermission() {
-      if (!("Notification" in window)) {
-        return alert("Tu navegador no soporta notificaciones.");
-      }
+      if (!("Notification" in window)) return alert("Tu navegador no soporta notificaciones.");
       Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-          alert("¡Notificaciones activadas con éxito!");
-        } else {
-          alert("Permiso de notificaciones denegado.");
-        }
+        if (permission === "granted") alert("¡Notificaciones activadas!");
       });
     }
 
-    function scheduleNotification(taskTime, taskDesc) {
-      if (!("Notification" in window) || Notification.permission !== "granted") return;
-
-      const now = new Date();
-      const [hours, minutes] = taskTime.split(':');
-      const targetTime = new Date();
-      targetTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-      const delay = targetTime.getTime() - now.getTime();
-
-      if (delay > 0) {
-        setTimeout(() => {
-          new Notification("CondoApp — Recordatorio", {
-            body: `⏰ Es hora de: ${taskDesc}`,
-            icon: "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza"
-          });
-        }, delay);
-      }
-    }
-
-    /* PWA Prompt */
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('pwaBtn');
-      if (btn) btn.style.display = 'block';
-    });
-
-    function installApp() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          document.getElementById('pwaBtn').style.display = 'none';
-          deferredPrompt = null;
-        });
-      }
-    }
-
-    /* Autenticación */
+    /* AUTHENTICATION */
     function checkAuthStatus() {
       const storedReg = localStorage.getItem('condo_regNumber');
       const storedPass = localStorage.getItem('condo_passKey');
@@ -453,7 +496,6 @@
         localStorage.setItem('condo_regNumber', regInput);
         localStorage.setItem('condo_passKey', passInput);
         localStorage.setItem('condo_isLoggedIn', 'true');
-        alert('¡Credenciales creadas con éxito!');
         unlockApp();
       } else {
         if (regInput === storedReg && passInput === storedPass) {
@@ -478,7 +520,7 @@
       document.getElementById('passKeyInput').value = '';
     }
 
-    /* Pestañas */
+    /* PESTAÑAS */
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-section').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -504,8 +546,6 @@
       const store = getStore('app_tasks');
       store.unshift({ time, desc });
       setStore('app_tasks', store);
-
-      scheduleNotification(time, desc);
 
       document.getElementById('taskTime').value = '';
       document.getElementById('taskDesc').value = '';
@@ -554,18 +594,51 @@
     }
 
     function renderAll() {
+      // Agenda
       const tasks = getStore('app_tasks');
-      
-      // Render Lista Agenda
       document.getElementById('taskList').innerHTML = tasks.length ? tasks.map((t, i) => `
         <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div><button class="btn-delete" onclick="removeItem('app_tasks', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin tareas registradas.</li>';
 
-      // Render Lista Tareas en Mi Día
-      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t, i) => `
+      document.getElementById('myDayTaskList').innerHTML = tasks.length ? tasks.slice(0, 3).map((t) => `
         <li><div><strong>⏰ ${t.time}</strong> — ${t.desc}</div></li>
       `).join('') : '<li style="color:var(--text-muted); background:transparent; box-shadow:none; padding:10px 0;">No tienes tareas pendientes para hoy.</li>';
 
+      // Hábitos
+      const habits = getStore('app_habits');
+      let completedCount = 0;
+
+      const habitsHTML = habits.map((h, i) => {
+        if(h.doneToday) completedCount++;
+        return `
+          <li>
+            <div class="super-item ${h.doneToday ? 'completed' : ''}">
+              <input type="checkbox" ${h.doneToday ? 'checked' : ''} onchange="toggleHabit(${i})">
+              <span>${h.name}</span>
+              <span class="streak-badge">🔥 ${h.streak} días</span>
+            </div>
+            <button class="btn-delete" onclick="removeItem('app_habits', ${i})">✕</button>
+          </li>
+        `;
+      }).join('');
+
+      document.getElementById('habitsList').innerHTML = habitsHTML || '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin hábitos registrados.</li>';
+      document.getElementById('myDayHabitsList').innerHTML = habitsHTML || '<li style="color:var(--text-muted); background:transparent; box-shadow:none;">Sin hábitos para hoy.</li>';
+
+      // KPIs Hábitos
+      document.getElementById('statActiveHabits').innerText = habits.length;
+      document.getElementById('statCompletedHabits').innerText = completedCount;
+      document.getElementById('statPendingHabits').innerText = habits.length - completedCount;
+
+      // Porcentaje Mi Día
+      const totalHabits = habits.length || 1;
+      const percent = Math.round((completedCount / totalHabits) * 100);
+      document.getElementById('progressPercent').innerText = `${percent}%`;
+      document.getElementById('progressBarFill').style.width = `${percent}%`;
+
+      drawChart(completedCount, habits.length - completedCount);
+
+      // Súper
       const superItems = getStore('app_super');
       document.getElementById('superList').innerHTML = superItems.length ? superItems.map((s, i) => `
         <li>
@@ -577,17 +650,35 @@
         </li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Lista de compras vacía.</li>';
 
+      // Migraña
       const migraines = getStore('app_migraines');
       document.getElementById('migraineList').innerHTML = migraines.length ? migraines.map((m, i) => `
         <li><div><strong>${m.date}</strong> — ${m.level}: ${m.trigger}</div><button class="btn-delete" onclick="removeItem('app_migraines', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin registros.</li>';
 
+      // Devocional
       const devotionals = getStore('app_devotionals');
       document.getElementById('devotionalList').innerHTML = devotionals.length ? devotionals.map((d, i) => `
         <li><div><strong>📖 ${d.passage}</strong> (${d.date})<br><small style="color:var(--text-muted);">${d.notes}</small></div><button class="btn-delete" onclick="removeItem('app_devotionals', ${i})">✕</button></li>
       `).join('') : '<li style="color:#FFF; background:transparent; box-shadow:none;">Sin notas guardadas.</li>';
+    }
 
-      updateProgress();
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('pwaBtn');
+      if (btn) btn.style.display = 'block';
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          document.getElementById('pwaBtn').style.display = 'none';
+          deferredPrompt = null;
+        });
+      }
     }
   </script>
 </body>
