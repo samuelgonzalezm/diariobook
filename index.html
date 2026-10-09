@@ -131,19 +131,18 @@
     .cal-day-cell.active-day { background: var(--primary-blue); color: #FFF; }
     .cal-task-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red-accent); margin-top: 2px; }
 
-    /* ESTILOS DE COMPRAS SEGÚN BOCETO REQUERIDO */
+    /* ESTILOS DE COMPRAS EN PÍLDORAS REDONDEADAS */
     .super-product-item-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; width: 100%; }
     
-    /* CASILLA CIRCULAR DE COMPRA (BOLITA) */
+    /* CASILLA CIRCULAR (BOLITA) */
     .custom-circle-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #C4C4C8; appearance: none; -webkit-appearance: none; outline: none; cursor: pointer; flex-shrink: 0; background: #FFF; transition: all 0.2s; }
     .custom-circle-check:checked { background: var(--primary-blue); border-color: var(--primary-blue); position: relative; }
     .custom-circle-check:checked::after { content: '✓'; color: #FFF; font-size: 12px; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-    /* DISEÑO PÍLDORA (ORDEN COMPUTADORA Y MÓVIL) */
+    /* PÍLDORAS REDONDEADAS DE PRODUCTO */
     .product-row-pill { display: flex; flex: 1; align-items: center; gap: 10px; }
     
     .pill-input { border-radius: 20px; background: #D0D7DE; border: none; padding: 10px 16px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); font-family: var(--font-main); outline: none; text-align: center; }
-    .pill-input::placeholder { color: #656D76; font-weight: 600; }
     .pill-input:focus { background: #E2E8ED; }
 
     .pill-name-box { flex: 2; min-width: 120px; text-align: left; }
@@ -152,7 +151,9 @@
 
     .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
 
-    /* ADAPTACIÓN MÓVIL FIEL AL BOCETO */
+    .btn-clear-store { width: 100%; padding: 12px; background: #FF3B30; color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* ADAPTACIÓN MÓVIL */
     @media (max-width: 600px) {
       .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; }
       .pill-sub-group { display: flex; gap: 8px; width: 100%; }
@@ -469,7 +470,7 @@
 
         </section>
 
-        <!-- 3. SÚPER REESTRUCTURADO FIEL AL BOCETO -->
+        <!-- 3. SÚPER SECCIÓN -->
         <section id="tab-super" class="tab-section" style="display:none;">
           
           <button class="drawer-open-btn" onclick="toggleStoreDrawer(true)">
@@ -504,8 +505,13 @@
               </div>
             </div>
 
-            <!-- LISTA DE PRODUCTOS CON PÍLDORAS SEGÚN BOCETO -->
+            <!-- LISTA DE PRODUCTOS CON CAMPOS LIMPIOS -->
             <div id="storeProductsList"></div>
+
+            <!-- BOTÓN PARA LIMPIAR TODO EL CONTENIDO DE LA TIENDA -->
+            <button class="btn-clear-store" onclick="clearCurrentStoreData()">
+              🗑️ Borrar información de esta tienda
+            </button>
           </div>
 
         </section>
@@ -620,7 +626,7 @@
     let loadedTasks = [];
     let currentStoreKey = "mercado";
 
-    // LISTAS INICIALES CON CAMPOS EN BLANCO PARA CANTIDAD Y PRECIO
+    // LISTAS INICIALES CON CASILLEROS COMPLETAMENTE LIMPIOS
     const defaultStoreLists = {
       mercado: [
         { name: "Quesillo", qty: "", price: "", done: false },
@@ -851,7 +857,7 @@
       });
     }
 
-    /* RENDERIZADO FIDELIDAD AL BOCETO EN PÍLDORAS REDONDEADAS */
+    /* RENDERIZADO DE PRODUCTOS CON PÍLDORAS SIN PLACEHOLDERS O TEXTOS PREVIOS */
     function renderStoreProducts(products) {
       const container = document.getElementById('storeProductsList');
       if(!products || Object.keys(products).length === 0) {
@@ -869,19 +875,19 @@
             
             <!-- CONTENEDOR DE PÍLDORAS -->
             <div class="product-row-pill">
-              <!-- NOMBRE (PÍLDORA LARGA) -->
-              <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" placeholder="Nombre" onchange="updateStoreField('${key}', 'name', this.value)">
+              <!-- NOMBRE -->
+              <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
               
               <div class="pill-sub-group">
-                <!-- CANTIDAD (PÍLDORA EN BLANCO) -->
-                <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" placeholder="cantidad" onchange="updateStoreField('${key}', 'qty', this.value)">
+                <!-- CANTIDAD (LIMPIO) -->
+                <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" onchange="updateStoreField('${key}', 'qty', this.value)">
                 
-                <!-- PRECIO (PÍLDORA EN BLANCO) -->
-                <input type="text" class="pill-input pill-price-box" value="${p.price || ''}" placeholder="precio" onchange="updateStoreField('${key}', 'price', this.value)">
+                <!-- PRECIO (LIMPIO) -->
+                <input type="text" class="pill-input pill-price-box" value="${p.price || ''}" onchange="updateStoreField('${key}', 'price', this.value)">
               </div>
             </div>
 
-            <!-- BOTÓN BORRAR -->
+            <!-- BOTÓN BORRAR INDIVIDUAL -->
             <button style="background:none; border:none; color:var(--red-accent); font-weight:800; cursor:pointer; font-size:1.1rem; padding:0 4px;" onclick="deleteStoreProduct('${key}')">✕</button>
           </div>`;
       });
@@ -907,6 +913,20 @@
 
     function deleteStoreProduct(key) {
       db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
+    }
+
+    /* BORRADO MASIVO DE CANTIDADES, PRECIOS Y CHECKS */
+    function clearCurrentStoreData() {
+      if(confirm('¿Deseas limpiar todas las cantidades, precios y marcas de esta tienda?')) {
+        db.ref(`${userKey}/stores/${currentStoreKey}`).once('value', snapshot => {
+          const data = snapshot.val();
+          if(data) {
+            Object.keys(data).forEach(key => {
+              db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
+            });
+          }
+        });
+      }
     }
 
     function renderCalendar() {
