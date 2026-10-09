@@ -31,6 +31,7 @@
       --text-dark: #1C1C1E;
       --text-muted: #8E8E93;
       --border-color: #E5E5EA;
+      
       --font-heading: 'Raleway', sans-serif;
       --font-body: 'Montserrat', sans-serif;
     }
@@ -40,6 +41,7 @@
 
     h1, h2, h3, h4, .brand-title, .splash-title, .user-greeting, .card-title { font-family: var(--font-heading); }
 
+    /* AUTH OVERLAY / SPLASH */
     .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary-blue); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; color: #FFF; text-align: center; }
     .splash-logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--yellow-accent); margin-bottom: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); background: #FFF; }
     .splash-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; text-transform: lowercase; }
@@ -50,9 +52,11 @@
     .btn-yellow { width: 100%; padding: 15px; background: var(--yellow-accent); color: var(--text-dark); border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.1s ease; text-transform: uppercase; letter-spacing: 0.5px; }
     .btn-yellow:active { transform: scale(0.98); }
 
+    /* MAIN LAYOUT */
     .app-layout { display: none; width: 100%; min-height: 100vh; }
     .app-layout.visible { display: flex; }
 
+    /* SIDEBAR (DESKTOP) */
     .sidebar { width: 260px; background: var(--primary-blue); color: #FFF; padding: 24px 16px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
     .brand-header { display: flex; align-items: center; gap: 12px; padding: 8px 10px; margin-bottom: 24px; }
     .brand-logo-img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
@@ -64,6 +68,7 @@
 
     .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.15); }
 
+    /* MAIN CONTENT AREA */
     .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
     .top-header { background: #FFF; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
     .user-greeting { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
@@ -71,15 +76,45 @@
 
     .content-body { padding: 26px; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; }
 
+    /* DASHBOARD GRID */
     .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 26px; }
     .quick-card { background: #FFF; border-radius: 18px; padding: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 16px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
     .quick-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
     .qc-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #FFF; flex-shrink: 0; }
 
+    /* SECTION CARDS */
     .card { background: var(--card-white); border-radius: 20px; padding: 22px; border: 1px solid var(--border-color); margin-bottom: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.02); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .card-title { font-size: 1.2rem; font-weight: 700; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
 
+    /* AGENDA SUBTABS & CONTROLS */
+    .subnav-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+    .subnav-btn { padding: 10px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: #FFF; color: var(--text-dark); font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .subnav-btn.active { background: var(--primary-blue); color: #FFF; border-color: var(--primary-blue); }
+
+    /* CALENDAR GRID */
+    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+    .cal-day-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); padding: 6px 0; }
+    .cal-day-cell { padding: 12px 6px; border-radius: 10px; background: #FAFAFC; border: 1px solid var(--border-color); font-size: 0.85rem; font-weight: 600; cursor: pointer; position: relative; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .cal-day-cell.active-day { background: var(--primary-blue); color: #FFF; }
+    .cal-day-cell.has-event::after { content: ''; width: 6px; height: 6px; background: var(--yellow-accent); border-radius: 50%; display: block; margin-top: 2px; }
+
+    /* WEEKLY & TIMELINE VIEWS */
+    .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+    .week-day-col { background: #FAFAFC; border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; }
+    .week-day-title { font-size: 0.8rem; font-weight: 700; color: var(--primary-blue); text-transform: uppercase; margin-bottom: 8px; text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
+
+    /* PRIORITY BADGES & PROGRESS BARS */
+    .priority-badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; color: #FFF; text-transform: uppercase; }
+    .p-alta { background: var(--red-accent); }
+    .p-media { background: var(--yellow-accent); color: #000; }
+    .p-baja { background: var(--green-accent); }
+
+    .progress-bar-bg { width: 100%; height: 10px; background: #E5E5EA; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+    .progress-bar-fill { height: 100%; background: var(--green-accent); transition: width 0.3s ease; }
+
+    /* FORMS & INPUTS */
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
     input, select, textarea { width: 100%; padding: 13px 15px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.95rem; font-family: var(--font-body); outline: none; background: #FAFAFC; color: var(--text-dark); }
@@ -87,6 +122,7 @@
 
     .btn-primary { width: 100%; padding: 14px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 12px; font-weight: 600; font-size: 0.95rem; cursor: pointer; font-family: var(--font-body); }
 
+    /* EMOJI MOOD SELECTOR */
     .mood-selector { display: flex; justify-content: space-between; gap: 10px; margin: 14px 0 20px 0; }
     .mood-btn { flex: 1; padding: 14px 8px; border-radius: 14px; border: 1px solid var(--border-color); background: #FFF; text-align: center; cursor: pointer; transition: all 0.2s; }
     .mood-btn.active { border-color: var(--red-accent); background: #FFF0F0; }
@@ -96,11 +132,13 @@
     .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
     .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 500; background: #F4F6FA; padding: 12px; border-radius: 10px; }
 
+    /* BOTTOM NAV (MOBILE) */
     .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #FFF; border-top: 1px solid var(--border-color); padding: 8px 12px; justify-content: space-around; z-index: 1000; }
     .mn-item { display: flex; flex-direction: column; align-items: center; gap: 4px; border: none; background: none; color: var(--text-muted); font-size: 0.7rem; font-weight: 500; cursor: pointer; font-family: var(--font-body); }
     .mn-item.active { color: var(--primary-blue); font-weight: 700; }
     .mn-icon { font-size: 1.25rem; }
 
+    /* DEVOCIONAL CARD BANNER */
     .devotional-banner { background: linear-gradient(135deg, #0052CC 0%, #002B66 100%); color: #FFF; border-radius: 18px; padding: 22px; margin-bottom: 18px; }
     .devotional-quote { font-family: var(--font-heading); font-style: italic; font-size: 1.1rem; margin-bottom: 10px; line-height: 1.5; font-weight: 300; }
     .devotional-ref { font-size: 0.85rem; opacity: 0.85; text-align: right; font-weight: 600; }
@@ -114,6 +152,8 @@
       .main-wrapper { padding-bottom: 75px; }
       .top-header { padding: 16px; }
       .content-body { padding: 16px; }
+      .cal-grid { gap: 4px; }
+      .cal-day-cell { padding: 8px 2px; font-size: 0.75rem; min-height: 40px; }
     }
   </style>
 </head>
@@ -183,7 +223,7 @@
               <div class="qc-icon" style="background: var(--primary-blue);">📅</div>
               <div>
                 <strong style="display:block; font-family:var(--font-heading);">Agenda</strong>
-                <span class="user-sub">Tus planes de hoy</span>
+                <span class="user-sub">Tus planes y metas</span>
               </div>
             </div>
             <div class="quick-card" onclick="switchTabByCode('super')">
@@ -211,37 +251,144 @@
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📅 Próximos Eventos</div>
+              <div class="card-title">📅 Próximos Eventos y Prioridades</div>
             </div>
             <ul id="dashTasksList"></ul>
           </div>
         </section>
 
-        <!-- 2. AGENDA -->
+        <!-- 2. AGENDA (MEJORADA Y COMPLETA) -->
         <section id="tab-agenda" class="tab-section" style="display:none;">
-          <div class="card">
-            <div class="card-title" style="margin-bottom:14px;">Agendar evento</div>
-            <div class="form-group">
-              <label>Título</label>
-              <input type="text" id="fTitle" placeholder="Ej: Reunión de trabajo, Examen...">
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-              <div class="form-group">
-                <label>Fecha</label>
-                <input type="date" id="fDate">
-              </div>
-              <div class="form-group">
-                <label>Hora</label>
-                <input type="time" id="fTimeStart">
-              </div>
-            </div>
-            <button class="btn-primary" onclick="addAcademicTask()">Guardar evento</button>
+          
+          <!-- Subnavegación Interna de Agenda -->
+          <div class="subnav-bar">
+            <button class="subnav-btn active" onclick="switchAgendaSubtab('cal', this)">📆 Calendario Mensual</button>
+            <button class="subnav-btn" onclick="switchAgendaSubtab('semana', this)">📊 Plan Semanal</button>
+            <button class="subnav-btn" onclick="switchAgendaSubtab('horario', this)">⏰ Horario Diario</button>
+            <button class="subnav-btn" onclick="switchAgendaSubtab('tareas', this)">🎯 Tareas & Prioridades</button>
+            <button class="subnav-btn" onclick="switchAgendaSubtab('metas', this)">🚀 Metas & Objetivos</button>
+            <button class="subnav-btn" onclick="switchAgendaSubtab('notas', this)">📝 Notas Rápidas</button>
           </div>
 
-          <div class="card">
-            <div class="card-title" style="margin-bottom:14px;">Tus eventos agendados</div>
-            <ul id="taskList"></ul>
+          <!-- SUBTAB 1: CALENDARIO MENSUAL -->
+          <div id="agSubtab-cal" class="ag-subtab">
+            <div class="card">
+              <div class="cal-header">
+                <button class="subnav-btn" onclick="changeMonth(-1)">← Mes Anterior</button>
+                <h3 id="calMonthTitle" style="color:var(--primary-blue);">Mes Año</h3>
+                <button class="subnav-btn" onclick="changeMonth(1)">Mes Siguiente →</button>
+              </div>
+              <div class="cal-grid">
+                <div class="cal-day-label">Dom</div><div class="cal-day-label">Lun</div><div class="cal-day-label">Mar</div>
+                <div class="cal-day-label">Mié</div><div class="cal-day-label">Jue</div><div class="cal-day-label">Vie</div>
+                <div class="cal-day-label">Sáb</div>
+              </div>
+              <div id="calDaysGrid" class="cal-grid" style="margin-top:6px;"></div>
+            </div>
           </div>
+
+          <!-- SUBTAB 2: PLAN SEMANAL -->
+          <div id="agSubtab-semana" class="ag-subtab" style="display:none;">
+            <div class="card">
+              <div class="card-title">Planificación Semanal</div>
+              <div class="week-grid" id="weeklyPlanGrid"></div>
+            </div>
+          </div>
+
+          <!-- SUBTAB 3: HORARIO DIARIO (TIME BLOCKING) -->
+          <div id="agSubtab-horario" class="ag-subtab" style="display:none;">
+            <div class="card">
+              <div class="card-title">Bloques de Horario para Hoy</div>
+              <div style="display:grid; grid-template-columns:1fr 2fr 1fr; gap:8px; margin-bottom:12px;">
+                <input type="time" id="timeBlockHour">
+                <input type="text" id="timeBlockActivity" placeholder="Actividad o compromiso...">
+                <button class="btn-primary" onclick="addTimeBlock()">+ Bloque</button>
+              </div>
+              <ul id="timeBlockList"></ul>
+            </div>
+          </div>
+
+          <!-- SUBTAB 4: TAREAS & PRIORIDADES -->
+          <div id="agSubtab-tareas" class="ag-subtab" style="display:none;">
+            <div class="card">
+              <div class="card-title" style="margin-bottom:14px;">Nueva Tarea con Prioridad</div>
+              <div class="form-group">
+                <label>Descripción de la Tarea</label>
+                <input type="text" id="fTitle" placeholder="Ej: Entregar reporte final...">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <input type="date" id="fDate">
+                </div>
+                <div class="form-group">
+                  <label>Hora</label>
+                  <input type="time" id="fTimeStart">
+                </div>
+                <div class="form-group">
+                  <label>Prioridad</label>
+                  <select id="fPriority">
+                    <option value="Alta">🔴 Alta</option>
+                    <option value="Media" selected>🟡 Media</option>
+                    <option value="Baja">🟢 Baja</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn-primary" onclick="addAcademicTask()">Guardar Tarea</button>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="margin-bottom:14px;">Lista de Tareas Registradas</div>
+              <ul id="taskList"></ul>
+            </div>
+          </div>
+
+          <!-- SUBTAB 5: METAS & OBJETIVOS -->
+          <div id="agSubtab-metas" class="ag-subtab" style="display:none;">
+            <div class="card">
+              <div class="card-title">Registrar Nueva Meta</div>
+              <div class="form-group">
+                <label>Objetivo o Meta</label>
+                <input type="text" id="goalTitle" placeholder="Ej: Leer 5 libros, Ahorrar $500...">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group">
+                  <label>Progreso Actual (%)</label>
+                  <input type="number" id="goalProgress" min="0" max="100" value="0">
+                </div>
+                <div class="form-group">
+                  <label>Fecha Límite</label>
+                  <input type="date" id="goalDeadline">
+                </div>
+              </div>
+              <button class="btn-primary" onclick="addGoal()">+ Guardar Meta</button>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Seguimiento de Objetivos</div>
+              <ul id="goalsList"></ul>
+            </div>
+          </div>
+
+          <!-- SUBTAB 6: NOTAS RÁPIDAS -->
+          <div id="agSubtab-notas" class="ag-subtab" style="display:none;">
+            <div class="card">
+              <div class="card-title">Notas y Recordatorios</div>
+              <div class="form-group">
+                <input type="text" id="noteTitle" placeholder="Título de la nota...">
+              </div>
+              <div class="form-group">
+                <textarea id="noteBody" rows="3" placeholder="Escribe un recordatorio rápido..."></textarea>
+              </div>
+              <button class="btn-primary" onclick="addQuickNote()">+ Guardar Nota</button>
+            </div>
+
+            <div class="card">
+              <div class="card-title">Mis Notas</div>
+              <ul id="quickNotesList"></ul>
+            </div>
+          </div>
+
         </section>
 
         <!-- 3. SÚPER -->
@@ -376,6 +523,7 @@
 
     let userKey = "usuario_default";
     let selectedMigraineLevel = "Moderada";
+    let currentCalDate = new Date();
 
     function updateDateDisplay() {
       const now = new Date();
@@ -413,6 +561,7 @@
       document.getElementById('authOverlay').style.display = 'none';
       document.getElementById('appLayout').classList.add('visible');
       updateDateDisplay();
+      renderCalendar();
       listenToDatabase();
     }
 
@@ -422,15 +571,71 @@
       location.reload();
     }
 
-    function listenToDatabase() {
-      db.ref(`${userKey}/devotionals`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderDevotionals(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
+    /* CALENDARIO & VISTAS INTERNAS DE AGENDA */
+    function switchAgendaSubtab(subId, btn) {
+      document.querySelectorAll('.ag-subtab').forEach(s => s.style.display = 'none');
+      document.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`agSubtab-${subId}`).style.display = 'block';
+      if(btn) btn.classList.add('active');
+    }
 
+    function renderCalendar() {
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      
+      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
+
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const grid = document.getElementById('calDaysGrid');
+      grid.innerHTML = '';
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        grid.innerHTML += `<div class="cal-day-cell" style="opacity:0.2;"></div>`;
+      }
+
+      const today = new Date();
+      for (let day = 1; day <= totalDays; day++) {
+        const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+        grid.innerHTML += `
+          <div class="cal-day-cell ${isToday ? 'active-day' : ''}">
+            <span>${day}</span>
+          </div>
+        `;
+      }
+    }
+
+    function changeMonth(dir) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + dir);
+      renderCalendar();
+    }
+
+    /* FIREBASE DATABASE LISTENERS */
+    function listenToDatabase() {
       db.ref(`${userKey}/tasks`).on('value', snapshot => {
         const data = snapshot.val() || {};
         renderTasks(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/goals`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderGoals(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/notes`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderQuickNotes(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/timeblocks`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderTimeBlocks(Object.keys(data).map(k => ({ id: k, ...data[k] })));
+      });
+
+      db.ref(`${userKey}/devotionals`).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        renderDevotionals(Object.keys(data).map(k => ({ id: k, ...data[k] })));
       });
 
       db.ref(`${userKey}/super`).on('value', snapshot => {
@@ -444,30 +649,60 @@
       });
     }
 
-    /* FIREBASE ACTIONS */
+    /* AGENDA ACTIONS */
+    function addAcademicTask() {
+      const title = document.getElementById('fTitle').value.trim();
+      const date = document.getElementById('fDate').value;
+      const timeStart = document.getElementById('fTimeStart').value;
+      const priority = document.getElementById('fPriority').value;
+
+      if(!title || !date) return alert('Ingresa título y fecha.');
+
+      db.ref(`${userKey}/tasks`).push({ desc: title, date, timeStart, priority });
+      document.getElementById('fTitle').value = '';
+    }
+
+    function addGoal() {
+      const title = document.getElementById('goalTitle').value.trim();
+      const progress = document.getElementById('goalProgress').value || 0;
+      const deadline = document.getElementById('goalDeadline').value;
+
+      if(!title) return alert('Ingresa un título para la meta.');
+
+      db.ref(`${userKey}/goals`).push({ title, progress: parseInt(progress), deadline });
+      document.getElementById('goalTitle').value = '';
+    }
+
+    function addQuickNote() {
+      const title = document.getElementById('noteTitle').value.trim();
+      const body = document.getElementById('noteBody').value.trim();
+
+      if(!title) return alert('Ingresa un título para la nota.');
+
+      db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
+      document.getElementById('noteTitle').value = '';
+      document.getElementById('noteBody').value = '';
+    }
+
+    function addTimeBlock() {
+      const hour = document.getElementById('timeBlockHour').value;
+      const activity = document.getElementById('timeBlockActivity').value.trim();
+
+      if(!hour || !activity) return alert('Ingresa hora y actividad.');
+
+      db.ref(`${userKey}/timeblocks`).push({ hour, activity });
+      document.getElementById('timeBlockActivity').value = '';
+    }
+
     function saveDevotional() {
       const title = document.getElementById('devTitle').value.trim();
       const notes = document.getElementById('devNotes').value.trim();
       if(!title || !notes) return alert('Por favor completa el título y notas.');
 
-      db.ref(`${userKey}/devotionals`).push({
-        title, notes, date: new Date().toLocaleDateString('es-ES')
-      });
-
+      db.ref(`${userKey}/devotionals`).push({ title, notes, date: new Date().toLocaleDateString('es-ES') });
       document.getElementById('devTitle').value = '';
       document.getElementById('devNotes').value = '';
       alert('¡Devocional guardado!');
-    }
-
-    function addAcademicTask() {
-      const title = document.getElementById('fTitle').value.trim();
-      const date = document.getElementById('fDate').value;
-      const timeStart = document.getElementById('fTimeStart').value;
-
-      if(!title || !date) return alert('Ingresa título y fecha.');
-
-      db.ref(`${userKey}/tasks`).push({ desc: title, date, timeStart });
-      document.getElementById('fTitle').value = '';
     }
 
     function addSuperItem() {
@@ -497,6 +732,77 @@
     }
 
     /* RENDERS */
+    function renderTasks(items) {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = items.length ? items.map(t => {
+        const pClass = t.priority === 'Alta' ? 'p-alta' : (t.priority === 'Baja' ? 'p-baja' : 'p-media');
+        return `
+          <li class="item-row">
+            <div>
+              <strong>${t.desc}</strong>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">
+                🗓️ ${t.date} ${t.timeStart ? ' - ' + t.timeStart : ''}
+                <span class="priority-badge ${pClass}">${t.priority || 'Media'}</span>
+              </div>
+            </div>
+            <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('tasks', '${t.id}')">✕</button>
+          </li>
+        `;
+      }).join('') : '<li style="color:var(--text-muted);">Sin tareas pendientes.</li>';
+
+      document.getElementById('dashTasksList').innerHTML = items.length ? items.slice(0, 3).map(t => `
+        <li class="item-row">📅 <strong>${t.date}</strong> — ${t.desc}</li>
+      `).join('') : '<li style="color:var(--text-muted);">No tienes próximas entregas agendadas.</li>';
+
+      // Render Plan Semanal
+      const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+      document.getElementById('weeklyPlanGrid').innerHTML = days.map(day => `
+        <div class="week-day-col">
+          <div class="week-day-title">${day}</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); text-align:center;">${items.length} tarea(s)</div>
+        </div>
+      `).join('');
+    }
+
+    function renderGoals(items) {
+      document.getElementById('goalsList').innerHTML = items.length ? items.map(g => `
+        <li class="item-row" style="flex-direction:column; align-items:stretch;">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>🚀 ${g.title}</strong>
+            <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('goals', '${g.id}')">✕</button>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">Progreso: ${g.progress}% ${g.deadline ? ' | Límite: ' + g.deadline : ''}</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:${g.progress}%;"></div>
+          </div>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin metas registradas.</li>';
+    }
+
+    function renderQuickNotes(items) {
+      document.getElementById('quickNotesList').innerHTML = items.length ? items.map(n => `
+        <li class="item-row">
+          <div>
+            <strong>📌 ${n.title}</strong>
+            <div style="font-size:0.85rem; color:var(--text-dark); margin-top:4px;">${n.body}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${n.date}</div>
+          </div>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('notes', '${n.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin notas guardadas.</li>';
+    }
+
+    function renderTimeBlocks(items) {
+      document.getElementById('timeBlockList').innerHTML = items.length ? items.map(b => `
+        <li class="item-row">
+          <div>
+            <strong style="color:var(--primary-blue);">⏰ ${b.hour}</strong> — ${b.activity}
+          </div>
+          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('timeblocks', '${b.id}')">✕</button>
+        </li>
+      `).join('') : '<li style="color:var(--text-muted);">Sin bloques de horario definidos.</li>';
+    }
+
     function renderDevotionals(items) {
       document.getElementById('devotionalIndexList').innerHTML = items.length ? items.map(d => `
         <li class="item-row">
@@ -507,22 +813,6 @@
           <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('devotionals', '${d.id}')">✕</button>
         </li>
       `).join('') : '<li style="color:var(--text-muted);">Sin notas devocionales.</li>';
-    }
-
-    function renderTasks(items) {
-      document.getElementById('taskList').innerHTML = items.length ? items.map(t => `
-        <li class="item-row">
-          <div>
-            <strong>${t.desc}</strong>
-            <div style="font-size:0.8rem; color:var(--text-muted);">🗓️ ${t.date} ${t.timeStart ? ' - ' + t.timeStart : ''}</div>
-          </div>
-          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('tasks', '${t.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin eventos agendados.</li>';
-
-      document.getElementById('dashTasksList').innerHTML = items.length ? items.slice(0, 3).map(t => `
-        <li class="item-row">📅 <strong>${t.date}</strong> — ${t.desc}</li>
-      `).join('') : '<li style="color:var(--text-muted);">No tienes próximas entregas agendadas.</li>';
     }
 
     function renderSuper(items) {
