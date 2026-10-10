@@ -143,12 +143,22 @@
     .pill-input { border-radius: 20px; background: #D0D7DE; border: none; padding: 10px 16px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); font-family: var(--font-main); outline: none; text-align: center; }
     .pill-input:focus { background: #E2E8ED; }
     .pill-name-box { flex: 2; min-width: 120px; text-align: left; }
-    .pill-qty-box { flex: 1; min-width: 80px; }
-    .pill-price-box { flex: 1; min-width: 80px; }
+    .pill-sub-group { display: flex; gap: 10px; flex: 2; }
+    .pill-qty-box { flex: 1; min-width: 70px; }
+    .pill-price-box { flex: 1; min-width: 70px; }
     .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
     .btn-clear-store { width: 100%; padding: 12px; background: #FF3B30; color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* ESTILOS ESPECÍFICOS DE MIGRAÑA Y GRID RESPONSIVO PARA FECHA/HORA/DURACIÓN */
+    /* ESTRUCTURA MÓVIL EXACTA A LA ILUSTRACIÓN */
+    @media (max-width: 600px) {
+      .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
+      .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
+      .pill-name-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
+      .pill-name-box { flex: 1; width: 100%; }
+      .pill-sub-group { display: flex; gap: 8px; width: 100%; padding-left: 32px; }
+    }
+
+    /* ESTILOS ESPECÍFICOS DE MIGRAÑA */
     .migraine-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
     
     .pain-scale-selector { display: flex; justify-content: space-between; gap: 4px; margin-top: 6px; }
@@ -552,7 +562,6 @@
           <div class="card">
             <div class="card-title" style="margin-bottom:14px;">⚡ Registro de Episodio e Intensidad</div>
             
-            <!-- FECHA Y HORA EN FILA DE 2 COLUMNAS -->
             <div class="migraine-time-row">
               <div class="form-group" style="margin-bottom:0;">
                 <label>Fecha</label>
@@ -564,13 +573,11 @@
               </div>
             </div>
 
-            <!-- DURACIÓN UBICADA ABAJO OCUPANDO EL ANCHO COMPLETO -->
             <div class="form-group">
               <label>Duración estimada (Horas)</label>
               <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4">
             </div>
 
-            <!-- ESCALA DE DOLOR INTENSIDAD 1-10 -->
             <div class="form-group">
               <label>Intensidad del dolor (1 = Leve, 10 = Insupportable)</label>
               <div class="pain-scale-selector" id="painScaleBox">
@@ -587,7 +594,6 @@
               </div>
             </div>
 
-            <!-- SÍNTOMAS MULTISELECT -->
             <div class="form-group">
               <label>Síntomas experimentados</label>
               <div class="tag-chips-grid" id="symptomsChipsBox">
@@ -601,7 +607,7 @@
               </div>
             </div>
 
-            <!-- DESENCADENANTES Y MEDICAMENTOS -->
+            <!-- DESENCADENANTES CON CAMPO PERSONALIZADO ADICIONAL -->
             <div class="form-group">
               <label>Desencadenantes probables</label>
               <div class="tag-chips-grid" id="triggersChipsBox">
@@ -613,6 +619,7 @@
                 <span class="tag-chip" onclick="toggleChip(this, 'triggers')">📱 Brillo de pantallas</span>
                 <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🩸 Cambio hormonal</span>
               </div>
+              <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante personalizado..." style="margin-top:8px;">
             </div>
 
             <div class="form-group">
@@ -958,10 +965,11 @@
         const p = products[key];
         html += `
           <div class="super-product-item-wrapper ${p.done ? 'completed' : ''}">
-            <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
-            
             <div class="product-row-pill">
-              <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
+              <div class="pill-name-wrapper">
+                <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
+                <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
+              </div>
               
               <div class="pill-sub-group">
                 <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" onchange="updateStoreField('${key}', 'qty', this.value)">
@@ -1032,9 +1040,14 @@
       const time = document.getElementById('migTime').value;
       const duration = parseFloat(document.getElementById('migDuration').value) || 1;
       const meds = document.getElementById('migMeds').value.trim();
+      const customTrigger = document.getElementById('migCustomTrigger').value.trim();
 
       const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
       const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
+
+      if(customTrigger) {
+        triggers.push(`✏️ ${customTrigger}`);
+      }
 
       if(!date || !time) return alert('Por favor selecciona la fecha y hora del episodio.');
 
@@ -1049,6 +1062,7 @@
         if(!err) {
           alert('¡Episodio de migraña registrado con éxito!');
           document.getElementById('migMeds').value = '';
+          document.getElementById('migCustomTrigger').value = '';
           document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
         }
       });
