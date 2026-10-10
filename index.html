@@ -135,32 +135,32 @@
 
     /* ESTILOS DE COMPRAS EN PÍLDORAS REDONDEADAS */
     .super-product-item-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; width: 100%; }
-    
-    /* CASILLA CIRCULAR (BOLITA) */
     .custom-circle-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #C4C4C8; appearance: none; -webkit-appearance: none; outline: none; cursor: pointer; flex-shrink: 0; background: #FFF; transition: all 0.2s; }
     .custom-circle-check:checked { background: var(--primary-blue); border-color: var(--primary-blue); position: relative; }
     .custom-circle-check:checked::after { content: '✓'; color: #FFF; font-size: 12px; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-    /* PÍLDORAS REDONDEADAS DE PRODUCTO */
     .product-row-pill { display: flex; flex: 1; align-items: center; gap: 10px; }
-    
     .pill-input { border-radius: 20px; background: #D0D7DE; border: none; padding: 10px 16px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); font-family: var(--font-main); outline: none; text-align: center; }
     .pill-input:focus { background: #E2E8ED; }
-
     .pill-name-box { flex: 2; min-width: 120px; text-align: left; }
     .pill-qty-box { flex: 1; min-width: 80px; }
     .pill-price-box { flex: 1; min-width: 80px; }
-
     .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
-
     .btn-clear-store { width: 100%; padding: 12px; background: #FF3B30; color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* ADAPTACIÓN MÓVIL */
-    @media (max-width: 600px) {
-      .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; }
-      .pill-sub-group { display: flex; gap: 8px; width: 100%; }
-      .pill-qty-box, .pill-price-box { flex: 1; }
-    }
+    /* ESTILOS ESPECÍFICOS DE MIGRAÑA */
+    .pain-scale-selector { display: flex; justify-content: space-between; gap: 4px; margin-top: 6px; }
+    .pain-btn { flex: 1; padding: 8px 0; border-radius: 8px; border: 1.5px solid var(--border-color); background: #FAFAFC; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .pain-btn.selected { color: #FFF; border-color: transparent; transform: scale(1.05); }
+
+    .tag-chips-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .tag-chip { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: #FAFAFC; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; color: var(--text-dark); }
+    .tag-chip.active { background: var(--primary-blue); color: #FFF; border-color: var(--primary-blue); }
+
+    .stats-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .kpi-card { background: #FAFAFC; border: 1px solid var(--border-color); padding: 12px; border-radius: 14px; text-align: center; }
+    .kpi-val { font-size: 1.4rem; font-weight: 900; color: var(--red-accent); }
+    .kpi-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
 
     /* FORMS & INPUTS GENERALES */
     .form-group { margin-bottom: 12px; text-align: left; }
@@ -201,7 +201,6 @@
         <button id="tabBtnRegister" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrarse</button>
       </div>
       
-      <!-- FORMULARIO 1: INICIO DE SESIÓN -->
       <form id="loginForm" class="auth-form active" onsubmit="event.preventDefault(); handleLogin();">
         <div class="form-group">
           <label>N° DE REGISTRO (8 DÍGITOS)</label>
@@ -220,7 +219,6 @@
         <button type="submit" class="btn-yellow">INICIAR SESIÓN →</button>
       </form>
 
-      <!-- FORMULARIO 2: REGISTRO -->
       <form id="registerForm" class="auth-form" onsubmit="event.preventDefault(); handleRegister();">
         <div class="form-group">
           <label>NOMBRE(S)</label>
@@ -344,13 +342,12 @@
           </div>
         </section>
 
-        <!-- 2. AGENDA CON DRAWER LATERAL -->
+        <!-- 2. AGENDA -->
         <section id="tab-agenda" class="tab-section" style="display:none;">
           <button class="drawer-open-btn" onclick="toggleAgendaDrawer(true)">
             <span>⚙️</span> Vistas de Agenda
           </button>
 
-          <!-- DRAWER DERECHO -->
           <div id="agendaDrawerOverlay" class="drawer-overlay" onclick="toggleAgendaDrawer(false)">
             <div class="drawer-panel" onclick="event.stopPropagation()">
               <div class="drawer-header">
@@ -366,7 +363,6 @@
             </div>
           </div>
 
-          <!-- SUBSECCIONES AGENDA -->
           <div id="agSubtab-cal" class="ag-subtab">
             <div class="card">
               <div class="cal-header">
@@ -480,12 +476,10 @@
 
         <!-- 3. SÚPER SECCIÓN -->
         <section id="tab-super" class="tab-section" style="display:none;">
-          
           <button class="drawer-open-btn" onclick="toggleStoreDrawer(true)">
             <span>🛒</span> Tiendas de Compras
           </button>
 
-          <!-- DRAWER DERECHO TIENDAS CON MONARCA Y EXTRAS -->
           <div id="storeDrawerOverlay" class="drawer-overlay" onclick="toggleStoreDrawer(false)">
             <div class="drawer-panel" onclick="event.stopPropagation()">
               <div class="drawer-header">
@@ -501,13 +495,11 @@
             </div>
           </div>
 
-          <!-- CONTENEDOR PRINCIPAL DE COMPRAS -->
           <div class="card">
             <div class="card-title" id="currentStoreTitle" style="margin-bottom:14px; color:var(--primary-blue);">
               🥬 Mercado
             </div>
 
-            <!-- FORMULARIO RÁPIDO PARA AGREGAR NUEVO PRODUCTO -->
             <div style="background:#FAFAFC; padding:12px; border-radius:14px; border:1px solid var(--border-color); margin-bottom:16px;">
               <div style="display:flex; gap:8px;">
                 <input type="text" id="storeProdName" placeholder="Agregar nuevo producto..." style="flex:1;">
@@ -515,10 +507,8 @@
               </div>
             </div>
 
-            <!-- LISTA DE PRODUCTOS CON CAMPOS LIMPIOS -->
             <div id="storeProductsList"></div>
 
-            <!-- BOTÓN PARA LIMPIAR TODO EL CONTENIDO DE LA TIENDA -->
             <button class="btn-clear-store" onclick="clearCurrentStoreData()">
               🗑️ Borrar información de esta tienda
             </button>
@@ -526,27 +516,122 @@
 
         </section>
 
-        <!-- 4. MIGRAÑA -->
+        <!-- 4. REGISTRO DE MIGRAÑA PROFESIONAL COMPLETO -->
         <section id="tab-migrana" class="tab-section" style="display:none;">
+          
+          <!-- RESUMEN ESTADÍSTICO MENSUAL -->
           <div class="card">
-            <div class="card-title">¿Cómo te sientes hoy?</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+            <div class="card-title" style="margin-bottom:12px; color:var(--primary-blue);">📊 Estadísticas Mensuales</div>
+            <div class="stats-kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-val" id="migKpiTotal">0</div>
+                <div class="kpi-lbl">Episodios</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-val" id="migKpiAvgPain">0</div>
+                <div class="kpi-lbl">Promedio Dolor</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-val" id="migKpiAvgHours">0h</div>
+                <div class="kpi-lbl">Duración Prom.</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-val" id="migKpiTopTrigger" style="font-size:0.9rem; margin-top:4px;">N/A</div>
+                <div class="kpi-lbl">Detonante Top</div>
+              </div>
+            </div>
+            
+            <button class="btn-primary" style="background:#34C759;" onclick="exportMigrainePDFReport()">
+              📑 Generar Informe para el Médico (PDF / Imprimir)
+            </button>
+          </div>
+
+          <!-- FORMULARIO DE REGISTRO RÁPIDO DE EPISODIO -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">⚡ Registro de Episodio e Intensidad</div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
               <div class="form-group">
                 <label>Fecha</label>
-                <input type="date" id="migraineDate">
+                <input type="date" id="migDate">
               </div>
               <div class="form-group">
                 <label>Hora</label>
-                <input type="time" id="migraineTime">
+                <input type="time" id="migTime">
+              </div>
+              <div class="form-group">
+                <label>Duración (Hrs)</label>
+                <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4">
               </div>
             </div>
-            <button class="btn-primary" onclick="addFullMigraine()" style="background:var(--red-accent);">Registrar episodio</button>
+
+            <!-- ESCALA DE DOLOR INTENSIDAD 1-10 -->
+            <div class="form-group">
+              <label>Intensidad del dolor (1 = Leve, 10 = Insupportable)</label>
+              <div class="pain-scale-selector" id="painScaleBox">
+                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(1, this)">1</button>
+                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(2, this)">2</button>
+                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(3, this)">3</button>
+                <button type="button" class="pain-btn" style="background:#FFCC00; color:#000;" onclick="selectPainLevel(4, this)">4</button>
+                <button type="button" class="pain-btn" style="background:#FFCC00; color:#000;" onclick="selectPainLevel(5, this)">5</button>
+                <button type="button" class="pain-btn" style="background:#FF9500; color:#FFF;" onclick="selectPainLevel(6, this)">6</button>
+                <button type="button" class="pain-btn" style="background:#FF9500; color:#FFF;" onclick="selectPainLevel(7, this)">7</button>
+                <button type="button" class="pain-btn" style="background:#FF3B30; color:#FFF;" onclick="selectPainLevel(8, this)">8</button>
+                <button type="button" class="pain-btn" style="background:#FF3B30; color:#FFF;" onclick="selectPainLevel(9, this)">9</button>
+                <button type="button" class="pain-btn" style="background:#8E0000; color:#FFF;" onclick="selectPainLevel(10, this)">10</button>
+              </div>
+            </div>
+
+            <!-- SÍNTOMAS MULTISELECT -->
+            <div class="form-group">
+              <label>Síntomas experimentados</label>
+              <div class="tag-chips-grid" id="symptomsChipsBox">
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">🤢 Náuseas</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">💡 Sensible a la luz</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">🔊 Sensible al ruido</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">✨ Aura visual</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">💫 Mareos</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">👁️ Visión borrosa</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">⚡ Pulsación / Latidos</span>
+              </div>
+            </div>
+
+            <!-- DESENCADENANTES Y MEDICAMENTOS -->
+            <div class="form-group">
+              <label>Desencadenantes probables</label>
+              <div class="tag-chips-grid" id="triggersChipsBox">
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">😫 Estrés</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">😴 Falta de sueño</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🌤️ Cambio de clima</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">☕ Cafeína</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🍽️ Ayuno prolongado</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">📱 Brillo de pantallas</span>
+                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🩸 Cambio hormonal</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Medicamento consumido y dosis</label>
+              <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg, Sumatriptán 50mg...">
+            </div>
+
+            <button class="btn-primary" style="background:var(--red-accent);" onclick="saveMigraineEpisode()">Guardar Episodio</button>
           </div>
 
+          <!-- DETECCIÓN DE PATRONES Y PERSONALIZACIÓN -->
           <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">Historial de migrañas</div>
+            <div class="card-title" style="margin-bottom:10px;">🔍 Detección de Patrones</div>
+            <p id="migPatternInsight" style="font-size:0.85rem; color:var(--text-dark); line-height:1.4;">
+              Cargando análisis de patrones...
+            </p>
+          </div>
+
+          <!-- HISTORIAL CLINICO REGISTRADO -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:12px;">📋 Historial de Episodios</div>
             <ul id="migraineList"></ul>
           </div>
+
         </section>
 
         <!-- 5. DEVOCIONAL -->
@@ -636,8 +721,8 @@
     let currentCalDate = new Date();
     let loadedTasks = [];
     let currentStoreKey = "mercado";
+    let selectedPainLevel = 5;
 
-    // LISTAS INICIALES CON LAS NUEVAS TIENDAS MONARCA Y EXTRAS
     const defaultStoreLists = {
       mercado: [
         { name: "Quesillo", qty: "", price: "", done: false },
@@ -775,21 +860,6 @@
       });
     }
 
-    function showForgotPasswordModal() {
-      const reg = prompt('Ingresa tu N° de Registro (8 dígitos):');
-      if(!reg || reg.length !== 8) return alert('Número de registro no válido.');
-
-      db.ref(`users/${reg}`).once('value', snapshot => {
-        if(!snapshot.exists()) return alert('No existe una cuenta registrada con este número.');
-
-        const newPass = prompt('Ingresa tu nueva clave (letras minúsculas y números):');
-        if(!newPass) return alert('Operación cancelada.');
-
-        db.ref(`users/${reg}`).update({ pass: newPass });
-        alert('¡Clave actualizada correctamente!');
-      });
-    }
-
     function checkActiveSession() {
       const savedReg = localStorage.getItem('omniapp_saved_reg');
       const savedPass = localStorage.getItem('omniapp_saved_pass');
@@ -818,6 +888,7 @@
       updateProfileUI();
       renderCalendar();
       initDefaultStoreData();
+      setDefaultMigraineForm();
       listenToDatabase();
     }
 
@@ -870,7 +941,6 @@
       });
     }
 
-    /* RENDERIZADO DE PRODUCTOS CON PÍLDORAS SIN PLACEHOLDERS O TEXTOS PREVIOS */
     function renderStoreProducts(products) {
       const container = document.getElementById('storeProductsList');
       if(!products || Object.keys(products).length === 0) {
@@ -883,24 +953,17 @@
         const p = products[key];
         html += `
           <div class="super-product-item-wrapper ${p.done ? 'completed' : ''}">
-            <!-- BOLITA CASILLA -->
             <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
             
-            <!-- CONTENEDOR DE PÍLDORAS -->
             <div class="product-row-pill">
-              <!-- NOMBRE -->
               <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
               
               <div class="pill-sub-group">
-                <!-- CANTIDAD (LIMPIO) -->
                 <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" onchange="updateStoreField('${key}', 'qty', this.value)">
-                
-                <!-- PRECIO (LIMPIO) -->
                 <input type="text" class="pill-input pill-price-box" value="${p.price || ''}" onchange="updateStoreField('${key}', 'price', this.value)">
               </div>
             </div>
 
-            <!-- BOTÓN BORRAR INDIVIDUAL -->
             <button style="background:none; border:none; color:var(--red-accent); font-weight:800; cursor:pointer; font-size:1.1rem; padding:0 4px;" onclick="deleteStoreProduct('${key}')">✕</button>
           </div>`;
       });
@@ -928,7 +991,6 @@
       db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
     }
 
-    /* BORRADO MASIVO DE CANTIDADES, PRECIOS Y CHECKS */
     function clearCurrentStoreData() {
       if(confirm('¿Deseas limpiar todas las cantidades, precios y marcas de esta tienda?')) {
         db.ref(`${userKey}/stores/${currentStoreKey}`).once('value', snapshot => {
@@ -940,6 +1002,119 @@
           }
         });
       }
+    }
+
+    /* MÓDULO AVANZADO DE MIGRAÑA */
+    function setDefaultMigraineForm() {
+      const now = new Date();
+      document.getElementById('migDate').value = now.toISOString().split('T')[0];
+      document.getElementById('migTime').value = now.toTimeString().split(' ')[0].substring(0, 5);
+      selectPainLevel(5, document.querySelectorAll('.pain-btn')[4]);
+    }
+
+    function selectPainLevel(level, btn) {
+      selectedPainLevel = level;
+      document.querySelectorAll('.pain-btn').forEach(b => b.classList.remove('selected'));
+      if(btn) btn.classList.add('selected');
+    }
+
+    function toggleChip(chipEl, type) {
+      chipEl.classList.toggle('active');
+    }
+
+    function saveMigraineEpisode() {
+      const date = document.getElementById('migDate').value;
+      const time = document.getElementById('migTime').value;
+      const duration = parseFloat(document.getElementById('migDuration').value) || 1;
+      const meds = document.getElementById('migMeds').value.trim();
+
+      const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
+      const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
+
+      if(!date || !time) return alert('Por favor selecciona la fecha y hora del episodio.');
+
+      const episode = {
+        date, time, duration,
+        pain: selectedPainLevel,
+        symptoms, triggers, meds,
+        timestamp: new Date().getTime()
+      };
+
+      db.ref(`${userKey}/migraines`).push(episode, (err) => {
+        if(!err) {
+          alert('¡Episodio de migraña registrado con éxito!');
+          document.getElementById('migMeds').value = '';
+          document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
+        }
+      });
+    }
+
+    function renderMigraines(items) {
+      const list = document.getElementById('migraineList');
+      if(!items.length) {
+        list.innerHTML = '<li style="color:var(--text-muted); font-size:0.85rem;">No hay episodios registrados.</li>';
+        calculateMigraineStats([]);
+        return;
+      }
+
+      list.innerHTML = items.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => `
+        <li class="item-row" style="flex-direction:column; align-items:stretch; gap:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>🗓️ ${m.date} (${m.time}) — <span style="color:var(--red-accent);">Dolor: ${m.pain}/10</span></strong>
+            <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteItem('migraines', '${m.id}')">✕</button>
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-dark);">
+            ⏱️ <strong>Duración:</strong> ${m.duration || 1} hrs
+            ${m.symptoms && m.symptoms.length ? `<br>🤢 <strong>Síntomas:</strong> ${m.symptoms.join(', ')}` : ''}
+            ${m.triggers && m.triggers.length ? `<br>⚡ <strong>Detonantes:</strong> ${m.triggers.join(', ')}` : ''}
+            ${m.meds ? `<br>💊 <strong>Medicamento:</strong> ${m.meds}` : ''}
+          </div>
+        </li>
+      `).join('');
+
+      calculateMigraineStats(items);
+    }
+
+    function calculateMigraineStats(items) {
+      document.getElementById('migKpiTotal').innerText = items.length;
+      if(!items.length) {
+        document.getElementById('migKpiAvgPain').innerText = "0";
+        document.getElementById('migKpiAvgHours').innerText = "0h";
+        document.getElementById('migKpiTopTrigger').innerText = "N/A";
+        document.getElementById('migPatternInsight').innerText = "Registra episodios para analizar patrones de salud.";
+        return;
+      }
+
+      const totalPain = items.reduce((acc, i) => acc + (parseInt(i.pain) || 0), 0);
+      const totalHours = items.reduce((acc, i) => acc + (parseFloat(i.duration) || 0), 0);
+
+      document.getElementById('migKpiAvgPain').innerText = (totalPain / items.length).toFixed(1);
+      document.getElementById('migKpiAvgHours').innerText = `${(totalHours / items.length).toFixed(1)}h`;
+
+      const triggersCount = {};
+      items.forEach(i => {
+        if(i.triggers && Array.isArray(i.triggers)) {
+          i.triggers.forEach(t => triggersCount[t] = (triggersCount[t] || 0) + 1);
+        }
+      });
+
+      let topTrigger = "N/A";
+      let maxCount = 0;
+      Object.keys(triggersCount).forEach(t => {
+        if(triggersCount[t] > maxCount) {
+          maxCount = triggersCount[t];
+          topTrigger = t;
+        }
+      });
+
+      document.getElementById('migKpiTopTrigger').innerText = topTrigger.split(' ')[1] || topTrigger;
+      document.getElementById('migPatternInsight').innerHTML = `
+        Se han registrado <strong>${items.length} episodios</strong>. El detonante más recurrente detectado es <strong>${topTrigger}</strong>. Te recomendamos llevar este reporte a tu neurólogo.
+      `;
+    }
+
+    function exportMigrainePDFReport() {
+      window.print();
     }
 
     function renderCalendar() {
@@ -1050,14 +1225,6 @@
       document.getElementById('timeBlockActivity').value = '';
     }
 
-    function addFullMigraine() {
-      const date = document.getElementById('migraineDate').value;
-      const time = document.getElementById('migraineTime').value;
-      if(!date) return alert('Ingresa la fecha.');
-      db.ref(`${userKey}/migraines`).push({ date, time });
-      alert('¡Episodio registrado!');
-    }
-
     function deleteItem(path, id) {
       db.ref(`${userKey}/${path}/${id}`).remove();
     }
@@ -1109,15 +1276,6 @@
           <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('timeblocks', '${b.id}')">✕</button>
         </li>
       `).join('') : '<li style="color:var(--text-muted);">Sin bloques de horario.</li>';
-    }
-
-    function renderMigraines(items) {
-      document.getElementById('migraineList').innerHTML = items.length ? items.map(m => `
-        <li class="item-row">
-          <div><strong>📅 ${m.date} (${m.time})</strong></div>
-          <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteItem('migraines', '${m.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin registros.</li>';
     }
 
     function updateUserProfile() {
