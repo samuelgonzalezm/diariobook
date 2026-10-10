@@ -1,1349 +1,667 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Omniapp — Todo lo importante en un solo lugar</title>
-  
-  <meta name="theme-color" content="#0052CC">
-  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp">
-  <link rel="manifest" href="./manifest.json">
-
-  <!-- Firebase Web SDK (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
-  <!-- Tipografía Montserrat Unificada -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary-blue: #0052CC;
-      --primary-dark: #003B99;
-      --bg-gradient: linear-gradient(135deg, #0052CC 0%, #002D62 50%, #001A3D 100%);
-      --bg-light: #F4F6FA;
-      --card-white: #FFFFFF;
-      --yellow-accent: #FFC700;
-      --red-accent: #FF3B30;
-      --green-accent: #34C759;
-      --purple-accent: #AF52DE;
-      --text-dark: #1C1C1E;
-      --text-muted: #8E8E93;
-      --border-color: #E5E5EA;
-      
-      --font-main: 'Montserrat', sans-serif;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: var(--font-main); background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
-
-    h1, h2, h3, h4, .brand-title, .splash-title, .user-greeting, .card-title { font-family: var(--font-main); font-weight: 800; }
-
-    /* AUTH OVERLAY / SPLASH ESTILIZADO */
-    .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-gradient); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px; color: #FFF; overflow-y: auto; }
-    .splash-card-wrapper { width: 100%; max-width: 400px; background: #FFFFFF; border-radius: 24px; padding: 24px 20px; color: var(--text-dark); box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center; }
-    .splash-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow-accent); margin-bottom: 10px; background: #FFF; }
-    .splash-title { font-size: 2rem; font-weight: 900; color: var(--primary-blue); margin-bottom: 2px; text-transform: lowercase; }
-    .splash-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 500; font-style: italic; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Omniapp — Todo lo importante en un solo lugar</title>
     
-    .auth-tabs { display: flex; gap: 6px; margin-bottom: 16px; background: #EFEFEF; padding: 4px; border-radius: 12px; }
-    .auth-tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.2s; font-family: var(--font-main); }
-    .auth-tab-btn.active { background: #FFF; color: var(--primary-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: 800; }
+    <!-- PWA primary color -->
+    <meta name="theme-color" content="#0052CC">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp">
+    <link rel="manifest" href="./manifest.json">
 
-    .auth-form { display: none; text-align: left; }
-    .auth-form.active { display: block !important; }
+    <!-- Firebase Web SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    .auth-input { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border-color); font-size: 0.88rem; font-weight: 600; margin-bottom: 12px; outline: none; font-family: var(--font-main); background: #FAFAFC; color: var(--text-dark); display: block; }
-    .auth-input:focus { border-color: var(--primary-blue); background: #FFF; }
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#0052CC',
+                            600: '#003B99',
+                            700: '#002D62',
+                            yellow: '#FFC700',
+                            red: '#FF3B30',
+                            green: '#34C759'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .auth-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 16px; color: var(--text-muted); font-weight: 600; }
-    .auth-options label { display: flex; align-items: center; gap: 6px; cursor: pointer; text-transform: none; font-weight: 600; }
-    .auth-options a { color: var(--primary-blue); text-decoration: none; font-weight: 700; cursor: pointer; }
-
-    .btn-yellow { width: 100%; padding: 14px; background: var(--yellow-accent); color: var(--text-dark); border: none; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-main); }
-
-    /* MAIN LAYOUT */
-    .app-layout { display: none; width: 100%; min-height: 100vh; }
-    .app-layout.visible { display: flex; }
-
-    /* SIDEBAR (DESKTOP) */
-    .sidebar { width: 250px; background: var(--primary-blue); color: #FFF; padding: 20px 14px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-    .brand-header { display: flex; align-items: center; gap: 10px; padding: 6px; margin-bottom: 12px; }
-    .brand-logo-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
-    .brand-title { font-size: 1.5rem; font-weight: 900; text-transform: lowercase; }
+    <!-- Google Font DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     
-    .user-profile-preview { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.12); border-radius: 14px; margin-bottom: 16px; cursor: pointer; border: 1px solid rgba(255,255,255,0.18); }
-    .profile-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--yellow-accent); background: #FFF; }
-    .profile-info-name { font-size: 0.88rem; font-weight: 800; color: #FFFFFF; line-height: 1.2; }
-    .profile-info-sub { font-size: 0.72rem; opacity: 0.85; font-style: italic; color: #E0E8FF; }
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .grad-bg {
+            background: linear-gradient(135deg, #0052CC 0%, #003B99 50%, #001A3D 100%);
+        }
 
-    .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; color: rgba(255,255,255,0.85); font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; background: none; width: 100%; text-align: left; font-size: 0.9rem; font-family: var(--font-main); }
-    .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.15); color: #FFF; }
-    .nav-item.active { background: var(--yellow-accent); color: var(--text-dark); font-weight: 800; }
+        .custom-circle-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #C4C4C8;
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: #FFF;
+            transition: all 0.2s;
+        }
+        .custom-circle-check:checked {
+            background: #0052CC;
+            border-color: #0052CC;
+            position: relative;
+        }
+        .custom-circle-check:checked::after {
+            content: '✓';
+            color: #FFF;
+            font-size: 12px;
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-    .sidebar-footer { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.15); }
+        .pill-input {
+            border-radius: 20px;
+            background: #E2E8F0;
+            border: none;
+            padding: 8px 14px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            outline: none;
+            text-align: center;
+        }
+        .dark .pill-input {
+            background: #334155;
+            color: #FFF;
+        }
 
-    /* MAIN CONTENT AREA */
-    .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow-y: auto; width: 100%; }
-    .top-header { background: #FFF; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
-    .header-user-box { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .header-logo-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-blue); background: #FFF; }
-    .user-greeting { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px; }
-    .user-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; font-style: italic; }
-
-    .content-body { padding: 16px; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; }
-
-    /* DASHBOARD GRID */
-    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .quick-card { background: #FFF; border-radius: 16px; padding: 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .qc-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #FFF; flex-shrink: 0; }
-
-    /* SECTION CARDS */
-    .card { background: var(--card-white); border-radius: 18px; padding: 16px; border: 1px solid var(--border-color); margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); width: 100%; overflow: hidden; }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-    .card-title { font-size: 1.05rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
-
-    /* BOTÓN DE DRAWER */
-    .drawer-open-btn { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; margin-bottom: 14px; font-family: var(--font-main); }
-
-    /* DRAWER LATERAL DERECHO */
-    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-    .drawer-overlay.open { opacity: 1; visibility: visible; }
-    
-    .drawer-panel { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: #FFF; z-index: 3001; padding: 24px 18px; box-shadow: -5px 0 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 12px; transition: right 0.3s ease; overflow-y: auto; }
-    .drawer-overlay.open .drawer-panel { right: 0; }
-    
-    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-    .drawer-title { font-size: 1.1rem; font-weight: 800; color: var(--primary-blue); }
-    .drawer-close { background: none; border: none; font-size: 1.4rem; font-weight: 800; color: var(--text-muted); cursor: pointer; }
-
-    .drawer-item { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-color); background: #FAFAFC; color: var(--text-dark); font-size: 0.88rem; font-weight: 700; cursor: pointer; text-align: left; transition: all 0.2s; font-family: var(--font-main); display: flex; align-items: center; gap: 10px; }
-    .drawer-item.active { background: var(--primary-blue); color: #FFF; border-color: var(--primary-blue); }
-
-    /* CALENDARIO */
-    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 6px; }
-    .cal-header button { padding: 6px 10px; font-size: 0.75rem; border-radius: 8px; }
-    .cal-header h3 { font-size: 0.95rem; text-align: center; white-space: nowrap; }
-    
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
-    .cal-day-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); padding: 4px 0; text-transform: uppercase; }
-    .cal-day-cell { padding: 6px 2px; border-radius: 8px; background: #FAFAFC; border: 1px solid var(--border-color); font-size: 0.8rem; font-weight: 700; cursor: pointer; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-    .cal-day-cell.active-day { background: var(--primary-blue); color: #FFF; }
-    .cal-task-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red-accent); margin-top: 2px; }
-
-    /* ESTILOS DE COMPRAS EN PÍLDORAS REDONDEADAS */
-    .super-product-item-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; width: 100%; }
-    .custom-circle-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #C4C4C8; appearance: none; -webkit-appearance: none; outline: none; cursor: pointer; flex-shrink: 0; background: #FFF; transition: all 0.2s; }
-    .custom-circle-check:checked { background: var(--primary-blue); border-color: var(--primary-blue); position: relative; }
-    .custom-circle-check:checked::after { content: '✓'; color: #FFF; font-size: 12px; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-    .product-row-pill { display: flex; flex: 1; align-items: center; gap: 10px; }
-    .pill-input { border-radius: 20px; background: #D0D7DE; border: none; padding: 10px 16px; font-size: 0.88rem; font-weight: 700; color: var(--text-dark); font-family: var(--font-main); outline: none; text-align: center; }
-    .pill-input:focus { background: #E2E8ED; }
-    .pill-name-box { flex: 2; min-width: 120px; text-align: left; }
-    .pill-sub-group { display: flex; gap: 10px; flex: 2; }
-    .pill-qty-box { flex: 1; min-width: 70px; }
-    .pill-price-box { flex: 1; min-width: 70px; }
-    .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
-    .btn-clear-store { width: 100%; padding: 12px; background: #FF3B30; color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-
-    /* ESTRUCTURA MÓVIL EXACTA A LA ILUSTRACIÓN */
-    @media (max-width: 600px) {
-      .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
-      .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
-      .pill-name-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
-      .pill-name-box { flex: 1; width: 100%; }
-      .pill-sub-group { display: flex; gap: 8px; width: 100%; padding-left: 32px; }
-    }
-
-    /* ESTILOS ESPECÍFICOS DE MIGRAÑA */
-    .migraine-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-    
-    .pain-scale-selector { display: flex; justify-content: space-between; gap: 4px; margin-top: 6px; }
-    .pain-btn { flex: 1; padding: 8px 0; border-radius: 8px; border: 1.5px solid var(--border-color); background: #FAFAFC; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
-    .pain-btn.selected { color: #FFF; border-color: transparent; transform: scale(1.05); }
-
-    .tag-chips-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .tag-chip { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: #FAFAFC; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; color: var(--text-dark); }
-    .tag-chip.active { background: var(--primary-blue); color: #FFF; border-color: var(--primary-blue); }
-
-    .stats-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
-    .kpi-card { background: #FAFAFC; border: 1px solid var(--border-color); padding: 12px; border-radius: 14px; text-align: center; }
-    .kpi-val { font-size: 1.4rem; font-weight: 900; color: var(--red-accent); }
-    .kpi-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
-
-    /* FORMS & INPUTS GENERALES */
-    .form-group { margin-bottom: 12px; text-align: left; }
-    label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
-    input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.88rem; font-family: var(--font-main); font-weight: 600; outline: none; background: #FAFAFC; color: var(--text-dark); }
-    
-    .btn-primary { width: 100%; padding: 12px; background: var(--primary-blue); color: #FFF; border: none; border-radius: 10px; font-weight: 800; font-size: 0.88rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; }
-
-    /* BOTTOM NAV (MOBILE) */
-    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #FFF; border-top: 1px solid var(--border-color); padding: 6px 8px; justify-content: space-around; z-index: 1000; }
-    .mn-item { display: flex; flex-direction: column; align-items: center; gap: 2px; border: none; background: none; color: var(--text-muted); font-size: 0.65rem; font-weight: 600; cursor: pointer; font-family: var(--font-main); }
-    .mn-item.active { color: var(--primary-blue); font-weight: 800; }
-    .mn-icon { font-size: 1.1rem; }
-
-    ul { list-style: none; }
-    li.item-row { background: #FFF; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; }
-
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .mobile-nav { display: flex; }
-      .main-wrapper { padding-bottom: 65px; }
-      .top-header { padding: 12px 16px; }
-      .content-body { padding: 12px; }
-    }
-  </style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 82, 204, 0.3); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 82, 204, 0.6); }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 h-full flex flex-col md:flex-row overflow-hidden transition-colors duration-200">
 
-  <!-- AUTH / LOGIN OVERLAY DEGRADADO -->
-  <div id="authOverlay" class="auth-overlay">
-    <div class="splash-card-wrapper">
-      <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="splash-logo" alt="Omniapp Logo">
-      <div class="splash-title">omniapp</div>
-      <div class="splash-sub">Todo lo importante en un solo lugar</div>
-
-      <div class="auth-tabs">
-        <button id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Ingresar</button>
-        <button id="tabBtnRegister" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrarse</button>
-      </div>
-      
-      <form id="loginForm" class="auth-form active" onsubmit="event.preventDefault(); handleLogin();">
-        <div class="form-group">
-          <label>N° DE REGISTRO (8 DÍGITOS)</label>
-          <input type="text" id="loginRegNumber" class="auth-input" placeholder="Ej: 16112001" maxlength="8" pattern="\d{8}" required>
-        </div>
-        <div class="form-group">
-          <label>CLAVE (LETRAS MINÚSCULAS Y NÚMEROS)</label>
-          <input type="password" id="loginPassKey" class="auth-input" placeholder="••••••••" required>
-        </div>
-
-        <div class="auth-options">
-          <label><input type="checkbox" id="rememberMe"> Recordar datos</label>
-          <a onclick="showForgotPasswordModal()">¿Olvidaste tu clave?</a>
-        </div>
-
-        <button type="submit" class="btn-yellow">INICIAR SESIÓN →</button>
-      </form>
-
-      <form id="registerForm" class="auth-form" onsubmit="event.preventDefault(); handleRegister();">
-        <div class="form-group">
-          <label>NOMBRE(S)</label>
-          <input type="text" id="regFirstName" class="auth-input" placeholder="Ej: Samuel" required>
-        </div>
-        <div class="form-group">
-          <label>APELLIDOS</label>
-          <input type="text" id="regLastName" class="auth-input" placeholder="Ej: Pérez González" required>
-        </div>
-        <div class="form-group">
-          <label>N° DE REGISTRO (8 DÍGITOS)</label>
-          <input type="text" id="regRegNumber" class="auth-input" placeholder="Ej: 16112001" maxlength="8" pattern="\d{8}" required>
-        </div>
-        <div class="form-group">
-          <label>CLAVE (MINÚSCULAS Y NÚMEROS)</label>
-          <input type="password" id="regPassKey" class="auth-input" placeholder="Ej: miacceso123" pattern="[a-z0-9]+" required>
-        </div>
-
-        <button type="submit" class="btn-yellow" style="margin-top:6px;">CREAR CUENTA →</button>
-      </form>
-
-    </div>
-  </div>
-
-  <!-- MAIN APP STRUCTURE -->
-  <div id="appLayout" class="app-layout">
-    
-    <!-- DESKTOP SIDEBAR -->
-    <aside class="sidebar">
-      <div class="brand-header">
-        <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="brand-logo-img" alt="Omniapp Logo">
-        <div class="brand-title">omniapp</div>
-      </div>
-
-      <div class="user-profile-preview" onclick="switchTabByCode('perfil')">
-        <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="profile-avatar" alt="Logo Persona">
+    <!-- Sidebar / Navigation for Desktop -->
+    <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
         <div>
-          <div class="profile-info-name" id="sidebarUserName">Usuario</div>
-          <div class="profile-info-sub" id="sidebarUserReg">Reg: --------</div>
+            <!-- Logo Brand Header -->
+            <div class="flex items-center space-x-3 px-3 py-4 mb-6">
+                <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-2xl border-2 border-brand-yellow object-cover" alt="Omniapp Logo">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+                        omniapp
+                    </h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Todo en un solo lugar</p>
+                </div>
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="space-y-1.5" id="desktop-nav">
+                <button onclick="switchTab('inicio')" id="d-nav-inicio" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <i class="fa-solid fa-house text-lg w-6"></i>
+                    <span>Inicio</span>
+                </button>
+
+                <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <i class="fa-solid fa-calendar-check text-lg w-6"></i>
+                    <span>Agenda</span>
+                </button>
+
+                <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <i class="fa-solid fa-cart-shopping text-lg w-6"></i>
+                    <span>Mi Súper</span>
+                </button>
+
+                <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <i class="fa-solid fa-brain text-lg w-6"></i>
+                    <span>Control Migraña</span>
+                </button>
+
+                <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <i class="fa-solid fa-book-bible text-lg w-6"></i>
+                    <span>Devocional</span>
+                </button>
+            </nav>
         </div>
-      </div>
 
-      <button class="nav-item active" onclick="switchTab('inicio', this)">
-        <span>🏠</span> Inicio
-      </button>
-      <button class="nav-item" onclick="switchTab('agenda', this)">
-        <span>📅</span> Agenda
-      </button>
-      <button class="nav-item" onclick="switchTab('super', this)">
-        <span>🛒</span> Súper
-      </button>
-      <button class="nav-item" onclick="switchTab('migrana', this)">
-        <span>🧠</span> Migraña
-      </button>
-      <button class="nav-item" onclick="switchTab('devocional', this)">
-        <span>📖</span> Devocional
-      </button>
-      <button class="nav-item" onclick="switchTab('perfil', this)">
-        <span>👤</span> Mi Perfil
-      </button>
-
-      <div class="sidebar-footer">
-        <button class="nav-item" onclick="logout()">
-          <span>🔒</span> Cerrar sesión
-        </button>
-      </div>
+        <!-- Footer actions desktop -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <span class="flex items-center space-x-2">
+                    <i class="fa-solid fa-moon text-brand-500"></i>
+                    <span>Modo Oscuro</span>
+                </span>
+                <i class="fa-solid fa-toggle-off dark:fa-toggle-on text-xl text-brand-500" id="dark-toggle-icon"></i>
+            </button>
+        </div>
     </aside>
 
-    <!-- CONTENT WRAPPER -->
-    <div class="main-wrapper">
-      <header class="top-header">
-        <div class="header-user-box" onclick="switchTabByCode('perfil')">
-          <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="header-logo-img" alt="Omniapp Logo">
-          <div>
-            <div class="user-greeting" id="userGreeting">¡Hola!</div>
-            <div class="user-sub" id="currentDateDisplay">Cargando fecha...</div>
-          </div>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        
+        <!-- Top App Bar for Mobile & Desktop Header -->
+        <header class="grad-bg text-white px-4 py-3 sm:px-6 flex justify-between items-center shadow-md z-10 shrink-0">
+            <div class="flex items-center space-x-3">
+                <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-8 h-8 rounded-xl border border-brand-yellow object-cover md:hidden" alt="Omniapp Logo">
+                <div>
+                    <h2 id="page-title" class="text-lg font-bold">Inicio</h2>
+                    <p id="current-date-display" class="text-xs text-white/80 hidden sm:block">Cargando fecha...</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cambiar tema">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>
+                <div class="w-9 h-9 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-sm font-semibold uppercase" id="user-avatar">
+                    OM
+                </div>
+            </div>
+        </header>
+
+        <!-- View Sections Container -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6 space-y-6" id="app-viewport">
+            
+            <!-- SECTION 0: INICIO -->
+            <section id="tab-inicio" class="tab-content space-y-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div onclick="switchTab('agenda')" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-3 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl grad-bg text-white flex items-center justify-center text-lg shrink-0">📅</div>
+                        <div>
+                            <strong class="block text-sm">Agenda</strong>
+                            <span class="text-xs text-slate-400">Planes y metas</span>
+                        </div>
+                    </div>
+                    <div onclick="switchTab('super')" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-3 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-amber-400 text-black flex items-center justify-center text-lg shrink-0">🛒</div>
+                        <div>
+                            <strong class="block text-sm">Súper</strong>
+                            <span class="text-xs text-slate-400">Lista de compras</span>
+                        </div>
+                    </div>
+                    <div onclick="switchTab('migrana')" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-3 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-red-500 text-white flex items-center justify-center text-lg shrink-0">🧠</div>
+                        <div>
+                            <strong class="block text-sm">Migraña</strong>
+                            <span class="text-xs text-slate-400">Registro de salud</span>
+                        </div>
+                    </div>
+                    <div onclick="switchTab('devocional')" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center space-x-3 cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl grad-bg text-white flex items-center justify-center text-lg shrink-0">📖</div>
+                        <div>
+                            <strong class="block text-sm">Devocional</strong>
+                            <span class="text-xs text-slate-400">Oraciones</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                        📅 Próximos Eventos y Prioridades
+                    </h3>
+                    <div id="dash-tasks-container" class="space-y-2 text-sm">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 1: AGENDA -->
+            <section id="tab-agenda" class="tab-content hidden space-y-6">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                    <form id="form-add-task" onsubmit="handleAddTask(event)" class="space-y-3">
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="task-title" placeholder="¿Qué tienes pendiente hoy?" required
+                                   class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="submit" class="grad-bg text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:opacity-95 transition shadow-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-plus"></i> Agregar Tarea
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <input type="date" id="task-date" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300">
+                            <select id="task-priority" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300">
+                                <option value="Baja">Prioridad Baja</option>
+                                <option value="Media" selected>Prioridad Media</option>
+                                <option value="Alta">Prioridad Alta</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-tasks text-brand-500"></i> Lista de Tareas
+                    </h3>
+                    <div id="tasks-container" class="space-y-2">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: CONTROL DE MIGRAÑA -->
+            <section id="tab-migrana" class="tab-content hidden space-y-6">
+                <!-- Migraine Stats Overview -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                        <h4 id="stat-total-migraines" class="text-xl font-extrabold text-red-500">0</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Episodios</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                        <h4 id="stat-avg-pain" class="text-xl font-extrabold text-amber-500">0.0</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Prom. Dolor</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                        <h4 id="stat-avg-hours" class="text-xl font-extrabold text-blue-500">0h</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Duración Prom.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+                        <h4 id="stat-top-trigger" class="text-sm font-extrabold text-brand-500 truncate mt-1">N/A</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold">Detonante Top</p>
+                    </div>
+                </div>
+
+                <!-- Formulario Registro de Crisis -->
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">⚡ Registro de Episodio e Intensidad</h3>
+                    
+                    <form onsubmit="handleSaveMigraine(event)" class="space-y-4 text-xs sm:text-sm">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-500 mb-1">Fecha</label>
+                                <input type="date" id="migraine-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-500 mb-1">Hora</label>
+                                <input type="time" id="migraine-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-slate-500 mb-1">Duración estimada (Horas)</label>
+                            <input type="number" id="migraine-duration" step="0.5" min="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-slate-500 mb-1">Intensidad del dolor (1 a 10)</label>
+                            <input type="range" id="migraine-pain" min="1" max="10" value="5" oninput="document.getElementById('pain-display').innerText = this.value" class="w-full accent-red-500 cursor-pointer">
+                            <span id="pain-display" class="font-bold text-red-500 text-sm">5</span>/10
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-slate-500 mb-1">Desencadenantes probables</label>
+                            <div class="flex flex-wrap gap-1.5 text-xs">
+                                <label class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border cursor-pointer">
+                                    <input type="checkbox" name="trigger" value="Estrés"> <span>😫 Estrés</span>
+                                </label>
+                                <label class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border cursor-pointer">
+                                    <input type="checkbox" name="trigger" value="Falta de sueño"> <span>😴 Falta de sueño</span>
+                                </label>
+                                <label class="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border cursor-pointer">
+                                    <input type="checkbox" name="trigger" value="Clima"> <span>🌤️ Clima</span>
+                                </label>
+                            </div>
+                            <input type="text" id="migraine-custom-trigger" placeholder="Otro desencadenante personalizado..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 mt-2">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-slate-500 mb-1">Medicamento y Dosis</label>
+                            <input type="text" id="migraine-meds" placeholder="Ej: Ibuprofeno 600mg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                        </div>
+
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl uppercase transition">Guardar Episodio</button>
+                    </form>
+                </div>
+
+                <!-- Historial -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-200">📋 Historial de Crisis</h3>
+                    <div id="migraine-history-container" class="space-y-3">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: DEVOCIONAL -->
+            <section id="tab-devocional" class="tab-content hidden space-y-6">
+                <form onsubmit="handleAddDevotional(event)" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                    <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Nueva Oración / Reflexión</h4>
+                    <input type="text" id="dev-title" placeholder="Título..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm">
+                    <textarea id="dev-text" rows="3" placeholder="Pensamientos..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm"></textarea>
+                    <button type="submit" class="grad-bg text-white px-4 py-2 rounded-xl text-xs font-semibold shadow">Guardar Devocional</button>
+                </form>
+
+                <div id="devotional-entries-container" class="space-y-3">
+                    <!-- Injected JS -->
+                </div>
+            </section>
+
+            <!-- SECTION 4: MI SÚPER (LISTA DE COMPRAS) -->
+            <section id="tab-super" class="tab-content hidden space-y-6">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <div class="flex gap-2">
+                        <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm">
+                        <button onclick="handleAddSuperItem()" class="grad-bg text-white px-4 py-2 rounded-xl text-xs font-bold">+ AGREGAR</button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-200">🛒 Lista de Productos</h3>
+                    <div id="super-items-container" class="space-y-3">
+                        <!-- Injected JS con la alineación exacta de tu ilustración -->
+                    </div>
+                </div>
+            </section>
         </div>
-      </header>
 
-      <main class="content-body">
-
-        <!-- 1. INICIO / DASHBOARD -->
-        <section id="tab-inicio" class="tab-section">
-          <div class="dash-grid">
-            <div class="quick-card" onclick="switchTabByCode('agenda')">
-              <div class="qc-icon" style="background: var(--primary-blue);">📅</div>
-              <div>
-                <strong style="display:block; font-size:0.9rem;">Agenda</strong>
-                <span class="user-sub">Planes y metas</span>
-              </div>
-            </div>
-            <div class="quick-card" onclick="switchTabByCode('super')">
-              <div class="qc-icon" style="background: var(--yellow-accent); color:#000;">🛒</div>
-              <div>
-                <strong style="display:block; font-size:0.9rem;">Súper</strong>
-                <span class="user-sub">Lista de compras</span>
-              </div>
-            </div>
-            <div class="quick-card" onclick="switchTabByCode('migrana')">
-              <div class="qc-icon" style="background: var(--red-accent);">🧠</div>
-              <div>
-                <strong style="display:block; font-size:0.9rem;">Migraña</strong>
-                <span class="user-sub">Registro de salud</span>
-              </div>
-            </div>
-            <div class="quick-card" onclick="switchTabByCode('devocional')">
-              <div class="qc-icon" style="background: var(--primary-blue);">📖</div>
-              <div>
-                <strong style="display:block; font-size:0.9rem;">Devocional</strong>
-                <span class="user-sub">Oraciones</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📅 Próximos Eventos y Prioridades</div>
-            </div>
-            <ul id="dashTasksList"></ul>
-          </div>
-        </section>
-
-        <!-- 2. AGENDA -->
-        <section id="tab-agenda" class="tab-section" style="display:none;">
-          <button class="drawer-open-btn" onclick="toggleAgendaDrawer(true)">
-            <span>⚙️</span> Vistas de Agenda
-          </button>
-
-          <div id="agendaDrawerOverlay" class="drawer-overlay" onclick="toggleAgendaDrawer(false)">
-            <div class="drawer-panel" onclick="event.stopPropagation()">
-              <div class="drawer-header">
-                <span class="drawer-title">Vistas de Agenda</span>
-                <button class="drawer-close" onclick="toggleAgendaDrawer(false)">✕</button>
-              </div>
-              <button class="drawer-item active" onclick="selectAgendaOption('cal', this)"><span>📆</span> Calendario Mensual</button>
-              <button class="drawer-item" onclick="selectAgendaOption('semana', this)"><span>📊</span> Plan Semanal</button>
-              <button class="drawer-item" onclick="selectAgendaOption('horario', this)"><span>⏰</span> Horario Diario</button>
-              <button class="drawer-item" onclick="selectAgendaOption('tareas', this)"><span>🎯</span> Tareas & Prioridades</button>
-              <button class="drawer-item" onclick="selectAgendaOption('metas', this)"><span>🚀</span> Metas & Objetivos</button>
-              <button class="drawer-item" onclick="selectAgendaOption('notas', this)"><span>📝</span> Notas & Recordatorios</button>
-            </div>
-          </div>
-
-          <div id="agSubtab-cal" class="ag-subtab">
-            <div class="card">
-              <div class="cal-header">
-                <button class="btn-primary" style="width:auto;" onclick="changeMonth(-1)">← Mes</button>
-                <h3 id="calMonthTitle" style="color:var(--primary-blue);">Mes Año</h3>
-                <button class="btn-primary" style="width:auto;" onclick="changeMonth(1)">Mes →</button>
-              </div>
-              <div class="cal-grid">
-                <div class="cal-day-label">Dom</div><div class="cal-day-label">Lun</div><div class="cal-day-label">Mar</div>
-                <div class="cal-day-label">Mié</div><div class="cal-day-label">Jue</div><div class="cal-day-label">Vie</div>
-                <div class="cal-day-label">Sáb</div>
-              </div>
-              <div id="calDaysGrid" class="cal-grid" style="margin-top:6px;"></div>
-            </div>
-          </div>
-
-          <div id="agSubtab-semana" class="ag-subtab" style="display:none;">
-            <div class="card">
-              <div class="card-title">Planificación Semanal</div>
-              <div id="weeklyPlanGrid" style="display:grid; grid-template-columns:1fr; gap:8px;"></div>
-            </div>
-          </div>
-
-          <div id="agSubtab-horario" class="ag-subtab" style="display:none;">
-            <div class="card">
-              <div class="card-title">Bloques de Horario para Hoy</div>
-              <div style="display:grid; grid-template-columns:1fr 2fr; gap:8px; margin-bottom:10px;">
-                <input type="time" id="timeBlockHour">
-                <input type="text" id="timeBlockActivity" placeholder="Actividad...">
-              </div>
-              <button class="btn-primary" onclick="addTimeBlock()">+ Agregar Bloque</button>
-              <ul id="timeBlockList" style="margin-top:12px;"></ul>
-            </div>
-          </div>
-
-          <div id="agSubtab-tareas" class="ag-subtab" style="display:none;">
-            <div class="card">
-              <div class="card-title" style="margin-bottom:12px;">Nueva Tarea con Prioridad</div>
-              <div class="form-group">
-                <label>Descripción de la Tarea</label>
-                <input type="text" id="fTitle" placeholder="Ej: Entregar reporte final...">
-              </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                <div class="form-group">
-                  <label>Fecha</label>
-                  <input type="date" id="fDate">
-                </div>
-                <div class="form-group">
-                  <label>Prioridad</label>
-                  <select id="fPriority">
-                    <option value="Alta">🔴 Alta</option>
-                    <option value="Media" selected>🟡 Media</option>
-                    <option value="Baja">🟢 Baja</option>
-                  </select>
-                </div>
-              </div>
-              <button class="btn-primary" onclick="addAcademicTask()">Guardar Tarea</button>
-            </div>
-
-            <div class="card">
-              <div class="card-title" style="margin-bottom:12px;">Lista de Tareas Registradas</div>
-              <ul id="taskList"></ul>
-            </div>
-          </div>
-
-          <div id="agSubtab-metas" class="ag-subtab" style="display:none;">
-            <div class="card">
-              <div class="card-title">Registrar Nueva Meta</div>
-              <div class="form-group">
-                <label>Objetivo</label>
-                <input type="text" id="goalTitle" placeholder="Ej: Ahorrar $500...">
-              </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                <div class="form-group">
-                  <label>Progreso (%)</label>
-                  <input type="number" id="goalProgress" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                  <label>Fecha Límite</label>
-                  <input type="date" id="goalDeadline">
-                </div>
-              </div>
-              <button class="btn-primary" onclick="addGoal()">+ Guardar Meta</button>
-            </div>
-
-            <div class="card">
-              <div class="card-title">Seguimiento de Objetivos</div>
-              <ul id="goalsList"></ul>
-            </div>
-          </div>
-
-          <div id="agSubtab-notas" class="ag-subtab" style="display:none;">
-            <div class="card">
-              <div class="card-title">Notas y Recordatorios</div>
-              <div class="form-group">
-                <input type="text" id="noteTitle" placeholder="Título de la nota...">
-              </div>
-              <div class="form-group">
-                <textarea id="noteBody" rows="3" placeholder="Escribe un recordatorio..."></textarea>
-              </div>
-              <button class="btn-primary" onclick="addQuickNote()">+ Guardar Nota</button>
-            </div>
-
-            <div class="card">
-              <div class="card-title">Mis Notas</div>
-              <ul id="quickNotesList"></ul>
-            </div>
-          </div>
-
-        </section>
-
-        <!-- 3. SÚPER SECCIÓN -->
-        <section id="tab-super" class="tab-section" style="display:none;">
-          <button class="drawer-open-btn" onclick="toggleStoreDrawer(true)">
-            <span>🛒</span> Tiendas de Compras
-          </button>
-
-          <div id="storeDrawerOverlay" class="drawer-overlay" onclick="toggleStoreDrawer(false)">
-            <div class="drawer-panel" onclick="event.stopPropagation()">
-              <div class="drawer-header">
-                <span class="drawer-title">Mis Tiendas</span>
-                <button class="drawer-close" onclick="toggleStoreDrawer(false)">✕</button>
-              </div>
-              <button class="drawer-item active" onclick="selectStoreTab('mercado', '🥬 Mercado', this)"><span>🥬</span> Mercado</button>
-              <button class="drawer-item" onclick="selectStoreTab('costco', '🛒 Costco', this)"><span>🛒</span> Costco</button>
-              <button class="drawer-item" onclick="selectStoreTab('sams', '📦 Sam\'s Club', this)"><span>📦</span> Sam's Club</button>
-              <button class="drawer-item" onclick="selectStoreTab('zorro', '🦊 El Zorro', this)"><span>🦊</span> El Zorro</button>
-              <button class="drawer-item" onclick="selectStoreTab('monarca', '👑 Monarca', this)"><span>👑</span> Monarca</button>
-              <button class="drawer-item" onclick="selectStoreTab('extras', '⭐ Extras', this)"><span>⭐</span> Extras</button>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-title" id="currentStoreTitle" style="margin-bottom:14px; color:var(--primary-blue);">
-              🥬 Mercado
-            </div>
-
-            <div style="background:#FAFAFC; padding:12px; border-radius:14px; border:1px solid var(--border-color); margin-bottom:16px;">
-              <div style="display:flex; gap:8px;">
-                <input type="text" id="storeProdName" placeholder="Agregar nuevo producto..." style="flex:1;">
-                <button class="btn-primary" style="width:auto; padding:10px 16px;" onclick="addStoreProduct()">+ AGREGAR</button>
-              </div>
-            </div>
-
-            <div id="storeProductsList"></div>
-
-            <button class="btn-clear-store" onclick="clearCurrentStoreData()">
-              🗑️ Borrar información de esta tienda
+        <!-- Navigation Bar for Mobile -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around items-center z-30 shadow-lg">
+            <button onclick="switchTab('inicio')" id="m-nav-inicio" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Inicio</span>
             </button>
-          </div>
-
-        </section>
-
-        <!-- 4. REGISTRO DE MIGRAÑA -->
-        <section id="tab-migrana" class="tab-section" style="display:none;">
-          
-          <!-- RESUMEN ESTADÍSTICO MENSUAL -->
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px; color:var(--primary-blue);">📊 Estadísticas Mensuales</div>
-            <div class="stats-kpi-grid">
-              <div class="kpi-card">
-                <div class="kpi-val" id="migKpiTotal">0</div>
-                <div class="kpi-lbl">Episodios</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-val" id="migKpiAvgPain">0</div>
-                <div class="kpi-lbl">Promedio Dolor</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-val" id="migKpiAvgHours">0h</div>
-                <div class="kpi-lbl">Duración Prom.</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-val" id="migKpiTopTrigger" style="font-size:0.9rem; margin-top:4px;">N/A</div>
-                <div class="kpi-lbl">Detonante Top</div>
-              </div>
-            </div>
-            
-            <button class="btn-primary" style="background:#34C759;" onclick="exportMigrainePDFReport()">
-              📑 Generar Informe para el Médico (PDF / Imprimir)
+            <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400">
+                <i class="fa-solid fa-calendar-check text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Agenda</span>
             </button>
-          </div>
+            <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Súper</span>
+            </button>
+            <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400">
+                <i class="fa-solid fa-brain text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Migraña</span>
+            </button>
+        </nav>
+    </main>
 
-          <!-- FORMULARIO DE REGISTRO RÁPIDO -->
-          <div class="card">
-            <div class="card-title" style="margin-bottom:14px;">⚡ Registro de Episodio e Intensidad</div>
+    <script>
+        const state = {
+            currentTab: 'inicio',
+            tasks: JSON.parse(localStorage.getItem('om_tasks')) || [],
+            migraines: JSON.parse(localStorage.getItem('om_migraines')) || [],
+            devotionals: JSON.parse(localStorage.getItem('om_devotionals')) || [],
+            superItems: JSON.parse(localStorage.getItem('om_super')) || [
+                { id: 1, name: 'Quesillo', qty: '', price: '', bought: false },
+                { id: 2, name: 'Jitomate', qty: '', price: '', bought: false }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initDates();
+            switchTab('inicio');
+            renderTasks();
+            renderMigraines();
+            renderDevotionals();
+            renderSuper();
+        });
+
+        function saveState(key) {
+            localStorage.setItem('om_' + key, JSON.stringify(state[key]));
+        }
+
+        function initDates() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const todayStr = new Date().toLocaleDateString('es-ES', options);
+            document.getElementById('current-date-display').innerText = todayStr.charAt(0).toUpperCase() + todayStr.slice(1);
+            document.getElementById('migraine-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('migraine-time').value = new Date().toTimeString().split(' ')[0].substring(0, 5);
+        }
+
+        function switchTab(tabName) {
+            state.currentTab = tabName;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             
-            <div class="migraine-time-row">
-              <div class="form-group" style="margin-bottom:0;">
-                <label>Fecha</label>
-                <input type="date" id="migDate">
-              </div>
-              <div class="form-group" style="margin-bottom:0;">
-                <label>Hora</label>
-                <input type="time" id="migTime">
-              </div>
-            </div>
+            const target = document.getElementById('tab-' + tabName);
+            if (target) target.classList.remove('hidden');
 
-            <div class="form-group">
-              <label>Duración estimada (Horas)</label>
-              <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4">
-            </div>
-
-            <div class="form-group">
-              <label>Intensidad del dolor (1 = Leve, 10 = Insupportable)</label>
-              <div class="pain-scale-selector" id="painScaleBox">
-                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(1, this)">1</button>
-                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(2, this)">2</button>
-                <button type="button" class="pain-btn" style="background:#34C759; color:#FFF;" onclick="selectPainLevel(3, this)">3</button>
-                <button type="button" class="pain-btn" style="background:#FFCC00; color:#000;" onclick="selectPainLevel(4, this)">4</button>
-                <button type="button" class="pain-btn" style="background:#FFCC00; color:#000;" onclick="selectPainLevel(5, this)">5</button>
-                <button type="button" class="pain-btn" style="background:#FF9500; color:#FFF;" onclick="selectPainLevel(6, this)">6</button>
-                <button type="button" class="pain-btn" style="background:#FF9500; color:#FFF;" onclick="selectPainLevel(7, this)">7</button>
-                <button type="button" class="pain-btn" style="background:#FF3B30; color:#FFF;" onclick="selectPainLevel(8, this)">8</button>
-                <button type="button" class="pain-btn" style="background:#FF3B30; color:#FFF;" onclick="selectPainLevel(9, this)">9</button>
-                <button type="button" class="pain-btn" style="background:#8E0000; color:#FFF;" onclick="selectPainLevel(10, this)">10</button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Síntomas experimentados</label>
-              <div class="tag-chips-grid" id="symptomsChipsBox">
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">🤢 Náuseas</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">💡 Sensible a la luz</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">🔊 Sensible al ruido</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">✨ Aura visual</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">💫 Mareos</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">👁️ Visión borrosa</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'symptoms')">⚡ Pulsación / Latidos</span>
-              </div>
-            </div>
-
-            <!-- DESENCADENANTES CON CAMPO PERSONALIZADO ADICIONAL -->
-            <div class="form-group">
-              <label>Desencadenantes probables</label>
-              <div class="tag-chips-grid" id="triggersChipsBox">
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">😫 Estrés</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">😴 Falta de sueño</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🌤️ Cambio de clima</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">☕ Cafeína</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🍽️ Ayuno prolongado</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">📱 Brillo de pantallas</span>
-                <span class="tag-chip" onclick="toggleChip(this, 'triggers')">🩸 Cambio hormonal</span>
-              </div>
-              <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante personalizado..." style="margin-top:8px;">
-            </div>
-
-            <div class="form-group">
-              <label>Medicamento consumido y dosis</label>
-              <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg, Sumatriptán 50mg...">
-            </div>
-
-            <button class="btn-primary" style="background:var(--red-accent);" onclick="saveMigraineEpisode()">Guardar Episodio</button>
-          </div>
-
-          <!-- DETECCIÓN DE PATRONES Y PERSONALIZACIÓN -->
-          <div class="card">
-            <div class="card-title" style="margin-bottom:10px;">🔍 Detección de Patrones</div>
-            <p id="migPatternInsight" style="font-size:0.85rem; color:var(--text-dark); line-height:1.4;">
-              Cargando análisis de patrones...
-            </p>
-          </div>
-
-          <!-- HISTORIAL CLINICO REGISTRADO -->
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">📋 Historial de Episodios</div>
-            <ul id="migraineList"></ul>
-          </div>
-
-        </section>
-
-        <!-- 5. DEVOCIONAL -->
-        <section id="tab-devocional" class="tab-section" style="display:none;">
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">Nueva Oración / Reflexión</div>
-            <div class="form-group">
-              <label>Título</label>
-              <input type="text" id="devTitle" placeholder="Ej: Agradecimiento...">
-            </div>
-            <div class="form-group">
-              <label>Notas / Reflexión</label>
-              <textarea id="devNotes" rows="3" placeholder="Pensamientos..."></textarea>
-            </div>
-            <button class="btn-primary" onclick="saveDevotional()">Guardar en devocional</button>
-          </div>
-
-          <div class="card">
-            <div class="card-title" style="margin-bottom:12px;">Mis Oraciones</div>
-            <ul id="devotionalIndexList"></ul>
-          </div>
-        </section>
-
-        <!-- 6. PERFIL -->
-        <section id="tab-perfil" class="tab-section" style="display:none;">
-          <div class="card" style="text-align:center;">
-            <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" style="width:90px; height:90px; border-radius:50%; object-fit:cover; border:3px solid var(--yellow-accent); margin-bottom:10px;">
-            <h2 id="profilePageName" style="color:var(--primary-blue);">Usuario</h2>
-            <p id="profilePageReg" style="color:var(--text-muted); font-size:0.85rem; font-style:italic;">N° Registro: --------</p>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Completar / Actualizar Perfil 👤</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-              <div class="form-group">
-                <label>Nombre(s)</label>
-                <input type="text" id="profileFirstName">
-              </div>
-              <div class="form-group">
-                <label>Apellidos</label>
-                <input type="text" id="profileLastName">
-              </div>
-            </div>
-            <button class="btn-primary" onclick="updateUserProfile()">Guardar Cambios</button>
-          </div>
-        </section>
-
-      </main>
-    </div>
-  </div>
-
-  <!-- MOBILE BOTTOM NAVIGATION -->
-  <nav class="mobile-nav">
-    <button class="mn-item active" onclick="switchTab('inicio', this)">
-      <span class="mn-icon">🏠</span> Inicio
-    </button>
-    <button class="mn-item" onclick="switchTab('agenda', this)">
-      <span class="mn-icon">📅</span> Agenda
-    </button>
-    <button class="mn-item" onclick="switchTab('super', this)">
-      <span class="mn-icon">🛒</span> Súper
-    </button>
-    <button class="mn-item" onclick="switchTab('migrana', this)">
-      <span class="mn-icon">🧠</span> Migraña
-    </button>
-    <button class="mn-item" onclick="switchTab('perfil', this)">
-      <span class="mn-icon">👤</span> Perfil
-    </button>
-  </nav>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
-      authDomain: "condoapp-d1729.firebaseapp.com",
-      databaseURL: "https://condoapp-d1729-default-rtdb.firebaseio.com",
-      projectId: "condoapp-d1729",
-      storageBucket: "condoapp-d1729.firebasestorage.app",
-      messagingSenderId: "834784357986",
-      appId: "1:834784357986:web:90855a08e0c5399d8aeb3b"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let userKey = "";
-    let currentUserData = {};
-    let currentCalDate = new Date();
-    let loadedTasks = [];
-    let currentStoreKey = "mercado";
-    let selectedPainLevel = 5;
-
-    const defaultStoreLists = {
-      mercado: [
-        { name: "Quesillo", qty: "", price: "", done: false },
-        { name: "Yogurt", qty: "", price: "", done: false },
-        { name: "Jitomate", qty: "", price: "", done: false },
-        { name: "Cebolla", qty: "", price: "", done: false },
-        { name: "Calabaza", qty: "", price: "", done: false },
-        { name: "Zanahoria", qty: "", price: "", done: false },
-        { name: "Tomatillo", qty: "", price: "", done: false },
-        { name: "Lechuga italiana", qty: "", price: "", done: false },
-        { name: "Lechuga romana", qty: "", price: "", done: false },
-        { name: "Cilantro", qty: "", price: "", done: false },
-        { name: "Nopales", qty: "", price: "", done: false },
-        { name: "Ajos", qty: "", price: "", done: false },
-        { name: "Papas", qty: "", price: "", done: false },
-        { name: "Manzana", qty: "", price: "", done: false },
-        { name: "Plátano", qty: "", price: "", done: false },
-        { name: "Papaya", qty: "", price: "", done: false },
-        { name: "Piña", qty: "", price: "", done: false },
-        { name: "Pierna con muslo", qty: "", price: "", done: false },
-        { name: "Pechuga", qty: "", price: "", done: false },
-        { name: "Tortilla", qty: "", price: "", done: false },
-        { name: "Huevo", qty: "", price: "", done: false }
-      ],
-      costco: [
-        { name: "Carne molida", qty: "", price: "", done: false },
-        { name: "Mantequilla", qty: "", price: "", done: false },
-        { name: "Tortillas de harina", qty: "", price: "", done: false },
-        { name: "Lechuga", qty: "", price: "", done: false }
-      ],
-      sams: [
-        { name: "Café", qty: "", price: "", done: false },
-        { name: "Pescado / atún", qty: "", price: "", done: false },
-        { name: "Catsup", qty: "", price: "", done: false },
-        { name: "Crema", qty: "", price: "", done: false },
-        { name: "Servilletas", qty: "", price: "", done: false },
-        { name: "Servitoallas", qty: "", price: "", done: false },
-        { name: "Jabón para trastes", qty: "", price: "", done: false },
-        { name: "Suavitel", qty: "", price: "", done: false },
-        { name: "Jabón para ropa", qty: "", price: "", done: false },
-        { name: "Pan molido", qty: "", price: "", done: false },
-        { name: "Pino", qty: "", price: "", done: false },
-        { name: "Queso americano", qty: "", price: "", done: false },
-        { name: "Windex", qty: "", price: "", done: false }
-      ],
-      zorro: [
-        { name: "Arroz", qty: "", price: "", done: false },
-        { name: "Leche", qty: "", price: "", done: false },
-        { name: "Harina", qty: "", price: "", done: false },
-        { name: "Sal (bolsa)", qty: "", price: "", done: false },
-        { name: "Jamón", qty: "", price: "", done: false },
-        { name: "Aceite", qty: "", price: "", done: false },
-        { name: "Espagueti", qty: "", price: "", done: false },
-        { name: "Sopa surtida", qty: "", price: "", done: false },
-        { name: "Azúcar", qty: "", price: "", done: false },
-        { name: "Pasta de dientes", qty: "", price: "", done: false },
-        { name: "Zote", qty: "", price: "", done: false },
-        { name: "Saladitas", qty: "", price: "", done: false },
-        { name: "Mayonesa", qty: "", price: "", done: false }
-      ],
-      monarca: [],
-      extras: []
-    };
-
-    function switchAuthTab(tab) {
-      const loginBtn = document.getElementById('tabBtnLogin');
-      const regBtn = document.getElementById('tabBtnRegister');
-      const loginForm = document.getElementById('loginForm');
-      const regForm = document.getElementById('registerForm');
-
-      if(tab === 'login') {
-        loginBtn.classList.add('active');
-        regBtn.classList.remove('active');
-        loginForm.classList.add('active');
-        regForm.classList.remove('active');
-      } else {
-        regBtn.classList.add('active');
-        loginBtn.classList.remove('active');
-        regForm.classList.add('active');
-        loginForm.classList.remove('active');
-      }
-    }
-
-    function handleLogin() {
-      const reg = document.getElementById('loginRegNumber').value.trim();
-      const pass = document.getElementById('loginPassKey').value.trim();
-      const remember = document.getElementById('rememberMe').checked;
-
-      if(reg.length !== 8) return alert('El número de registro debe contener exactamente 8 dígitos.');
-
-      userKey = `user_${reg}_${pass}`;
-
-      db.ref(`users/${reg}`).once('value', snapshot => {
-        const val = snapshot.val();
-        if(val && val.pass === pass) {
-          currentUserData = val;
-          if(remember) {
-            localStorage.setItem('omniapp_saved_reg', reg);
-            localStorage.setItem('omniapp_saved_pass', pass);
-          } else {
-            localStorage.removeItem('omniapp_saved_reg');
-            localStorage.removeItem('omniapp_saved_pass');
-          }
-          localStorage.setItem('omniapp_active_userKey', userKey);
-          unlockApp();
-        } else {
-          alert('Número de registro o clave incorrecta.');
-        }
-      });
-    }
-
-    function handleRegister() {
-      const firstName = document.getElementById('regFirstName').value.trim();
-      const lastName = document.getElementById('regLastName').value.trim();
-      const reg = document.getElementById('regRegNumber').value.trim();
-      const pass = document.getElementById('regPassKey').value.trim();
-
-      if(!firstName || !lastName || !reg || !pass) return alert('Completa todos los campos para continuar.');
-      if(reg.length !== 8) return alert('El número de registro debe tener exactamente 8 números.');
-
-      db.ref(`users/${reg}`).once('value', snapshot => {
-        if(snapshot.exists()) {
-          return alert('Este número de registro ya se encuentra registrado.');
-        }
-
-        const newUser = { firstName, lastName, reg, pass };
-        db.ref(`users/${reg}`).set(newUser, (error) => {
-          if(error) {
-            alert('Error al registrar usuario.');
-          } else {
-            alert('¡Registro exitoso! Ya puedes iniciar sesión.');
-            switchAuthTab('login');
-          }
-        });
-      });
-    }
-
-    function checkActiveSession() {
-      const savedReg = localStorage.getItem('omniapp_saved_reg');
-      const savedPass = localStorage.getItem('omniapp_saved_pass');
-      
-      if(savedReg && savedPass) {
-        document.getElementById('loginRegNumber').value = savedReg;
-        document.getElementById('loginPassKey').value = savedPass;
-        document.getElementById('rememberMe').checked = true;
-      }
-
-      const activeKey = localStorage.getItem('omniapp_active_userKey');
-      if (activeKey) {
-        userKey = activeKey;
-        const regMatch = activeKey.split('_')[1];
-        db.ref(`users/${regMatch}`).once('value', snapshot => {
-          currentUserData = snapshot.val() || {};
-          unlockApp();
-        });
-      }
-    }
-
-    function unlockApp() {
-      document.getElementById('authOverlay').style.display = 'none';
-      document.getElementById('appLayout').classList.add('visible');
-      updateDateDisplay();
-      updateProfileUI();
-      renderCalendar();
-      initDefaultStoreData();
-      setDefaultMigraineForm();
-      listenToDatabase();
-    }
-
-    function logout() {
-      localStorage.removeItem('omniapp_active_userKey');
-      location.reload();
-    }
-
-    function toggleAgendaDrawer(open) {
-      const drawer = document.getElementById('agendaDrawerOverlay');
-      if(open) drawer.classList.add('open');
-      else drawer.classList.remove('open');
-    }
-
-    function selectAgendaOption(subId, btn) {
-      document.querySelectorAll('.ag-subtab').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.drawer-item').forEach(b => b.classList.remove('active'));
-      document.getElementById(`agSubtab-${subId}`).style.display = 'block';
-      if(btn) btn.classList.add('active');
-      toggleAgendaDrawer(false);
-    }
-
-    function toggleStoreDrawer(open) {
-      const drawer = document.getElementById('storeDrawerOverlay');
-      if(open) drawer.classList.add('open');
-      else drawer.classList.remove('open');
-    }
-
-    function selectStoreTab(storeKey, storeTitle, btn) {
-      currentStoreKey = storeKey;
-      document.getElementById('currentStoreTitle').innerText = storeTitle;
-      document.querySelectorAll('#storeDrawerOverlay .drawer-item').forEach(b => b.classList.remove('active'));
-      if(btn) btn.classList.add('active');
-      toggleStoreDrawer(false);
-      listenToStoreProducts();
-    }
-
-    function initDefaultStoreData() {
-      db.ref(`${userKey}/stores`).once('value', snapshot => {
-        if(!snapshot.exists()) {
-          db.ref(`${userKey}/stores`).set(defaultStoreLists);
-        }
-      });
-    }
-
-    function listenToStoreProducts() {
-      db.ref(`${userKey}/stores/${currentStoreKey}`).on('value', snapshot => {
-        const data = snapshot.val() || [];
-        renderStoreProducts(data);
-      });
-    }
-
-    function renderStoreProducts(products) {
-      const container = document.getElementById('storeProductsList');
-      if(!products || Object.keys(products).length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; padding:10px 0;">No hay productos en esta lista.</p>';
-        return;
-      }
-
-      let html = '';
-      Object.keys(products).forEach(key => {
-        const p = products[key];
-        html += `
-          <div class="super-product-item-wrapper ${p.done ? 'completed' : ''}">
-            <div class="product-row-pill">
-              <div class="pill-name-wrapper">
-                <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleStoreProduct('${key}', ${p.done})">
-                <input type="text" class="pill-input pill-name-box" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
-              </div>
-              
-              <div class="pill-sub-group">
-                <input type="text" class="pill-input pill-qty-box" value="${p.qty || ''}" onchange="updateStoreField('${key}', 'qty', this.value)">
-                <input type="text" class="pill-input pill-price-box" value="${p.price || ''}" onchange="updateStoreField('${key}', 'price', this.value)">
-              </div>
-            </div>
-
-            <button style="background:none; border:none; color:var(--red-accent); font-weight:800; cursor:pointer; font-size:1.1rem; padding:0 4px;" onclick="deleteStoreProduct('${key}')">✕</button>
-          </div>`;
-      });
-
-      container.innerHTML = html;
-    }
-
-    function updateStoreField(key, field, val) {
-      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ [field]: val });
-    }
-
-    function addStoreProduct() {
-      const name = document.getElementById('storeProdName').value.trim();
-      if(!name) return alert('Ingresa el nombre del producto.');
-
-      db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty: "", price: "", done: false });
-      document.getElementById('storeProdName').value = '';
-    }
-
-    function toggleStoreProduct(key, currentDone) {
-      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ done: !currentDone });
-    }
-
-    function deleteStoreProduct(key) {
-      db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
-    }
-
-    function clearCurrentStoreData() {
-      if(confirm('¿Deseas limpiar todas las cantidades, precios y marcas de esta tienda?')) {
-        db.ref(`${userKey}/stores/${currentStoreKey}`).once('value', snapshot => {
-          const data = snapshot.val();
-          if(data) {
-            Object.keys(data).forEach(key => {
-              db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
+            document.querySelectorAll('.nav-btn, .mobile-nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-500', 'font-bold');
             });
-          }
-        });
-      }
-    }
 
-    /* MÓDULO AVANZADO DE MIGRAÑA */
-    function setDefaultMigraineForm() {
-      const now = new Date();
-      document.getElementById('migDate').value = now.toISOString().split('T')[0];
-      document.getElementById('migTime').value = now.toTimeString().split(' ')[0].substring(0, 5);
-      selectPainLevel(5, document.querySelectorAll('.pain-btn')[4]);
-    }
+            const dBtn = document.getElementById('d-nav-' + tabName);
+            if (dBtn) dBtn.classList.add('text-brand-500', 'font-bold');
 
-    function selectPainLevel(level, btn) {
-      selectedPainLevel = level;
-      document.querySelectorAll('.pain-btn').forEach(b => b.classList.remove('selected'));
-      if(btn) btn.classList.add('selected');
-    }
-
-    function toggleChip(chipEl, type) {
-      chipEl.classList.toggle('active');
-    }
-
-    function saveMigraineEpisode() {
-      const date = document.getElementById('migDate').value;
-      const time = document.getElementById('migTime').value;
-      const duration = parseFloat(document.getElementById('migDuration').value) || 1;
-      const meds = document.getElementById('migMeds').value.trim();
-      const customTrigger = document.getElementById('migCustomTrigger').value.trim();
-
-      const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
-      const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
-
-      if(customTrigger) {
-        triggers.push(`✏️ ${customTrigger}`);
-      }
-
-      if(!date || !time) return alert('Por favor selecciona la fecha y hora del episodio.');
-
-      const episode = {
-        date, time, duration,
-        pain: selectedPainLevel,
-        symptoms, triggers, meds,
-        timestamp: new Date().getTime()
-      };
-
-      db.ref(`${userKey}/migraines`).push(episode, (err) => {
-        if(!err) {
-          alert('¡Episodio de migraña registrado con éxito!');
-          document.getElementById('migMeds').value = '';
-          document.getElementById('migCustomTrigger').value = '';
-          document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
+            const mBtn = document.getElementById('m-nav-' + tabName);
+            if (mBtn) mBtn.classList.add('text-brand-500', 'font-bold');
         }
-      });
-    }
 
-    function renderMigraines(items) {
-      const list = document.getElementById('migraineList');
-      if(!items.length) {
-        list.innerHTML = '<li style="color:var(--text-muted); font-size:0.85rem;">No hay episodios registrados.</li>';
-        calculateMigraineStats([]);
-        return;
-      }
-
-      list.innerHTML = items.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => `
-        <li class="item-row" style="flex-direction:column; align-items:stretch; gap:6px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong>🗓️ ${m.date} (${m.time}) — <span style="color:var(--red-accent);">Dolor: ${m.pain}/10</span></strong>
-            <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteItem('migraines', '${m.id}')">✕</button>
-          </div>
-          <div style="font-size:0.78rem; color:var(--text-dark);">
-            ⏱️ <strong>Duración:</strong> ${m.duration || 1} hrs
-            ${m.symptoms && m.symptoms.length ? `<br>🤢 <strong>Síntomas:</strong> ${m.symptoms.join(', ')}` : ''}
-            ${m.triggers && m.triggers.length ? `<br>⚡ <strong>Detonantes:</strong> ${m.triggers.join(', ')}` : ''}
-            ${m.meds ? `<br>💊 <strong>Medicamento:</strong> ${m.meds}` : ''}
-          </div>
-        </li>
-      `).join('');
-
-      calculateMigraineStats(items);
-    }
-
-    function calculateMigraineStats(items) {
-      document.getElementById('migKpiTotal').innerText = items.length;
-      if(!items.length) {
-        document.getElementById('migKpiAvgPain').innerText = "0";
-        document.getElementById('migKpiAvgHours').innerText = "0h";
-        document.getElementById('migKpiTopTrigger').innerText = "N/A";
-        document.getElementById('migPatternInsight').innerText = "Registra episodios para analizar patrones de salud.";
-        return;
-      }
-
-      const totalPain = items.reduce((acc, i) => acc + (parseInt(i.pain) || 0), 0);
-      const totalHours = items.reduce((acc, i) => acc + (parseFloat(i.duration) || 0), 0);
-
-      document.getElementById('migKpiAvgPain').innerText = (totalPain / items.length).toFixed(1);
-      document.getElementById('migKpiAvgHours').innerText = `${(totalHours / items.length).toFixed(1)}h`;
-
-      const triggersCount = {};
-      items.forEach(i => {
-        if(i.triggers && Array.isArray(i.triggers)) {
-          i.triggers.forEach(t => triggersCount[t] = (triggersCount[t] || 0) + 1);
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
         }
-      });
 
-      let topTrigger = "N/A";
-      let maxCount = 0;
-      Object.keys(triggersCount).forEach(t => {
-        if(triggersCount[t] > maxCount) {
-          maxCount = triggersCount[t];
-          topTrigger = t;
+        /* AGENDA */
+        function handleAddTask(e) {
+            e.preventDefault();
+            const title = document.getElementById('task-title').value.trim();
+            const date = document.getElementById('task-date').value;
+            const priority = document.getElementById('task-priority').value;
+
+            if (!title) return;
+
+            state.tasks.unshift({ id: Date.now(), title, date, priority, completed: false });
+            saveState('tasks');
+            renderTasks();
+            document.getElementById('form-add-task').reset();
         }
-      });
 
-      document.getElementById('migKpiTopTrigger').innerText = topTrigger.split(' ')[1] || topTrigger;
-      document.getElementById('migPatternInsight').innerHTML = `
-        Se han registrado <strong>${items.length} episodios</strong>. El detonante más recurrente detectado es <strong>${topTrigger}</strong>. Te recomendamos llevar este reporte a tu neurólogo.
-      `;
-    }
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+            const dashContainer = document.getElementById('dash-tasks-container');
 
-    function exportMigrainePDFReport() {
-      window.print();
-    }
+            if (state.tasks.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-2">Sin tareas registradas.</p>`;
+                dashContainer.innerHTML = `<p class="text-xs text-slate-400 py-2">Sin tareas pendientes.</p>`;
+                return;
+            }
 
-    function renderCalendar() {
-      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      document.getElementById('calMonthTitle').innerText = `${monthNames[month]} ${year}`;
+            container.innerHTML = state.tasks.map(t => `
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div>
+                        <strong class="${t.completed ? 'line-through text-slate-400' : ''}">${t.title}</strong>
+                        <div class="text-xs text-slate-400">🗓️ ${t.date} | Prioridad: ${t.priority}</div>
+                    </div>
+                    <button onclick="deleteTask(${t.id})" class="text-red-500 font-bold px-2">✕</button>
+                </div>
+            `).join('');
 
-      const firstDayIndex = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-      const grid = document.getElementById('calDaysGrid');
-      grid.innerHTML = '';
+            dashContainer.innerHTML = state.tasks.slice(0, 3).map(t => `
+                <div class="p-2 border-b border-slate-100 dark:border-slate-800">📅 <strong>${t.date}</strong> — ${t.title}</div>
+            `).join('');
+        }
 
-      for (let i = 0; i < firstDayIndex; i++) {
-        grid.innerHTML += `<div class="cal-day-cell" style="opacity:0.2;"></div>`;
-      }
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            saveState('tasks');
+            renderTasks();
+        }
 
-      const today = new Date();
-      for (let day = 1; day <= totalDays; day++) {
-        const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const hasTask = loadedTasks.some(t => t.date === dateString);
+        /* MIGRAÑA */
+        function handleSaveMigraine(e) {
+            e.preventDefault();
+            const date = document.getElementById('migraine-date').value;
+            const time = document.getElementById('migraine-time').value;
+            const duration = parseFloat(document.getElementById('migraine-duration').value) || 1;
+            const pain = parseInt(document.getElementById('migraine-pain').value);
+            const meds = document.getElementById('migraine-meds').value.trim();
+            const customTrigger = document.getElementById('migraine-custom-trigger').value.trim();
 
-        grid.innerHTML += `
-          <div class="cal-day-cell ${isToday ? 'active-day' : ''}" onclick="openDayTasks('${dateString}')">
-            <span>${day}</span>
-            ${hasTask ? '<div class="cal-task-dot"></div>' : ''}
-          </div>`;
-      }
-    }
+            const triggers = Array.from(document.querySelectorAll('input[name="trigger"]:checked')).map(cb => cb.value);
+            if (customTrigger) triggers.push(`✏️ ${customTrigger}`);
 
-    function openDayTasks(dateString) {
-      selectAgendaOption('tareas', null);
-      alert(`Viendo tareas para el día: ${dateString}`);
-    }
+            state.migraines.unshift({ id: Date.now(), date, time, duration, pain, meds, triggers });
+            saveState('migraines');
+            renderMigraines();
+            document.getElementById('migraine-custom-trigger').value = '';
+        }
 
-    function changeMonth(dir) {
-      currentCalDate.setMonth(currentCalDate.getMonth() + dir);
-      renderCalendar();
-    }
+        function renderMigraines() {
+            const container = document.getElementById('migraine-history-container');
+            const total = state.migraines.length;
 
-    function listenToDatabase() {
-      db.ref(`${userKey}/tasks`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        loadedTasks = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-        renderTasks(loadedTasks);
-        renderCalendar();
-      });
-      db.ref(`${userKey}/goals`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderGoals(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
-      db.ref(`${userKey}/notes`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderQuickNotes(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
-      db.ref(`${userKey}/timeblocks`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderTimeBlocks(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
-      db.ref(`${userKey}/migraines`).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        renderMigraines(Object.keys(data).map(k => ({ id: k, ...data[k] })));
-      });
-      listenToStoreProducts();
-    }
+            document.getElementById('stat-total-migraines').innerText = total;
 
-    function addAcademicTask() {
-      const title = document.getElementById('fTitle').value.trim();
-      const date = document.getElementById('fDate').value;
-      const priority = document.getElementById('fPriority').value;
+            if (total > 0) {
+                const avgPain = (state.migraines.reduce((acc, m) => acc + m.pain, 0) / total).toFixed(1);
+                const avgHours = (state.migraines.reduce((acc, m) => acc + m.duration, 0) / total).toFixed(1);
+                document.getElementById('stat-avg-pain').innerText = avgPain;
+                document.getElementById('stat-avg-hours').innerText = avgHours + 'h';
+            }
 
-      if(!title || !date) return alert('Ingresa título y fecha.');
+            if (total === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-2">Sin episodios registrados.</p>`;
+                return;
+            }
 
-      db.ref(`${userKey}/tasks`).push({ desc: title, date, priority });
-      document.getElementById('fTitle').value = '';
-    }
+            container.innerHTML = state.migraines.map(m => `
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                    <div class="flex justify-between items-center">
+                        <strong>🗓️ ${m.date} (${m.time}) — <span class="text-red-500">Dolor: ${m.pain}/10</span></strong>
+                        <button onclick="deleteMigraine(${m.id})" class="text-red-500 font-bold">✕</button>
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        ⏱️ Duración: ${m.duration} hrs<br>
+                        ${m.triggers.length ? `⚡ Detonantes: ${m.triggers.join(', ')}<br>` : ''}
+                        ${m.meds ? `💊 Medicamento: ${m.meds}` : ''}
+                    </p>
+                </div>
+            `).join('');
+        }
 
-    function addGoal() {
-      const title = document.getElementById('goalTitle').value.trim();
-      const progress = document.getElementById('goalProgress').value || 0;
-      const deadline = document.getElementById('goalDeadline').value;
+        function deleteMigraine(id) {
+            state.migraines = state.migraines.filter(m => m.id !== id);
+            saveState('migraines');
+            renderMigraines();
+        }
 
-      if(!title) return alert('Ingresa un título.');
+        /* DEVOCIONAL */
+        function handleAddDevotional(e) {
+            e.preventDefault();
+            const title = document.getElementById('dev-title').value.trim();
+            const text = document.getElementById('dev-text').value.trim();
 
-      db.ref(`${userKey}/goals`).push({ title, progress: parseInt(progress), deadline });
-      document.getElementById('goalTitle').value = '';
-    }
+            if (!text) return;
 
-    function addQuickNote() {
-      const title = document.getElementById('noteTitle').value.trim();
-      const body = document.getElementById('noteBody').value.trim();
+            state.devotionals.unshift({ id: Date.now(), title, text, date: new Date().toLocaleDateString('es-ES') });
+            saveState('devotionals');
+            renderDevotionals();
+            document.getElementById('dev-title').value = '';
+            document.getElementById('dev-text').value = '';
+        }
 
-      if(!title) return alert('Ingresa un título.');
+        function renderDevotionals() {
+            const container = document.getElementById('devotional-entries-container');
+            if (!state.devotionals.length) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-2">Sin registros devocionales.</p>`;
+                return;
+            }
 
-      db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
-      document.getElementById('noteTitle').value = '';
-      document.getElementById('noteBody').value = '';
-    }
+            container.innerHTML = state.devotionals.map(d => `
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                    <div class="flex justify-between items-center">
+                        <strong>📖 ${d.title || 'Reflexión'}</strong>
+                        <button onclick="deleteDevotional(${d.id})" class="text-red-500 font-bold">✕</button>
+                    </div>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">${d.text}</p>
+                </div>
+            `).join('');
+        }
 
-    function addTimeBlock() {
-      const hour = document.getElementById('timeBlockHour').value;
-      const activity = document.getElementById('timeBlockActivity').value.trim();
+        function deleteDevotional(id) {
+            state.devotionals = state.devotionals.filter(d => d.id !== id);
+            saveState('devotionals');
+            renderDevotionals();
+        }
 
-      if(!hour || !activity) return alert('Ingresa hora y actividad.');
+        /* MI SÚPER - FORMATO Y ALINEACIÓN ILUSTRACIÓN */
+        function handleAddSuperItem() {
+            const name = document.getElementById('super-item-name').value.trim();
+            if (!name) return;
 
-      db.ref(`${userKey}/timeblocks`).push({ hour, activity });
-      document.getElementById('timeBlockActivity').value = '';
-    }
+            state.superItems.unshift({ id: Date.now(), name, qty: '', price: '', bought: false });
+            saveState('superItems');
+            renderSuper();
+            document.getElementById('super-item-name').value = '';
+        }
 
-    function deleteItem(path, id) {
-      db.ref(`${userKey}/${path}/${id}`).remove();
-    }
+        function updateSuperItem(id, field, val) {
+            const item = state.superItems.find(i => i.id === id);
+            if (item) {
+                item[field] = val;
+                saveState('superItems');
+            }
+        }
 
-    function renderTasks(items) {
-      document.getElementById('taskList').innerHTML = items.length ? items.map(t => `
-        <li class="item-row">
-          <div>
-            <strong>${t.desc}</strong>
-            <div style="font-size:0.75rem; color:var(--text-muted);">🗓️ ${t.date} | ${t.priority || 'Media'}</div>
-          </div>
-          <button style="background:none; border:none; color:var(--red-accent); font-weight:bold; cursor:pointer;" onclick="deleteItem('tasks', '${t.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin tareas.</li>';
+        function toggleSuperBought(id) {
+            const item = state.superItems.find(i => i.id === id);
+            if (item) {
+                item.bought = !item.bought;
+                saveState('superItems');
+                renderSuper();
+            }
+        }
 
-      document.getElementById('dashTasksList').innerHTML = items.length ? items.slice(0, 3).map(t => `
-        <li class="item-row">📅 <strong>${t.date}</strong> — ${t.desc}</li>
-      `).join('') : '<li style="color:var(--text-muted);">No tienes entregas cercanas.</li>';
-    }
+        function deleteSuperItem(id) {
+            state.superItems = state.superItems.filter(i => i.id !== id);
+            saveState('superItems');
+            renderSuper();
+        }
 
-    function renderGoals(items) {
-      document.getElementById('goalsList').innerHTML = items.length ? items.map(g => `
-        <li class="item-row" style="flex-direction:column; align-items:stretch;">
-          <div style="display:flex; justify-content:space-between;">
-            <strong>🚀 ${g.title}</strong>
-            <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('goals', '${g.id}')">✕</button>
-          </div>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Progreso: ${g.progress}%</div>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin metas.</li>';
-    }
+        function renderSuper() {
+            const container = document.getElementById('super-items-container');
+            if (!state.superItems.length) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-2">Lista vacía.</p>`;
+                return;
+            }
 
-    function renderQuickNotes(items) {
-      document.getElementById('quickNotesList').innerHTML = items.length ? items.map(n => `
-        <li class="item-row">
-          <div>
-            <strong>📌 ${n.title}</strong>
-            <div style="font-size:0.8rem; color:var(--text-dark); margin-top:2px;">${n.body}</div>
-          </div>
-          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('notes', '${n.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin notas.</li>';
-    }
+            container.innerHTML = state.superItems.map(i => `
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-2 items-center">
+                    <!-- Fila Superior Movil: Checkbox y Nombre -->
+                    <div class="flex items-center gap-3 w-full sm:w-auto flex-1">
+                        <input type="checkbox" class="custom-circle-check" ${i.bought ? 'checked' : ''} onchange="toggleSuperBought(${i.id})">
+                        <input type="text" class="pill-input flex-1 text-left ${i.bought ? 'line-through opacity-50' : ''}" value="${i.name}" onchange="updateSuperItem(${i.id}, 'name', this.value)">
+                    </div>
 
-    function renderTimeBlocks(items) {
-      document.getElementById('timeBlockList').innerHTML = items.length ? items.map(b => `
-        <li class="item-row">
-          <div><strong style="color:var(--primary-blue);">⏰ ${b.hour}</strong> — ${b.activity}</div>
-          <button style="background:none; border:none; color:var(--red-accent); cursor:pointer; font-weight:bold;" onclick="deleteItem('timeblocks', '${b.id}')">✕</button>
-        </li>
-      `).join('') : '<li style="color:var(--text-muted);">Sin bloques de horario.</li>';
-    }
-
-    function updateUserProfile() {
-      const firstName = document.getElementById('profileFirstName').value.trim();
-      const lastName = document.getElementById('profileLastName').value.trim();
-
-      const reg = currentUserData.reg;
-      if(!reg) return;
-
-      db.ref(`users/${reg}`).update({ firstName, lastName }, () => {
-        currentUserData.firstName = firstName;
-        currentUserData.lastName = lastName;
-        updateProfileUI();
-        alert('¡Perfil actualizado con éxito!');
-      });
-    }
-
-    function updateProfileUI() {
-      const fullName = `${currentUserData.firstName || 'Usuario'} ${currentUserData.lastName || ''}`;
-
-      document.getElementById('userGreeting').innerText = `¡Hola, ${currentUserData.firstName || 'Bienvenido'}!`;
-      document.getElementById('sidebarUserName').innerText = fullName;
-      document.getElementById('sidebarUserReg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
-      document.getElementById('profilePageName').innerText = fullName;
-      document.getElementById('profilePageReg').innerText = `N° Registro: ${currentUserData.reg || '--------'}`;
-
-      document.getElementById('profileFirstName').value = currentUserData.firstName || '';
-      document.getElementById('profileLastName').value = currentUserData.lastName || '';
-    }
-
-    function updateDateDisplay() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const dateStr = now.toLocaleDateString('es-ES', options);
-      document.getElementById('currentDateDisplay').innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-    }
-
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-section').forEach(t => t.style.display = 'none');
-      document.querySelectorAll('.nav-item, .mn-item').forEach(b => b.classList.remove('active'));
-      document.getElementById(`tab-${tabId}`).style.display = 'block';
-      if(btn) btn.classList.add('active');
-    }
-
-    function switchTabByCode(tabId) {
-      switchTab(tabId, null);
-    }
-
-    document.addEventListener('DOMContentLoaded', checkActiveSession);
-  </script>
+                    <!-- Fila Inferior Movil: Cantidad y Precio -->
+                    <div class="flex gap-2 w-full sm:w-auto pl-8 sm:pl-0">
+                        <input type="text" placeholder="Cantidad" class="pill-input flex-1 sm:w-28" value="${i.qty}" onchange="updateSuperItem(${i.id}, 'qty', this.value)">
+                        <input type="text" placeholder="Precio" class="pill-input flex-1 sm:w-28" value="${i.price}" onchange="updateSuperItem(${i.id}, 'price', this.value)">
+                        <button onclick="deleteSuperItem(${i.id})" class="text-red-500 font-bold px-2">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
 </body>
 </html>
