@@ -485,7 +485,7 @@
             <span>🛒</span> Tiendas de Compras
           </button>
 
-          <!-- DRAWER DERECHO TIENDAS -->
+          <!-- DRAWER DERECHO TIENDAS CON MONARCA Y EXTRAS -->
           <div id="storeDrawerOverlay" class="drawer-overlay" onclick="toggleStoreDrawer(false)">
             <div class="drawer-panel" onclick="event.stopPropagation()">
               <div class="drawer-header">
@@ -496,6 +496,8 @@
               <button class="drawer-item" onclick="selectStoreTab('costco', '🛒 Costco', this)"><span>🛒</span> Costco</button>
               <button class="drawer-item" onclick="selectStoreTab('sams', '📦 Sam\'s Club', this)"><span>📦</span> Sam's Club</button>
               <button class="drawer-item" onclick="selectStoreTab('zorro', '🦊 El Zorro', this)"><span>🦊</span> El Zorro</button>
+              <button class="drawer-item" onclick="selectStoreTab('monarca', '👑 Monarca', this)"><span>👑</span> Monarca</button>
+              <button class="drawer-item" onclick="selectStoreTab('extras', '⭐ Extras', this)"><span>⭐</span> Extras</button>
             </div>
           </div>
 
@@ -635,7 +637,7 @@
     let loadedTasks = [];
     let currentStoreKey = "mercado";
 
-    // LISTAS INICIALES CON CASILLEROS COMPLETAMENTE LIMPIOS
+    // LISTAS INICIALES CON LAS NUEVAS TIENDAS MONARCA Y EXTRAS
     const defaultStoreLists = {
       mercado: [
         { name: "Quesillo", qty: "", price: "", done: false },
@@ -695,7 +697,9 @@
         { name: "Zote", qty: "", price: "", done: false },
         { name: "Saladitas", qty: "", price: "", done: false },
         { name: "Mayonesa", qty: "", price: "", done: false }
-      ]
+      ],
+      monarca: [],
+      extras: []
     };
 
     function switchAuthTab(tab) {
