@@ -148,7 +148,9 @@
     .super-product-item-wrapper.completed .pill-input { text-decoration: line-through; opacity: 0.55; }
     .btn-clear-store { width: 100%; padding: 12px; background: #FF3B30; color: #FFF; border: none; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; font-family: var(--font-main); text-transform: uppercase; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* ESTILOS ESPECÍFICOS DE MIGRAÑA */
+    /* ESTILOS ESPECÍFICOS DE MIGRAÑA Y GRID RESPONSIVO PARA FECHA/HORA/DURACIÓN */
+    .migraine-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    
     .pain-scale-selector { display: flex; justify-content: space-between; gap: 4px; margin-top: 6px; }
     .pain-btn { flex: 1; padding: 8px 0; border-radius: 8px; border: 1.5px solid var(--border-color); background: #FAFAFC; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
     .pain-btn.selected { color: #FFF; border-color: transparent; transform: scale(1.05); }
@@ -516,7 +518,7 @@
 
         </section>
 
-        <!-- 4. REGISTRO DE MIGRAÑA PROFESIONAL COMPLETO -->
+        <!-- 4. REGISTRO DE MIGRAÑA -->
         <section id="tab-migrana" class="tab-section" style="display:none;">
           
           <!-- RESUMEN ESTADÍSTICO MENSUAL -->
@@ -546,23 +548,26 @@
             </button>
           </div>
 
-          <!-- FORMULARIO DE REGISTRO RÁPIDO DE EPISODIO -->
+          <!-- FORMULARIO DE REGISTRO RÁPIDO -->
           <div class="card">
             <div class="card-title" style="margin-bottom:14px;">⚡ Registro de Episodio e Intensidad</div>
             
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-              <div class="form-group">
+            <!-- FECHA Y HORA EN FILA DE 2 COLUMNAS -->
+            <div class="migraine-time-row">
+              <div class="form-group" style="margin-bottom:0;">
                 <label>Fecha</label>
                 <input type="date" id="migDate">
               </div>
-              <div class="form-group">
+              <div class="form-group" style="margin-bottom:0;">
                 <label>Hora</label>
                 <input type="time" id="migTime">
               </div>
-              <div class="form-group">
-                <label>Duración (Hrs)</label>
-                <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4">
-              </div>
+            </div>
+
+            <!-- DURACIÓN UBICADA ABAJO OCUPANDO EL ANCHO COMPLETO -->
+            <div class="form-group">
+              <label>Duración estimada (Horas)</label>
+              <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4">
             </div>
 
             <!-- ESCALA DE DOLOR INTENSIDAD 1-10 -->
