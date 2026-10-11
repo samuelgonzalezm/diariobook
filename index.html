@@ -222,13 +222,84 @@
             border-color: #6366f1;
         }
 
+        /* ============================
+           TOASTS (notificaciones UI)
+           ============================ */
+        #toast-container {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+            max-width: 90vw;
+            width: 22rem;
+        }
+        .toast {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            opacity: 0;
+            transform: translateY(-12px);
+            animation: toast-in 0.3s forwards;
+            pointer-events: auto;
+        }
+        .toast.toast-out {
+            animation: toast-out 0.3s forwards;
+        }
+        .toast-success { border-left: 4px solid #10b981; }
+        .toast-error   { border-left: 4px solid #ef4444; }
+        .toast-info    { border-left: 4px solid #6366f1; }
+        .toast-warning { border-left: 4px solid #f59e0b; }
+
+        @keyframes toast-in {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toast-out {
+            to { opacity: 0; transform: translateY(-12px); }
+        }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
     </style>
+
+    <!-- Detectar tema ANTES de cargar para evitar flash -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('omniapp_theme');
+                if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (savedTheme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else {
+                    // Sin preferencia guardada: usar la del sistema
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                    }
+                }
+            } catch (e) {
+                console.warn('Theme detection failed:', e);
+            }
+        })();
+    </script>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 h-full flex flex-col md:flex-row overflow-hidden transition-colors duration-200">
+
+    <!-- TOASTS CONTAINER -->
+    <div id="toast-container"></div>
 
     <!-- AUTH OVERLAY -->
     <div id="authOverlay" class="fixed inset-0 grad-bg z-[2000] flex flex-col justify-center items-center p-4 text-white overflow-y-auto">
@@ -351,7 +422,7 @@
                     </span>
                     <i class="fa-solid fa-toggle-off dark:fa-toggle-on text-xl text-brand-purple"></i>
                 </button>
-                <button onclick="logout()" class="w-full flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition">
+                <button onclick="confirmLogout()" class="w-full flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition">
                     <i class="fa-solid fa-lock"></i>
                     <span>Cerrar sesión</span>
                 </button>
@@ -378,7 +449,7 @@
                     <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cambiar tema">
                         <i class="fa-solid fa-circle-half-stroke"></i>
                     </button>
-                    <button onclick="logout()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cerrar sesión">
+                    <button onclick="confirmLogout()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cerrar sesión">
                         <i class="fa-solid fa-power-off"></i>
                     </button>
                 </div>
@@ -815,46 +886,73 @@
         let currentUserData = {};
         let currentStoreKey = "mercado";
         let selectedPainLevel = 5;
-        let notifiedPills = {}; // Evitar notificaciones duplicadas en el mismo minuto
+        let notifiedPills = {};
+
+        /* =========================================
+           SISTEMA DE TOASTS
+           ========================================= */
+
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+
+            // Icono según el tipo
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️',
+                warning: '⚠️'
+            };
+
+            toast.innerHTML = `
+                <span style="font-size:1.1rem; flex-shrink:0;">${icons[type] || icons.info}</span>
+                <span style="flex:1;">${escapeHtml(message)}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-eliminar
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Alias para usar como si fuera alert pero elegante
+        function toastAlert(message, type = 'info') {
+            showToast(message, type, 3500);
+        }
+
+        // Confirm personalizado usando toast + confirm nativo
+        function toastConfirm(message) {
+            return confirm(message);
+        }
 
         /* =========================================
            SANITIZACIÓN DE CLAVES PARA FIREBASE
            ========================================= */
 
-        // Caracteres prohibidos por Firebase Realtime Database: . # $ [ ] /
-        // Además, se eliminan caracteres de control
         const FIREBASE_FORBIDDEN_CHARS = /[.#$\[\]\/\u0000-\u001F\u007F]/g;
 
-        /**
-         * Limpia una clave para que sea segura como path de Firebase
-         */
         function sanitizeForKey(str) {
             if (str == null) return '';
             return String(str).replace(FIREBASE_FORBIDDEN_CHARS, '_');
         }
 
-        /**
-         * Valida que una clave cumpla el formato permitido:
-         * solo minúsculas y números, longitud mínima 4
-         */
         function isValidPassKey(pass) {
             return /^[a-z0-9]{4,}$/.test(pass);
         }
 
-        /**
-         * Valida que un número de registro tenga exactamente 8 dígitos
-         */
         function isValidRegNumber(reg) {
             return /^\d{8}$/.test(reg);
         }
 
-        /**
-         * Construye un userKey seguro y consistente a partir de un hash
-         */
         function buildUserKeyFromHash(reg, passHash) {
             const safeReg = sanitizeForKey(reg);
             const safeHash = sanitizeForKey(passHash);
-            // Usamos solo los primeros 24 caracteres del hash para no hacer keys gigantes
             return `user_${safeReg}_${safeHash.substring(0, 24)}`;
         }
 
@@ -862,27 +960,18 @@
            HASH DE CONTRASEÑAS (SHA-256)
            ========================================= */
 
-        /**
-         * Genera el hash SHA-256 de una contraseña en formato hexadecimal.
-         * Usa Web Crypto API (nativo del navegador, sin librerías externas).
-         */
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         /* =========================================
            ESCAPE HTML (ANTI-XSS)
            ========================================= */
 
-        /**
-         * Escapa caracteres peligrosos para insertar
-         * texto de usuario de forma segura en innerHTML
-         */
         function escapeHtml(str) {
             if (str == null) return '';
             return String(str)
@@ -893,10 +982,6 @@
                 .replace(/'/g, '&#039;');
         }
 
-        /**
-         * Escapa solo para usar dentro de atributos HTML (ej: value="...")
-         * Es más estricto con comillas
-         */
         function escapeAttr(str) {
             if (str == null) return '';
             return String(str)
@@ -908,35 +993,18 @@
         }
 
         const CUSTOM_HOURS = [
-            "6:00 a.m",
-            "6:30 a.m",
-            "7:30 a.m",
-            "8:00 a.m",
-            "8:30 a.m a 9:00 a.m",
-            "9:00 a.m a 10:00 a.m",
-            "10:00 a.m a 10:15 a.m",
-            "10:15 a.m a 10:55 a.m",
-            "10:55 a.m a 11:10 a.m",
-            "11:10 a.m a 11:50 a.m",
-            "11:50 a.m a 12:00 p.m",
-            "12:00 p.m",
-            "12:10 p.m a 1:10 p.m",
-            "1:10 p.m a 2:00 p.m",
-            "2:00 p.m a 2:10 p.m",
-            "2:10 p.m",
-            "2:20 p.m",
-            "3:00 p.m a 3:45 p.m",
-            "3:45 p.m a 4:00 p.m",
-            "4:00 p.m a 4:50 p.m",
-            "4:50 p.m a 5:00 p.m",
-            "5:00 p.m a 5:55 p.m",
-            "6:00 p.m a 7:00 p.m",
-            "7:00 p.m a 7:15 p.m",
-            "7:15 p.m a 8:30 p.m",
-            "8:30 p.m",
-            "9:00 a 9:40 pm",
-            "9:40 p.m",
-            "10:00 p.m"
+            "6:00 a.m", "6:30 a.m", "7:30 a.m", "8:00 a.m",
+            "8:30 a.m a 9:00 a.m", "9:00 a.m a 10:00 a.m",
+            "10:00 a.m a 10:15 a.m", "10:15 a.m a 10:55 a.m",
+            "10:55 a.m a 11:10 a.m", "11:10 a.m a 11:50 a.m",
+            "11:50 a.m a 12:00 p.m", "12:00 p.m",
+            "12:10 p.m a 1:10 p.m", "1:10 p.m a 2:00 p.m",
+            "2:00 p.m a 2:10 p.m", "2:10 p.m", "2:20 p.m",
+            "3:00 p.m a 3:45 p.m", "3:45 p.m a 4:00 p.m",
+            "4:00 p.m a 4:50 p.m", "4:50 p.m a 5:00 p.m",
+            "5:00 p.m a 5:55 p.m", "6:00 p.m a 7:00 p.m",
+            "7:00 p.m a 7:15 p.m", "7:15 p.m a 8:30 p.m",
+            "8:30 p.m", "9:00 a 9:40 pm", "9:40 p.m", "10:00 p.m"
         ];
 
         let state = {
@@ -951,18 +1019,28 @@
             stores: {}
         };
 
+        /* =========================================
+           MODO OSCURO PERSISTENTE
+           ========================================= */
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            // Guardar preferencia
+            localStorage.setItem('omniapp_theme', isDark ? 'dark' : 'light');
+        }
+
         /* NOTIFICACIONES */
         function requestNotificationPermission() {
             if (!("Notification" in window)) {
-                alert("Este navegador no soporta notificaciones de sistema.");
+                toastAlert("Este navegador no soporta notificaciones de sistema.", 'warning');
                 return;
             }
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    alert("¡Notificaciones activadas con éxito! Te avisaremos cuando sea hora de tus medicamentos o citas.");
+                    toastAlert("¡Notificaciones activadas con éxito!", 'success');
                     sendSystemNotification("Omniapp Recordatorios", "Notificaciones activadas para citas y medicamentos.");
                 } else {
-                    alert("Para recibir alertas con la app cerrada, debes habilitar los permisos en la configuración de tu navegador.");
+                    toastAlert("Para recibir alertas, debes habilitar los permisos en tu navegador.", 'warning');
                 }
             });
         }
@@ -973,15 +1051,15 @@
                     navigator.serviceWorker.ready.then(registration => {
                         registration.showNotification(title, {
                             body: body,
-                            icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
-                            badge: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
+                            icon: './icons/web-app-manifest-192x192.png',
+                            badge: './icons/web-app-manifest-192x192.png',
                             vibrate: [200, 100, 200]
                         });
                     });
                 } else {
                     new Notification(title, {
                         body: body,
-                        icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp'
+                        icon: './icons/web-app-manifest-192x192.png'
                     });
                 }
             }
@@ -999,7 +1077,6 @@
 
             let pillDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startH, startM, 0, 0);
 
-            // Si la hora calculada ya pasó, avanzar intervalos hasta la siguiente futura toma
             while (pillDate <= now) {
                 pillDate.setHours(pillDate.getHours() + interval);
             }
@@ -1014,14 +1091,11 @@
             };
         }
 
-        // Revisión cada 30 segundos para notificaciones y actualización ligera de labels
         setInterval(() => {
             const now = new Date();
 
             state.pills.forEach(pill => {
                 const nextPill = getNextPillTime(pill.startTime, pill.interval);
-                
-                // Si falta menos de 1 minuto para la toma y no se ha notificado
                 const timeDiff = Math.abs(now - nextPill.nextDateObj);
                 const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
 
@@ -1031,8 +1105,6 @@
                 }
             });
 
-            // Actualizar SOLO el texto de "Próxima toma" si el usuario está en el pastillero
-            // (sin re-renderizar toda la lista, para no perder foco ni scroll)
             if (state.currentTab === 'pastillero') {
                 updatePillLabels();
             }
@@ -1061,54 +1133,42 @@
             const pass = document.getElementById('loginPassKey').value.trim();
             const remember = document.getElementById('rememberMe').checked;
 
-            // Validaciones
             if (!isValidRegNumber(reg)) {
-                return alert('El número de registro debe contener exactamente 8 dígitos.');
+                return toastAlert('El número de registro debe contener exactamente 8 dígitos.', 'error');
             }
             if (!isValidPassKey(pass)) {
-                return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números.');
+                return toastAlert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números.', 'error');
             }
 
-            // Hashear la clave introducida
             const passHash = await hashPassword(pass);
 
             db.ref(`users/${reg}`).once('value', async snapshot => {
                 const val = snapshot.val();
 
                 if (!val) {
-                    return alert('Número de registro o clave incorrecta.');
+                    return toastAlert('Número de registro o clave incorrecta.', 'error');
                 }
 
-                // 🅱️ CASO 1: Usuario con clave en texto plano (migración)
                 if (val.pass && !val.passHash) {
                     if (val.pass === pass) {
-                        // Migrar a hash automáticamente
                         await db.ref(`users/${reg}`).update({
                             passHash: passHash,
-                            pass: null // Eliminar la clave en texto plano
+                            pass: null
                         });
-
-                        // Actualizar objeto en memoria
                         delete val.pass;
                         val.passHash = passHash;
-
-                        console.log('✅ Usuario migrado a hash correctamente');
+                        console.log('✅ Usuario migrado a hash');
                     } else {
-                        return alert('Número de registro o clave incorrecta.');
+                        return toastAlert('Número de registro o clave incorrecta.', 'error');
                     }
-                }
-                // 🔐 CASO 2: Usuario nuevo con hash
-                else if (val.passHash) {
+                } else if (val.passHash) {
                     if (val.passHash !== passHash) {
-                        return alert('Número de registro o clave incorrecta.');
+                        return toastAlert('Número de registro o clave incorrecta.', 'error');
                     }
-                }
-                // ❓ CASO 3: Datos corruptos
-                else {
-                    return alert('Número de registro o clave incorrecta.');
+                } else {
+                    return toastAlert('Número de registro o clave incorrecta.', 'error');
                 }
 
-                // Todo OK: guardar sesión
                 userKey = buildUserKeyFromHash(reg, passHash);
                 currentUserData = val;
 
@@ -1122,6 +1182,7 @@
                 localStorage.setItem('omniapp_active_userKey', userKey);
                 localStorage.setItem('omniapp_active_userReg', reg);
                 unlockApp();
+                showToast(`¡Bienvenido de nuevo, ${val.firstName}!`, 'success');
             });
         }
 
@@ -1131,31 +1192,28 @@
             const reg = document.getElementById('regRegNumber').value.trim();
             const pass = document.getElementById('regPassKey').value.trim();
 
-            // Validaciones
             if (!firstName || !lastName || !reg || !pass) {
-                return alert('Completa todos los campos para continuar.');
+                return toastAlert('Completa todos los campos para continuar.', 'error');
             }
             if (!isValidRegNumber(reg)) {
-                return alert('El número de registro debe contener exactamente 8 dígitos.');
+                return toastAlert('El número de registro debe contener exactamente 8 dígitos.', 'error');
             }
             if (!isValidPassKey(pass)) {
-                return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números (sin espacios ni símbolos).');
+                return toastAlert('La clave debe tener al menos 4 caracteres, solo minúsculas y números.', 'error');
             }
 
-            // Hashear la clave antes de guardar
             const passHash = await hashPassword(pass);
 
             db.ref(`users/${reg}`).once('value', snapshot => {
-                if(snapshot.exists()) return alert('Este número de registro ya existe.');
+                if(snapshot.exists()) return toastAlert('Este número de registro ya existe.', 'error');
 
-                // Guardamos el hash, NO la clave en texto plano
                 const newUser = { firstName, lastName, reg, passHash };
                 db.ref(`users/${reg}`).set(newUser, (err) => {
                     if(!err) {
-                        alert('¡Registro exitoso! Ya puedes iniciar sesión.');
+                        toastAlert('¡Registro exitoso! Ya puedes iniciar sesión.', 'success');
                         switchAuthTab('login');
                     } else {
-                        alert('Error al registrar. Intenta de nuevo.');
+                        toastAlert('Error al registrar. Intenta de nuevo.', 'error');
                     }
                 });
             });
@@ -1187,6 +1245,12 @@
             initDates();
             updateProfileUI();
             listenToDatabase();
+        }
+
+        function confirmLogout() {
+            if (confirm('¿Seguro que quieres cerrar sesión?')) {
+                logout();
+            }
         }
 
         function logout() {
@@ -1267,10 +1331,12 @@
 
             const mBtn = document.getElementById('m-nav-' + tabName);
             if (mBtn) mBtn.classList.add('text-brand-purple', 'font-bold');
-        }
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
+            // Scroll suave al inicio
+            const viewport = document.getElementById('app-viewport');
+            if (viewport) {
+                viewport.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function toggleAgendaView(view) {
@@ -1303,6 +1369,7 @@
             db.ref(`${userKey}/tasks`).push({ desc, priority, category, date, completed: false });
             document.getElementById('form-add-task').reset();
             initDates();
+            showToast('Tarea agregada', 'success');
         }
 
         function filterTasks(type) {
@@ -1328,6 +1395,7 @@
 
         function deleteTask(id) {
             db.ref(`${userKey}/tasks/${id}`).remove();
+            showToast('Tarea eliminada', 'info', 2000);
         }
 
         function renderTasks() {
@@ -1405,7 +1473,7 @@
             const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
 
             if (selectedDayChips.length === 0) {
-                return alert('Por favor selecciona al menos un día.');
+                return toastAlert('Por favor selecciona al menos un día.', 'warning');
             }
 
             selectedDayChips.forEach(chip => {
@@ -1415,6 +1483,7 @@
 
             document.getElementById('horario-title').value = '';
             closeModalHorario();
+            showToast(`Bloque agregado a ${selectedDayChips.length} día(s)`, 'success');
         }
 
         function deleteHorarioItem(id) { db.ref(`${userKey}/timeblocks/${id}`).remove(); }
@@ -1444,7 +1513,6 @@
             container.innerHTML = html;
         }
 
-        /* GUARDAR MEDICAMENTO */
         function handleSavePill(e) {
             e.preventDefault();
             const name = document.getElementById('pillName').value.trim();
@@ -1458,16 +1526,16 @@
                 if(!err) {
                     document.getElementById('pillName').value = '';
                     document.getElementById('pillDose').value = '';
-                    alert('Medicamento agregado exitosamente a tu pastillero.');
+                    showToast('Medicamento agregado', 'success');
                 }
             });
         }
 
         function deletePill(id) {
             db.ref(`${userKey}/pills/${id}`).remove();
+            showToast('Medicamento eliminado', 'info', 2000);
         }
 
-        /* RENDER DE PASTILLERO DINÁMICO */
         function renderPills() {
             const container = document.getElementById('pills-container');
             if (state.pills.length === 0) {
@@ -1502,14 +1570,10 @@
             }).join('');
         }
 
-        /**
-         * Actualiza SOLO el texto de "Próxima toma" en cada medicamento,
-         * sin re-renderizar toda la lista (evita perder el foco, el scroll, etc.)
-         */
         function updatePillLabels() {
             state.pills.forEach(p => {
                 const container = document.getElementById(`pill-next-${p.id}`);
-                if (!container) return; // No está en el DOM (otro tab, etc.)
+                if (!container) return;
                 
                 const label = container.querySelector('.pill-next-label');
                 if (!label) return;
@@ -1519,7 +1583,6 @@
             });
         }
 
-        /* LÓGICA COMPLETA DE MIGRAÑA */
         function selectPainLevel(level, btn) {
             selectedPainLevel = level;
             document.querySelectorAll('#painScaleBox .pain-btn').forEach(b => b.classList.remove('selected'));
@@ -1539,13 +1602,13 @@
 
             if(customTrigger) triggers.push(`✏️ ${customTrigger}`);
 
-            if(!date || !time) return alert('Selecciona la fecha y hora.');
+            if(!date || !time) return toastAlert('Selecciona la fecha y hora.', 'warning');
 
             const episode = { date, time, duration, pain: selectedPainLevel, symptoms, triggers, meds, timestamp: Date.now() };
 
             db.ref(`${userKey}/migraines`).push(episode, (err) => {
                 if(!err) {
-                    alert('¡Episodio de migraña registrado con éxito!');
+                    toastAlert('Episodio de migraña registrado', 'success');
                     document.getElementById('migMeds').value = '';
                     document.getElementById('migCustomTrigger').value = '';
                     document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
@@ -1553,7 +1616,10 @@
             });
         }
 
-        function deleteMigraine(id) { db.ref(`${userKey}/migraines/${id}`).remove(); }
+        function deleteMigraine(id) { 
+            db.ref(`${userKey}/migraines/${id}`).remove(); 
+            showToast('Episodio eliminado', 'info', 2000);
+        }
 
         function renderMigraines() {
             const total = state.migraines.length;
@@ -1627,9 +1693,13 @@
             db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
             document.getElementById('dev-title').value = '';
             document.getElementById('dev-text').value = '';
+            showToast('Reflexión guardada', 'success');
         }
 
-        function deleteDevotional(id) { db.ref(`${userKey}/notes/${id}`).remove(); }
+        function deleteDevotional(id) { 
+            db.ref(`${userKey}/notes/${id}`).remove();
+            showToast('Reflexión eliminada', 'info', 2000);
+        }
 
         function renderDevotionals() {
             const container = document.getElementById('devotional-entries-container');
@@ -1654,7 +1724,6 @@
             `).join('');
         }
 
-        /* SECCIÓN DEL SÚPER */
         function selectStore(storeKey) {
             currentStoreKey = storeKey;
             
@@ -1696,6 +1765,7 @@
                 Object.keys(storeData).forEach(key => {
                     db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
                 });
+                showToast('Tienda limpiada', 'success');
             }
         }
 
