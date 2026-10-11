@@ -1,9 +1,11 @@
 // ==========================================
-// Omniapp Service Worker - v2
+// Omniapp Service Worker - v3
+// Con precacheo de CDNs externos
 // ==========================================
 
-const CACHE_NAME = 'omniapp-cache-v2';
-const CACHE_STATIC = 'omniapp-static-v2';
+const CACHE_NAME = 'omniapp-cache-v3';
+const CACHE_STATIC = 'omniapp-static-v3';
+const CACHE_CDN = 'omniapp-cdn-v3';
 
 // Recursos del "shell" que siempre deben estar disponibles offline
 const urlsToCache = [
@@ -12,36 +14,62 @@ const urlsToCache = [
   './manifest.json'
 ];
 
+// CDNs externos que queremos precachear (una sola vez)
+// Estos son recursos ESTABLES que no cambian seguido
+const CDN_PRECACHE = [
+  // Font Awesome (iconos)
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
+  
+  // Google Fonts (DM Sans)
+  'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap'
+];
+
 // Dominios que NUNCA deben cachearse (rompen la app o son dinámicos)
 const BYPASS_HOSTS = [
   'firebaseio.com',
   'firebasedatabase.app',
-  'googleapis.com',      // Firebase Auth, FCM
+  'googleapis.com',
   'firebaseapp.com',
-  'gstatic.com',         // SDKs de Firebase (muy dinámicos)
+  'gstatic.com',
   'google-analytics.com',
   'googletagmanager.com'
 ];
 
-// CDNs estáticos que SÍ queremos cachear (mejoran offline)
+// CDNs estáticos que SÍ queremos cachear dinámicamente
 const STATIC_CDN_HOSTS = [
   'cdn.tailwindcss.com',
-  'cdnjs.cloudflare.com',       // Font Awesome
-  'fonts.googleapis.com',       // DM Sans
-  'fonts.gstatic.com'           // Archivos de fuentes
+  'cdnjs.cloudflare.com',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com'
 ];
 
 // ------------------------------------------
-// INSTALL: precachea el shell y activa ya
+// INSTALL: precachea shell + CDNs críticos
 // ------------------------------------------
 self.addEventListener('install', event => {
-  self.skipWaiting(); // No esperar a que se cierren las pestañas
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_STATIC).then(cache => {
-      return cache.addAll(urlsToCache).catch(err => {
-        console.warn('⚠️ SW: error al precachear shell:', err);
-      });
-    })
+    Promise.all([
+      // Shell de la app
+      caches.open(CACHE_STATIC).then(cache => 
+        cache.addAll(urlsToCache).catch(err => 
+          console.warn('⚠️ SW: error precache shell:', err)
+        )
+      ),
+      // CDNs críticos
+      caches.open(CACHE_CDN).then(cache =>
+        Promise.all(
+          CDN_PRECACHE.map(url =>
+            cache.add(url).catch(err =>
+              console.warn(`⚠️ SW: no se pudo precachear ${url}:`, err.message)
+            )
+          )
+        )
+      )
+    ])
   );
 });
 
@@ -49,17 +77,19 @@ self.addEventListener('install', event => {
 // ACTIVATE: limpia cachés viejos
 // ------------------------------------------
 self.addEventListener('activate', event => {
+  const VALID_CACHES = [CACHE_STATIC, CACHE_CDN, CACHE_NAME];
+  
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_STATIC && key !== CACHE_NAME)
+          .filter(key => !VALID_CACHES.includes(key))
           .map(key => {
             console.log('🧹 SW: eliminando caché viejo:', key);
             return caches.delete(key);
           })
       )
-    ).then(() => self.clients.claim()) // Toma control inmediato
+    ).then(() => self.clients.claim())
   );
 });
 
@@ -81,7 +111,7 @@ self.addEventListener('fetch', event => {
 
   // ❌ 2. Bypass total para Firebase y APIs dinámicas
   if (BYPASS_HOSTS.some(host => url.hostname.includes(host))) {
-    return; // Dejar pasar la petición normal (sin cachear)
+    return;
   }
 
   // 🌐 3. Navegación HTML → Network-first con fallback a caché
@@ -102,7 +132,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 📦 4. CDNs estáticos conocidos → Cache-first + update en background
+  // 🎨 4. CDNs estáticos → Cache-first + update en background
   if (STATIC_CDN_HOSTS.some(host => url.hostname.includes(host))) {
     event.respondWith(
       caches.match(request).then(cached => {
@@ -110,7 +140,7 @@ self.addEventListener('fetch', event => {
           .then(response => {
             if (response && response.status === 200) {
               const copy = response.clone();
-              caches.open(CACHE_STATIC).then(cache => cache.put(request, copy));
+              caches.open(CACHE_CDN).then(cache => cache.put(request, copy));
             }
             return response;
           })
@@ -142,12 +172,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 🌍 6. Cualquier otra cosa → solo red
+  // 🌍 6. Cualquier otra cosa → solo red con fallback
   event.respondWith(fetch(request).catch(() => caches.match(request)));
 });
 
 // ------------------------------------------
-// MESSAGE: permite forzar actualización desde la app
+// MESSAGE: permite forzar actualización
 // ------------------------------------------
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
