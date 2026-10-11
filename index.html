@@ -832,12 +832,30 @@
         }
 
         /**
-         * Construye un userKey seguro y consistente
+         * Construye un userKey seguro y consistente a partir de un hash
          */
-        function buildUserKey(reg, pass) {
+        function buildUserKeyFromHash(reg, passHash) {
             const safeReg = sanitizeForKey(reg);
-            const safePass = sanitizeForKey(pass);
-            return `user_${safeReg}_${safePass}`;
+            const safeHash = sanitizeForKey(passHash);
+            // Usamos solo los primeros 24 caracteres del hash para no hacer keys gigantes
+            return `user_${safeReg}_${safeHash.substring(0, 24)}`;
+        }
+
+        /* =========================================
+           HASH DE CONTRASEÑAS (SHA-256)
+           ========================================= */
+
+        /**
+         * Genera el hash SHA-256 de una contraseña en formato hexadecimal.
+         * Usa Web Crypto API (nativo del navegador, sin librerías externas).
+         */
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
         }
 
         /* =========================================
@@ -1021,7 +1039,7 @@
             }
         }
 
-        function handleLogin() {
+        async function handleLogin() {
             const reg = document.getElementById('loginRegNumber').value.trim();
             const pass = document.getElementById('loginPassKey').value.trim();
             const remember = document.getElementById('rememberMe').checked;
@@ -1034,29 +1052,63 @@
                 return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números.');
             }
 
-            userKey = buildUserKey(reg, pass);
+            // Hashear la clave introducida
+            const passHash = await hashPassword(pass);
 
-            db.ref(`users/${reg}`).once('value', snapshot => {
+            db.ref(`users/${reg}`).once('value', async snapshot => {
                 const val = snapshot.val();
-                if(val && val.pass === pass) {
-                    currentUserData = val;
-                    if(remember) {
-                        localStorage.setItem('omniapp_saved_reg', reg);
-                        localStorage.setItem('omniapp_saved_pass', pass);
-                    } else {
-                        localStorage.removeItem('omniapp_saved_reg');
-                        localStorage.removeItem('omniapp_saved_pass');
-                    }
-                    localStorage.setItem('omniapp_active_userKey', userKey);
-                    localStorage.setItem('omniapp_active_userReg', reg);
-                    unlockApp();
-                } else {
-                    alert('Número de registro o clave incorrecta.');
+
+                if (!val) {
+                    return alert('Número de registro o clave incorrecta.');
                 }
+
+                // 🅱️ CASO 1: Usuario con clave en texto plano (migración)
+                if (val.pass && !val.passHash) {
+                    if (val.pass === pass) {
+                        // Migrar a hash automáticamente
+                        await db.ref(`users/${reg}`).update({
+                            passHash: passHash,
+                            pass: null // Eliminar la clave en texto plano
+                        });
+
+                        // Actualizar objeto en memoria
+                        delete val.pass;
+                        val.passHash = passHash;
+
+                        console.log('✅ Usuario migrado a hash correctamente');
+                    } else {
+                        return alert('Número de registro o clave incorrecta.');
+                    }
+                }
+                // 🔐 CASO 2: Usuario nuevo con hash
+                else if (val.passHash) {
+                    if (val.passHash !== passHash) {
+                        return alert('Número de registro o clave incorrecta.');
+                    }
+                }
+                // ❓ CASO 3: Datos corruptos
+                else {
+                    return alert('Número de registro o clave incorrecta.');
+                }
+
+                // Todo OK: guardar sesión
+                userKey = buildUserKeyFromHash(reg, passHash);
+                currentUserData = val;
+
+                if (remember) {
+                    localStorage.setItem('omniapp_saved_reg', reg);
+                    localStorage.setItem('omniapp_saved_pass', pass);
+                } else {
+                    localStorage.removeItem('omniapp_saved_reg');
+                    localStorage.removeItem('omniapp_saved_pass');
+                }
+                localStorage.setItem('omniapp_active_userKey', userKey);
+                localStorage.setItem('omniapp_active_userReg', reg);
+                unlockApp();
             });
         }
 
-        function handleRegister() {
+        async function handleRegister() {
             const firstName = document.getElementById('regFirstName').value.trim();
             const lastName = document.getElementById('regLastName').value.trim();
             const reg = document.getElementById('regRegNumber').value.trim();
@@ -1073,14 +1125,20 @@
                 return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números (sin espacios ni símbolos).');
             }
 
+            // Hashear la clave antes de guardar
+            const passHash = await hashPassword(pass);
+
             db.ref(`users/${reg}`).once('value', snapshot => {
                 if(snapshot.exists()) return alert('Este número de registro ya existe.');
 
-                const newUser = { firstName, lastName, reg, pass };
+                // Guardamos el hash, NO la clave en texto plano
+                const newUser = { firstName, lastName, reg, passHash };
                 db.ref(`users/${reg}`).set(newUser, (err) => {
                     if(!err) {
                         alert('¡Registro exitoso! Ya puedes iniciar sesión.');
                         switchAuthTab('login');
+                    } else {
+                        alert('Error al registrar. Intenta de nuevo.');
                     }
                 });
             });
