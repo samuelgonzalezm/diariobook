@@ -181,6 +181,30 @@
             border-color: #6366f1;
         }
 
+        /* Chips Selección de Días en Horario Modal */
+        .day-chip {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #475569;
+            text-align: center;
+        }
+        .dark .day-chip {
+            background: #1e293b;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+        .day-chip.active {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
@@ -675,7 +699,7 @@
         </main>
     </div>
 
-    <!-- MODAL: AGREGAR BLOQUE DE HORARIO -->
+    <!-- MODAL: AGREGAR BLOQUE DE HORARIO (CON SELECCIÓN MÚLTIPLE DE DÍAS Y 'TODOS LOS DÍAS') -->
     <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex justify-between items-center">
@@ -687,59 +711,64 @@
                 </button>
             </div>
 
-            <form onsubmit="handleSaveHorario(event)" class="space-y-3 text-xs sm:text-sm">
+            <form onsubmit="handleSaveHorario(event)" class="space-y-4 text-xs sm:text-sm">
                 <div>
                     <label class="block font-semibold mb-1">Título de la actividad</label>
                     <input type="text" id="horario-title" placeholder="Ej. Levanto, Trabajo, Ejercicio" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-semibold mb-1">Día</label>
-                        <select id="horario-day" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
-                            <option value="all">Todos los días</option>
-                            <option value="1">Lunes</option>
-                            <option value="2">Martes</option>
-                            <option value="3">Miércoles</option>
-                            <option value="4">Jueves</option>
-                            <option value="5">Viernes</option>
-                            <option value="6">Sábado</option>
-                            <option value="0">Domingo</option>
-                        </select>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block font-semibold">Seleccionar Día(s)</label>
+                        <button type="button" onclick="toggleAllDaysModal()" id="btn-toggle-all-days" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                            Todos los días
+                        </button>
                     </div>
-                    <div>
-                        <label class="block font-semibold mb-1">Horario</label>
-                        <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
-                            <option value="6:00 a.m">6:00 a.m</option>
-                            <option value="6:30 a.m">6:30 a.m</option>
-                            <option value="7:30 a.m">7:30 a.m</option>
-                            <option value="8:00 a.m">8:00 a.m</option>
-                            <option value="8:30 a.m a 9:00 a.m">8:30 a.m a 9:00 a.m</option>
-                            <option value="9:00 a.m a 10:00 a.m">9:00 a.m a 10:00 a.m</option>
-                            <option value="10:00 a.m a 10:15 a.m">10:00 a.m a 10:15 a.m</option>
-                            <option value="10:15 a.m a 10:55 a.m">10:15 a.m a 10:55 a.m</option>
-                            <option value="10:55 a.m a 11:10 a.m">10:55 a.m a 11:10 a.m</option>
-                            <option value="11:10 a.m a 11:50 a.m">11:10 a.m a 11:50 a.m</option>
-                            <option value="11:50 a.m a 12:00 p.m">11:50 a.m a 12:00 p.m</option>
-                            <option value="12:00 p.m">12:00 p.m</option>
-                            <option value="12:10 p.m a 1:10 p.m">12:10 p.m a 1:10 p.m</option>
-                            <option value="1:10 p.m a 2:00 p.m">1:10 p.m a 2:00 p.m</option>
-                            <option value="2:00 p.m a 2:10 p.m">2:00 p.m a 2:10 p.m</option>
-                            <option value="2:10 p.m">2:10 p.m</option>
-                            <option value="2:20 p.m">2:20 p.m</option>
-                            <option value="3:00 p.m a 3:45 p.m">3:00 p.m a 3:45 p.m</option>
-                            <option value="3:45 p.m a 4:00 p.m">3:45 p.m a 4:00 p.m</option>
-                            <option value="4:00 p.m a 4:50 p.m">4:00 p.m a 4:50 p.m</option>
-                            <option value="4:50 p.m a 5:00 p.m">4:50 p.m a 5:00 p.m</option>
-                            <option value="5:00 p.m a 5:55 p.m">5:00 p.m a 5:55 p.m</option>
-                            <option value="6:00 p.m a 7:00 p.m">6:00 p.m a 7:00 p.m</option>
-                            <option value="7:00 p.m a 7:15 p.m">7:00 p.m a 7:15 p.m</option>
-                            <option value="7:15 p.m a 8:30 p.m">7:15 p.m a 8:30 p.m</option>
-                            <option value="8:30 p.m">8:30 p.m</option>
-                            <option value="9:00 a 9:40 pm">9:00 a 9:40 pm</option>
-                            <option value="9:40 p.m">9:40 p.m</option>
-                            <option value="10:00 p.m">10:00 p.m</option>
-                        </select>
+                    <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="modal-days-box">
+                        <button type="button" class="day-chip active" data-day="1" onclick="toggleModalDayChip(this)">Lun</button>
+                        <button type="button" class="day-chip" data-day="2" onclick="toggleModalDayChip(this)">Mar</button>
+                        <button type="button" class="day-chip" data-day="3" onclick="toggleModalDayChip(this)">Mié</button>
+                        <button type="button" class="day-chip" data-day="4" onclick="toggleModalDayChip(this)">Jue</button>
+                        <button type="button" class="day-chip" data-day="5" onclick="toggleModalDayChip(this)">Vie</button>
+                        <button type="button" class="day-chip" data-day="6" onclick="toggleModalDayChip(this)">Sáb</button>
+                        <button type="button" class="day-chip" data-day="0" onclick="toggleModalDayChip(this)">Dom</button>
+                        <button type="button" class="day-chip bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/40 font-bold" id="chip-all-days" onclick="toggleAllDaysModal()">Todos</button>
                     </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1">Horario</label>
+                    <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                        <option value="6:00 a.m">6:00 a.m</option>
+                        <option value="6:30 a.m">6:30 a.m</option>
+                        <option value="7:30 a.m">7:30 a.m</option>
+                        <option value="8:00 a.m">8:00 a.m</option>
+                        <option value="8:30 a.m a 9:00 a.m">8:30 a.m a 9:00 a.m</option>
+                        <option value="9:00 a.m a 10:00 a.m">9:00 a.m a 10:00 a.m</option>
+                        <option value="10:00 a.m a 10:15 a.m">10:00 a.m a 10:15 a.m</option>
+                        <option value="10:15 a.m a 10:55 a.m">10:15 a.m a 10:55 a.m</option>
+                        <option value="10:55 a.m a 11:10 a.m">10:55 a.m a 11:10 a.m</option>
+                        <option value="11:10 a.m a 11:50 a.m">11:10 a.m a 11:50 a.m</option>
+                        <option value="11:50 a.m a 12:00 p.m">11:50 a.m a 12:00 p.m</option>
+                        <option value="12:00 p.m">12:00 p.m</option>
+                        <option value="12:10 p.m a 1:10 p.m">12:10 p.m a 1:10 p.m</option>
+                        <option value="1:10 p.m a 2:00 p.m">1:10 p.m a 2:00 p.m</option>
+                        <option value="2:00 p.m a 2:10 p.m">2:00 p.m a 2:10 p.m</option>
+                        <option value="2:10 p.m">2:10 p.m</option>
+                        <option value="2:20 p.m">2:20 p.m</option>
+                        <option value="3:00 p.m a 3:45 p.m">3:00 p.m a 3:45 p.m</option>
+                        <option value="3:45 p.m a 4:00 p.m">3:45 p.m a 4:00 p.m</option>
+                        <option value="4:00 p.m a 4:50 p.m">4:00 p.m a 4:50 p.m</option>
+                        <option value="4:50 p.m a 5:00 p.m">4:50 p.m a 5:00 p.m</option>
+                        <option value="5:00 p.m a 5:55 p.m">5:00 p.m a 5:55 p.m</option>
+                        <option value="6:00 p.m a 7:00 p.m">6:00 p.m a 7:00 p.m</option>
+                        <option value="7:00 p.m a 7:15 p.m">7:00 p.m a 7:15 p.m</option>
+                        <option value="7:15 p.m a 8:30 p.m">7:15 p.m a 8:30 p.m</option>
+                        <option value="8:30 p.m">8:30 p.m</option>
+                        <option value="9:00 a 9:40 pm">9:00 a 9:40 pm</option>
+                        <option value="9:40 p.m">9:40 p.m</option>
+                        <option value="10:00 p.m">10:00 p.m</option>
+                    </select>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2">
@@ -1137,22 +1166,54 @@
         function openModalHorario() { document.getElementById('modal-horario').classList.remove('hidden'); }
         function closeModalHorario() { document.getElementById('modal-horario').classList.add('hidden'); }
 
+        /* LÓGICA DE SELECCIÓN MÚLTIPLE DE DÍAS Y 'TODOS' */
+        function toggleModalDayChip(btn) {
+            btn.classList.toggle('active');
+            updateAllDaysChipState();
+        }
+
+        function toggleAllDaysModal() {
+            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
+            const allChip = document.getElementById('chip-all-days');
+            const shouldActivateAll = !allChip.classList.contains('active');
+
+            dayChips.forEach(chip => {
+                if (shouldActivateAll) chip.classList.add('active');
+                else chip.classList.remove('active');
+            });
+
+            if (shouldActivateAll) allChip.classList.add('active');
+            else allChip.classList.remove('active');
+        }
+
+        function updateAllDaysChipState() {
+            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
+            const activeChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
+            const allChip = document.getElementById('chip-all-days');
+
+            if (dayChips.length === activeChips.length) {
+                allChip.classList.add('active');
+            } else {
+                allChip.classList.remove('active');
+            }
+        }
+
         function handleSaveHorario(e) {
             e.preventDefault();
             const activity = document.getElementById('horario-title').value.trim();
-            const dayVal = document.getElementById('horario-day').value;
             const hour = document.getElementById('horario-hour').value;
+            
+            const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
 
-            if(!activity) return;
-
-            if(dayVal === 'all') {
-                const days = [1, 2, 3, 4, 5, 6, 0];
-                days.forEach(d => {
-                    db.ref(`${userKey}/timeblocks`).push({ activity, day: d, hour });
-                });
-            } else {
-                db.ref(`${userKey}/timeblocks`).push({ activity, day: parseInt(dayVal), hour });
+            if (selectedDayChips.length === 0) {
+                return alert('Por favor selecciona al menos un día.');
             }
+
+            // Guardar bloque por cada día seleccionado
+            selectedDayChips.forEach(chip => {
+                const day = parseInt(chip.getAttribute('data-day'));
+                db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
+            });
 
             document.getElementById('horario-title').value = '';
             closeModalHorario();
