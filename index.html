@@ -26,9 +26,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
@@ -348,6 +346,63 @@
         @media (max-width: 767px) {
             #app-viewport { padding-bottom: 6rem !important; }
         }
+
+        /* CATEGORÍA CHIP (Devocional) */
+        .category-group {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .dark .category-group { background: #0f172a; border-color: #1e293b; }
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .category-header:hover { background: #f8fafc; }
+        .dark .category-header:hover { background: #1e293b; }
+        .category-header .chevron { transition: transform 0.2s; }
+        .category-header.open .chevron { transform: rotate(180deg); }
+        .category-items {
+            display: none;
+            border-top: 1px solid #f1f5f9;
+            padding: 0.5rem;
+        }
+        .dark .category-items { border-color: #1e293b; }
+        .category-items.open { display: block; }
+        
+        .devotional-item {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 0.25rem;
+        }
+        .devotional-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .devotional-item-header:hover { background: #f8fafc; }
+        .dark .devotional-item-header:hover { background: #1e293b; }
+        .devotional-item-header .chevron-small { transition: transform 0.2s; }
+        .devotional-item-header.open .chevron-small { transform: rotate(180deg); }
+        .devotional-item-body {
+            display: none;
+            padding: 0.75rem 0.85rem;
+            border-top: 1px solid #f1f5f9;
+            background: #f8fafc;
+        }
+        .dark .devotional-item-body { border-color: #1e293b; background: #1e293b; }
+        .devotional-item-body.open { display: block; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -839,10 +894,21 @@
 
                 <!-- OmniBan -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-hands-praying text-indigo-500"></i> Nueva Petición de Oración
-                        </h3>
+                    <!-- Botón para mostrar formulario -->
+                    <button id="omniban-toggle-btn" onclick="toggleOmniBanForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Agregar nueva intención
+                    </button>
+
+                    <!-- Formulario colapsable -->
+                    <div id="omniban-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-hands-praying text-indigo-500"></i> Nueva Petición de Oración
+                            </h3>
+                            <button onclick="toggleOmniBanForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                                <i class="fa-solid fa-xmark text-xl"></i>
+                            </button>
+                        </div>
 
                         <form onsubmit="handleAddOmniBan(event)" class="space-y-3 text-xs sm:text-sm">
                             <div>
@@ -886,7 +952,7 @@
                     </div>
                 </section>
 
-                <!-- DEVOCIONAL -->
+                <!-- DEVOCIONAL (con categorías) -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -900,17 +966,54 @@
                         <p class="text-xs text-white/90 text-right font-bold" id="dev-daily-ref">— Filipenses 4:13</p>
                     </div>
 
-                    <div class="space-y-4">
-                        <form onsubmit="handleAddDevotional(event)" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-                            <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Añadir Reflexión u Oración</h4>
-                            <input type="text" id="dev-title" placeholder="Título de la reflexión..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <textarea id="dev-text" rows="3" placeholder="Escribe tus pensamientos o reflexión..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                    <!-- Botón para mostrar formulario -->
+                    <button id="dev-toggle-btn" onclick="toggleDevForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración
+                    </button>
+
+                    <!-- Formulario colapsable -->
+                    <div id="dev-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Nueva Entrada</h4>
+                            <button onclick="toggleDevForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                                <i class="fa-solid fa-xmark text-xl"></i>
+                            </button>
+                        </div>
+
+                        <form onsubmit="handleAddDevotional(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Categoría</label>
+                                <select id="dev-category" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm font-semibold" onchange="handleDevCategoryChange()">
+                                    <option value="">-- Selecciona o crea --</option>
+                                    <option value="Oración">🙏 Oración</option>
+                                    <option value="Reflexión">📖 Reflexión</option>
+                                    <option value="Agradecimiento">🙌 Agradecimiento</option>
+                                    <option value="Pensamiento">💭 Pensamiento</option>
+                                    <option value="Otro">✨ Otro</option>
+                                    <option value="__new__">➕ Nueva categoría...</option>
+                                </select>
+                                <input type="text" id="dev-new-category" placeholder="Escribe la nueva categoría..." class="hidden w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm font-semibold mt-2">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
+                                <input type="text" id="dev-title" placeholder="Ej: Por mi familia" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Reflexión u oración</label>
+                                <textarea id="dev-text" rows="3" placeholder="Escribe tus pensamientos o reflexión..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                            </div>
                             <div class="flex justify-end">
-                                <button type="submit" class="grad-bg text-white px-4 py-2 rounded-xl text-xs font-semibold shadow hover:opacity-90">
-                                    Guardar en devocional
+                                <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl text-xs font-semibold shadow hover:opacity-90">
+                                    Guardar
                                 </button>
                             </div>
                         </form>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-book-bible text-brand-purple"></i> Mis Entradas
+                        </h3>
                         <div id="devotional-entries-container" class="space-y-3"></div>
                     </div>
                 </section>
@@ -942,7 +1045,6 @@
 
             </div>
 
-            <!-- FAB -->
             <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -1181,7 +1283,8 @@
         let state = {
             tasks: [], taskFilter: 'all',
             horario: [], migraines: [], devotionals: [],
-            pills: [], stores: {}, chat: [], omniban: []
+            pills: [], stores: {}, chat: [], omniban: [],
+            categoriesCache: {}
         };
 
         function toggleDarkMode() {
@@ -1890,7 +1993,7 @@
             `).join('');
         }
 
-        // PDF MIGRAÑA (con DM Sans UTF-8)
+        // PDF MIGRAÑA
         let dmSansRegularBase64 = null;
         let dmSansBoldBase64 = null;
         let dmSansLoaded = false;
@@ -1931,6 +2034,22 @@
             }
         }
 
+        function buildMigrainePDFFileName() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            let h = now.getHours();
+            const ampm = h >= 12 ? 'pm' : 'am';
+            h = h % 12;
+            if (h === 0) h = 12;
+            const hh = String(h).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const reg = currentUserData.reg || 'usuario';
+            return `${reg}_${day}-${month}-${year}-h${hh}-${mm}${ampm}.pdf`;
+        }
+
         async function downloadMigrainePDF() {
             if (state.migraines.length === 0) return toastAlert('No hay episodios para exportar.', 'warning');
             if (typeof window.jspdf === 'undefined') return toastAlert('Error: recarga la página.', 'error');
@@ -1949,9 +2068,6 @@
                     doc.addFileToVFS('DMSans-Bold.ttf', dmSansBoldBase64);
                     doc.addFont('DMSans-Bold.ttf', 'DMSans', 'bold');
                     fontName = 'DMSans';
-                    console.log('✅ Usando DM Sans en el PDF');
-                } else {
-                    console.warn('⚠️ Usando Helvetica (fallback)');
                 }
 
                 const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
@@ -2056,7 +2172,8 @@
                     doc.text(`Omniapp  |  Página ${i} de ${pageCount}`, 105, 290, { align: 'center' });
                 }
 
-                doc.save(`informe-migrana-${new Date().toISOString().split('T')[0]}.pdf`);
+                const fileName = buildMigrainePDFFileName();
+                doc.save(fileName);
                 showToast('PDF generado exitosamente', 'success', 3000);
             } catch (err) {
                 console.error('Error PDF:', err);
@@ -2117,6 +2234,18 @@
         }
 
         // OmniBan
+        function toggleOmniBanForm() {
+            const formContainer = document.getElementById('omniban-form-container');
+            const btn = document.getElementById('omniban-toggle-btn');
+            if (formContainer.classList.contains('hidden')) {
+                formContainer.classList.remove('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cerrar formulario';
+            } else {
+                formContainer.classList.add('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-plus"></i> Agregar nueva intención';
+            }
+        }
+
         function toggleOmniBanAllDays() {
             const allDays = document.getElementById('omniban-alldays').checked;
             const datesBox = document.getElementById('omniban-dates-box');
@@ -2154,6 +2283,7 @@
                     document.getElementById('omniban-alldays').checked = false;
                     toggleOmniBanAllDays();
                     initDates();
+                    toggleOmniBanForm();
                     showToast('Petición agregada', 'success');
                 }
             });
@@ -2243,41 +2373,156 @@
             }).join('');
         }
 
-        // DEVOCIONAL
+        // DEVOCIONAL (con categorías y acordeón)
+        function toggleDevForm() {
+            const formContainer = document.getElementById('dev-form-container');
+            const btn = document.getElementById('dev-toggle-btn');
+            if (formContainer.classList.contains('hidden')) {
+                formContainer.classList.remove('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cerrar formulario';
+            } else {
+                formContainer.classList.add('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración';
+            }
+        }
+
+        function handleDevCategoryChange() {
+            const select = document.getElementById('dev-category');
+            const newInput = document.getElementById('dev-new-category');
+            if (select.value === '__new__') {
+                newInput.classList.remove('hidden');
+                newInput.focus();
+            } else {
+                newInput.classList.add('hidden');
+                newInput.value = '';
+            }
+        }
+
         function handleAddDevotional(e) {
             e.preventDefault();
-            const title = document.getElementById('dev-title').value.trim();
+            const categorySelect = document.getElementById('dev-category').value;
+            const newCategory = document.getElementById('dev-new-category').value.trim();
+            let category = '';
+
+            if (categorySelect === '__new__') {
+                if (!newCategory) return toastAlert('Escribe el nombre de la nueva categoría.', 'warning');
+                category = newCategory;
+            } else if (categorySelect) {
+                category = categorySelect;
+            } else {
+                return toastAlert('Selecciona o crea una categoría.', 'warning');
+            }
+
+            const title = document.getElementById('dev-title').value.trim() || 'Sin título';
             const body = document.getElementById('dev-text').value.trim();
-            if (!body) return;
-            db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
+            if (!body) return toastAlert('Escribe el contenido.', 'warning');
+
+            db.ref(`${userKey}/notes`).push({
+                title, body, category,
+                date: new Date().toLocaleDateString('es-ES'),
+                timestamp: Date.now()
+            });
+
             document.getElementById('dev-title').value = '';
             document.getElementById('dev-text').value = '';
+            document.getElementById('dev-category').value = '';
+            document.getElementById('dev-new-category').value = '';
+            document.getElementById('dev-new-category').classList.add('hidden');
+            toggleDevForm();
             showToast('Reflexión guardada', 'success');
         }
+
         function deleteDevotional(id) {
-            db.ref(`${userKey}/notes/${id}`).remove();
-            showToast('Reflexión eliminada', 'info', 2000);
+            if (confirm('¿Eliminar esta entrada?')) {
+                db.ref(`${userKey}/notes/${id}`).remove();
+                showToast('Entrada eliminada', 'info', 2000);
+            }
         }
+
+        function toggleCategoryGroup(catKey) {
+            const header = document.querySelector(`.category-header[data-cat="${catKey}"]`);
+            const items = document.querySelector(`.category-items[data-cat="${catKey}"]`);
+            if (header && items) {
+                header.classList.toggle('open');
+                items.classList.toggle('open');
+            }
+        }
+
+        function toggleDevotionalItem(itemId) {
+            const header = document.querySelector(`.devotional-item-header[data-item="${itemId}"]`);
+            const body = document.querySelector(`.devotional-item-body[data-item="${itemId}"]`);
+            if (header && body) {
+                header.classList.toggle('open');
+                body.classList.toggle('open');
+            }
+        }
+
         function renderDevotionals() {
             const container = document.getElementById('devotional-entries-container');
             if (state.devotionals.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Sin oraciones guardadas.</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Sin entradas guardadas.</p>`;
                 return;
             }
-            container.innerHTML = state.devotionals.map((d, idx) => `
-                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-brand-purple font-bold">${escapeHtml(d.title || 'Reflexión')}</span>
-                        <span class="text-slate-400 text-[10px]">${escapeHtml(d.date || '')}</span>
+
+            // Agrupar por categoría
+            const grouped = {};
+            state.devotionals.forEach(d => {
+                const cat = d.category || 'Sin categoría';
+                if (!grouped[cat]) grouped[cat] = [];
+                grouped[cat].push(d);
+            });
+
+            // Ordenar cada grupo por timestamp (más recientes primero)
+            Object.keys(grouped).forEach(cat => {
+                grouped[cat].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            });
+
+            // Ordenar categorías alfabéticamente
+            const sortedCategories = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+
+            container.innerHTML = sortedCategories.map(cat => {
+                const items = grouped[cat];
+                const catKey = cat.replace(/[^a-zA-Z0-9]/g, '_');
+                const catEsc = escapeHtml(cat);
+
+                return `
+                    <div class="category-group">
+                        <div class="category-header" data-cat="${catKey}" onclick="toggleCategoryGroup('${catKey}')">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-folder text-indigo-500"></i>
+                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">${catEsc}</span>
+                                <span class="text-[10px] font-bold text-white bg-indigo-500 rounded-full px-2 py-0.5">${items.length}</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-slate-400 chevron"></i>
+                        </div>
+                        <div class="category-items" data-cat="${catKey}">
+                            ${items.map(d => {
+                                const itemId = escapeAttr(d.id);
+                                return `
+                                    <div class="devotional-item">
+                                        <div class="devotional-item-header" data-item="${itemId}" onclick="toggleDevotionalItem('${itemId}')">
+                                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                                <i class="fa-solid fa-bookmark text-purple-400 text-xs"></i>
+                                                <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">${escapeHtml(d.title || 'Sin título')}</span>
+                                            </div>
+                                            <i class="fa-solid fa-chevron-down text-slate-400 text-[10px] chevron-small"></i>
+                                        </div>
+                                        <div class="devotional-item-body" data-item="${itemId}">
+                                            <p class="text-xs text-slate-700 dark:text-slate-200 leading-relaxed mb-2">${escapeHtml(d.body || d.text || '')}</p>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-[10px] text-slate-400">${escapeHtml(d.date || '')}</span>
+                                                <button onclick="event.stopPropagation(); deleteDevotional('${itemId}')" class="text-slate-300 hover:text-red-500 text-xs">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
                     </div>
-                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">${escapeHtml(d.body || d.text || '')}</p>
-                    <div class="flex justify-end">
-                        <button onclick="deleteDevotional('${escapeAttr(d.id)}')" class="text-slate-300 hover:text-red-500 text-xs">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // SÚPER
@@ -2400,8 +2645,8 @@
                 })), ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']) : 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n'));
 
                 folder.file('devocional.csv', '\uFEFF' + (state.devotionals.length ? arrayToCSV(state.devotionals.map(d => ({
-                    titulo: d.title || '', texto: d.body || d.text || '', fecha: d.date || ''
-                })), ['titulo', 'texto', 'fecha']) : 'titulo,texto,fecha\n'));
+                    categoria: d.category || '', titulo: d.title || '', texto: d.body || d.text || '', fecha: d.date || ''
+                })), ['categoria', 'titulo', 'texto', 'fecha']) : 'categoria,titulo,texto,fecha\n'));
 
                 const superRows = [];
                 const storeNames = { mercado: 'Mercado', costco: 'Costco', sams: "Sam's", zorro: 'El Zorro', monarca: 'Monarca', extras: 'Extras' };
