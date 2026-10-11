@@ -1,11 +1,11 @@
 // ==========================================
-// Omniapp Service Worker - v3
-// Con precacheo de CDNs externos
+// Omniapp Service Worker - v4
+// Con precacheo de Tailwind, Font Awesome y DM Sans
 // ==========================================
 
-const CACHE_NAME = 'omniapp-cache-v3';
-const CACHE_STATIC = 'omniapp-static-v3';
-const CACHE_CDN = 'omniapp-cdn-v3';
+const CACHE_NAME = 'omniapp-cache-v4';
+const CACHE_STATIC = 'omniapp-static-v4';
+const CACHE_CDN = 'omniapp-cdn-v4';
 
 // Recursos del "shell" que siempre deben estar disponibles offline
 const urlsToCache = [
@@ -17,6 +17,9 @@ const urlsToCache = [
 // CDNs externos que queremos precachear (una sola vez)
 // Estos son recursos ESTABLES que no cambian seguido
 const CDN_PRECACHE = [
+  // Tailwind CSS (crítico para el diseño)
+  'https://cdn.tailwindcss.com',
+  
   // Font Awesome (iconos)
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
