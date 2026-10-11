@@ -399,7 +399,7 @@
                         </div>
                     </div>
 
-                    <!-- VIEW 2: HORARIO SEMANAL CON HORARIOS PERSONALIZADOS DE LA IMAGEN -->
+                    <!-- VIEW 2: HORARIO SEMANAL -->
                     <div id="subview-horario" class="hidden space-y-4">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-slate-500 dark:text-slate-400">Organiza tus clases o rutina semanal.</p>
@@ -690,12 +690,13 @@
             <form onsubmit="handleSaveHorario(event)" class="space-y-3 text-xs sm:text-sm">
                 <div>
                     <label class="block font-semibold mb-1">Título de la actividad</label>
-                    <input type="text" id="horario-title" placeholder="Ej. Cálculo II, Gimnasio, Trabajo" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                    <input type="text" id="horario-title" placeholder="Ej. Levanto, Trabajo, Ejercicio" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block font-semibold mb-1">Día</label>
-                        <select id="horario-day" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                        <select id="horario-day" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                            <option value="all">Todos los días</option>
                             <option value="1">Lunes</option>
                             <option value="2">Martes</option>
                             <option value="3">Miércoles</option>
@@ -769,7 +770,6 @@
         let currentStoreKey = "mercado";
         let selectedPainLevel = 5;
 
-        // Lista de franjas horarias tomadas directamente de la imagen adjunta
         const CUSTOM_HOURS = [
             "6:00 a.m",
             "6:30 a.m",
@@ -1139,11 +1139,22 @@
 
         function handleSaveHorario(e) {
             e.preventDefault();
-            const activity = document.getElementById('horario-title').value;
-            const day = parseInt(document.getElementById('horario-day').value);
+            const activity = document.getElementById('horario-title').value.trim();
+            const dayVal = document.getElementById('horario-day').value;
             const hour = document.getElementById('horario-hour').value;
 
-            db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
+            if(!activity) return;
+
+            if(dayVal === 'all') {
+                const days = [1, 2, 3, 4, 5, 6, 0];
+                days.forEach(d => {
+                    db.ref(`${userKey}/timeblocks`).push({ activity, day: d, hour });
+                });
+            } else {
+                db.ref(`${userKey}/timeblocks`).push({ activity, day: parseInt(dayVal), hour });
+            }
+
+            document.getElementById('horario-title').value = '';
             closeModalHorario();
         }
 
