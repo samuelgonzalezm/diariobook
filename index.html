@@ -541,4 +541,1070 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha</label>
-                                    <input type="date" id="migDate" required class="w-full bg-slate-50 dark:bg-slate
+                                    <input type="date" id="migDate" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora</label>
+                                    <input type="time" id="migTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duración estimada (Horas)</label>
+                                <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad del dolor (1 = Leve, 10 = Insuportablemente fuerte)</label>
+                                <div class="flex justify-between gap-1 mt-1" id="painScaleBox">
+                                    <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(1, this)">1</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(2, this)">2</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(3, this)">3</button>
+                                    <button type="button" class="pain-btn text-slate-900" style="background:#FFCC00;" onclick="selectPainLevel(4, this)">4</button>
+                                    <button type="button" class="pain-btn text-slate-900 selected" style="background:#FFCC00;" onclick="selectPainLevel(5, this)">5</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#FF9500;" onclick="selectPainLevel(6, this)">6</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#FF9500;" onclick="selectPainLevel(7, this)">7</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#FF3B30;" onclick="selectPainLevel(8, this)">8</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#FF3B30;" onclick="selectPainLevel(9, this)">9</button>
+                                    <button type="button" class="pain-btn text-white" style="background:#8E0000;" onclick="selectPainLevel(10, this)">10</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Síntomas experimentados</label>
+                                <div class="flex flex-wrap gap-1.5 mt-1" id="symptomsChipsBox">
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🤢 Náuseas</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">💡 Sensible a la luz</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🔊 Sensible al ruido</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">✨ Aura visual</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">💫 Mareos</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">👁️ Visión borrosa</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">⚡ Pulsación / Latidos</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desencadenantes probables</label>
+                                <div class="flex flex-wrap gap-1.5 mt-1" id="triggersChipsBox">
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">😫 Estrés</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">😴 Falta de sueño</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🌤️ Cambio de clima</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">☕ Cafeína</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🍽️ Ayuno prolongado</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">📱 Brillo de pantallas</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🩸 Cambio hormonal</span>
+                                </div>
+                                <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante personalizado..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 mt-2 font-medium">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Medicamento consumido y dosis</label>
+                                <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg, Sumatriptán 50mg..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
+                                Guardar Episodio
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brand-purple"></i> Historial de Crisis
+                        </h3>
+                        <div id="migraine-history-container" class="space-y-3"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: DEVOCIONAL -->
+                <section id="tab-devocional" class="tab-content hidden space-y-6">
+                    <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between text-xs font-semibold text-white/80">
+                            <span>DEVOCIONAL DIARIO</span>
+                            <span id="dev-today-date">--/--/----</span>
+                        </div>
+                        <blockquote class="text-base sm:text-lg font-medium italic leading-relaxed" id="dev-daily-verse">
+                            "Todo lo puedo en Cristo que me fortalece."
+                        </blockquote>
+                        <p class="text-xs text-white/90 text-right font-bold" id="dev-daily-ref">— Filipenses 4:13</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <form onsubmit="handleAddDevotional(event)" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+                            <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Añadir Reflexión u Oración</h4>
+                            <input type="text" id="dev-title" placeholder="Título de la reflexión..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <textarea id="dev-text" rows="3" placeholder="Escribe tus pensamientos o reflexión..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                            <div class="flex justify-end">
+                                <button type="submit" class="grad-bg text-white px-4 py-2 rounded-xl text-xs font-semibold shadow hover:opacity-90">
+                                    Guardar en devocional
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="devotional-entries-container" class="space-y-3"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: MI SÚPER -->
+                <section id="tab-super" class="tab-content hidden space-y-6">
+                    <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
+                        <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
+                        <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🛒 Costco</button>
+                        <button onclick="selectStore('sams')" id="btn-store-sams" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">📦 Sam's</button>
+                        <button onclick="selectStore('zorro')" id="btn-store-zorro" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🦊 El Zorro</button>
+                        <button onclick="selectStore('monarca')" id="btn-store-monarca" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">👑 Monarca</button>
+                        <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">⭐ Extras</button>
+                    </div>
+
+                    <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 overflow-hidden">
+                        <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 min-w-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <button type="submit" class="grad-bg text-white px-3 sm:px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0 whitespace-nowrap">
+                            + AGREGAR
+                        </button>
+                    </form>
+
+                    <div id="super-items-container" class="space-y-3"></div>
+
+                    <button onclick="clearCurrentStore()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow">
+                        🗑️ Borrar información de esta tienda
+                    </button>
+                </section>
+
+            </div>
+
+            <!-- Mobile Bottom Nav Bar -->
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg">
+                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-calendar-check text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Agenda</span>
+                </button>
+                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-pills text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Pastillero</span>
+                </button>
+                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-brain text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Migraña</span>
+                </button>
+                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-book-bible text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Devocional</span>
+                </button>
+                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Súper</span>
+                </button>
+            </nav>
+        </main>
+    </div>
+
+    <!-- MODAL: AGREGAR BLOQUE DE HORARIO -->
+    <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque
+                </h3>
+                <button onclick="closeModalHorario()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveHorario(event)" class="space-y-4 text-xs sm:text-sm">
+                <div>
+                    <label class="block font-semibold mb-1">Título de la actividad</label>
+                    <input type="text" id="horario-title" placeholder="Ej. Levanto, Trabajo, Ejercicio" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block font-semibold">Seleccionar Día(s)</label>
+                        <button type="button" onclick="toggleAllDaysModal()" id="btn-toggle-all-days" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                            Todos los días
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="modal-days-box">
+                        <button type="button" class="day-chip active" data-day="1" onclick="toggleModalDayChip(this)">Lun</button>
+                        <button type="button" class="day-chip" data-day="2" onclick="toggleModalDayChip(this)">Mar</button>
+                        <button type="button" class="day-chip" data-day="3" onclick="toggleModalDayChip(this)">Mié</button>
+                        <button type="button" class="day-chip" data-day="4" onclick="toggleModalDayChip(this)">Jue</button>
+                        <button type="button" class="day-chip" data-day="5" onclick="toggleModalDayChip(this)">Vie</button>
+                        <button type="button" class="day-chip" data-day="6" onclick="toggleModalDayChip(this)">Sáb</button>
+                        <button type="button" class="day-chip" data-day="0" onclick="toggleModalDayChip(this)">Dom</button>
+                        <button type="button" class="day-chip bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/40 font-bold" id="chip-all-days" onclick="toggleAllDaysModal()">Todos</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1">Horario</label>
+                    <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                        <option value="6:00 a.m">6:00 a.m</option>
+                        <option value="6:30 a.m">6:30 a.m</option>
+                        <option value="7:30 a.m">7:30 a.m</option>
+                        <option value="8:00 a.m">8:00 a.m</option>
+                        <option value="8:30 a.m a 9:00 a.m">8:30 a.m a 9:00 a.m</option>
+                        <option value="9:00 a.m a 10:00 a.m">9:00 a.m a 10:00 a.m</option>
+                        <option value="10:00 a.m a 10:15 a.m">10:00 a.m a 10:15 a.m</option>
+                        <option value="10:15 a.m a 10:55 a.m">10:15 a.m a 10:55 a.m</option>
+                        <option value="10:55 a.m a 11:10 a.m">10:55 a.m a 11:10 a.m</option>
+                        <option value="11:10 a.m a 11:50 a.m">11:10 a.m a 11:50 a.m</option>
+                        <option value="11:50 a.m a 12:00 p.m">11:50 a.m a 12:00 p.m</option>
+                        <option value="12:00 p.m">12:00 p.m</option>
+                        <option value="12:10 p.m a 1:10 p.m">12:10 p.m a 1:10 p.m</option>
+                        <option value="1:10 p.m a 2:00 p.m">1:10 p.m a 2:00 p.m</option>
+                        <option value="2:00 p.m a 2:10 p.m">2:00 p.m a 2:10 p.m</option>
+                        <option value="2:10 p.m">2:10 p.m</option>
+                        <option value="2:20 p.m">2:20 p.m</option>
+                        <option value="3:00 p.m a 3:45 p.m">3:00 p.m a 3:45 p.m</option>
+                        <option value="3:45 p.m a 4:00 p.m">3:45 p.m a 4:00 p.m</option>
+                        <option value="4:00 p.m a 4:50 p.m">4:00 p.m a 4:50 p.m</option>
+                        <option value="4:50 p.m a 5:00 p.m">4:50 p.m a 5:00 p.m</option>
+                        <option value="5:00 p.m a 5:55 p.m">5:00 p.m a 5:55 p.m</option>
+                        <option value="6:00 p.m a 7:00 p.m">6:00 p.m a 7:00 p.m</option>
+                        <option value="7:00 p.m a 7:15 p.m">7:00 p.m a 7:15 p.m</option>
+                        <option value="7:15 p.m a 8:30 p.m">7:15 p.m a 8:30 p.m</option>
+                        <option value="8:30 p.m">8:30 p.m</option>
+                        <option value="9:00 a 9:40 pm">9:00 a 9:40 pm</option>
+                        <option value="9:40 p.m">9:40 p.m</option>
+                        <option value="10:00 p.m">10:00 p.m</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModalHorario()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Cancelar</button>
+                    <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl font-medium shadow">Agregar Bloque</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT & FIREBASE INTEGRATION -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
+            authDomain: "condoapp-d1729.firebaseapp.com",
+            databaseURL: "https://condoapp-d1729-default-rtdb.firebaseio.com",
+            projectId: "condoapp-d1729",
+            storageBucket: "condoapp-d1729.firebasestorage.app",
+            messagingSenderId: "834784357986",
+            appId: "1:834784357986:web:90855a08e0c5399d8aeb3b"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let userKey = "";
+        let currentUserData = {};
+        let currentStoreKey = "mercado";
+        let selectedPainLevel = 5;
+        let notifiedPills = {}; // Evitar notificaciones duplicadas en el mismo minuto
+
+        /* =========================================
+           SANITIZACIÓN DE CLAVES PARA FIREBASE
+           ========================================= */
+
+        // Caracteres prohibidos por Firebase Realtime Database: . # $ [ ] /
+        // Además, se eliminan caracteres de control
+        const FIREBASE_FORBIDDEN_CHARS = /[.#$\[\]\/\u0000-\u001F\u007F]/g;
+
+        /**
+         * Limpia una clave para que sea segura como path de Firebase
+         */
+        function sanitizeForKey(str) {
+            if (str == null) return '';
+            return String(str).replace(FIREBASE_FORBIDDEN_CHARS, '_');
+        }
+
+        /**
+         * Valida que una clave cumpla el formato permitido:
+         * solo minúsculas y números, longitud mínima 4
+         */
+        function isValidPassKey(pass) {
+            return /^[a-z0-9]{4,}$/.test(pass);
+        }
+
+        /**
+         * Valida que un número de registro tenga exactamente 8 dígitos
+         */
+        function isValidRegNumber(reg) {
+            return /^\d{8}$/.test(reg);
+        }
+
+        /**
+         * Construye un userKey seguro y consistente
+         */
+        function buildUserKey(reg, pass) {
+            const safeReg = sanitizeForKey(reg);
+            const safePass = sanitizeForKey(pass);
+            return `user_${safeReg}_${safePass}`;
+        }
+
+        const CUSTOM_HOURS = [
+            "6:00 a.m",
+            "6:30 a.m",
+            "7:30 a.m",
+            "8:00 a.m",
+            "8:30 a.m a 9:00 a.m",
+            "9:00 a.m a 10:00 a.m",
+            "10:00 a.m a 10:15 a.m",
+            "10:15 a.m a 10:55 a.m",
+            "10:55 a.m a 11:10 a.m",
+            "11:10 a.m a 11:50 a.m",
+            "11:50 a.m a 12:00 p.m",
+            "12:00 p.m",
+            "12:10 p.m a 1:10 p.m",
+            "1:10 p.m a 2:00 p.m",
+            "2:00 p.m a 2:10 p.m",
+            "2:10 p.m",
+            "2:20 p.m",
+            "3:00 p.m a 3:45 p.m",
+            "3:45 p.m a 4:00 p.m",
+            "4:00 p.m a 4:50 p.m",
+            "4:50 p.m a 5:00 p.m",
+            "5:00 p.m a 5:55 p.m",
+            "6:00 p.m a 7:00 p.m",
+            "7:00 p.m a 7:15 p.m",
+            "7:15 p.m a 8:30 p.m",
+            "8:30 p.m",
+            "9:00 a 9:40 pm",
+            "9:40 p.m",
+            "10:00 p.m"
+        ];
+
+        let state = {
+            currentTab: 'agenda',
+            agendaView: 'planner',
+            tasks: [],
+            taskFilter: 'all',
+            horario: [],
+            migraines: [],
+            devotionals: [],
+            pills: [],
+            stores: {}
+        };
+
+        /* NOTIFICACIONES */
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert("Este navegador no soporta notificaciones de sistema.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("¡Notificaciones activadas con éxito! Te avisaremos cuando sea hora de tus medicamentos o citas.");
+                    sendSystemNotification("Omniapp Recordatorios", "Notificaciones activadas para citas y medicamentos.");
+                } else {
+                    alert("Para recibir alertas con la app cerrada, debes habilitar los permisos en la configuración de tu navegador.");
+                }
+            });
+        }
+
+        function sendSystemNotification(title, body) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification(title, {
+                            body: body,
+                            icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
+                            badge: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
+                            vibrate: [200, 100, 200]
+                        });
+                    });
+                } else {
+                    new Notification(title, {
+                        body: body,
+                        icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp'
+                    });
+                }
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
+        }
+
+        /* LÓGICA DINÁMICA DEL PASTILLERO */
+        function getNextPillTime(startTime, intervalHours) {
+            const now = new Date();
+            const [startH, startM] = startTime.split(':').map(Number);
+            const interval = parseInt(intervalHours) || 8;
+
+            let pillDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startH, startM, 0, 0);
+
+            // Si la hora calculada ya pasó, avanzar intervalos hasta la siguiente futura toma
+            while (pillDate <= now) {
+                pillDate.setHours(pillDate.getHours() + interval);
+            }
+
+            const formattedTime = pillDate.toTimeString().substring(0,5);
+            const isTomorrow = pillDate.getDate() !== now.getDate();
+            
+            return {
+                nextDateObj: pillDate,
+                formattedTime: formattedTime,
+                displayLabel: isTomorrow ? `${formattedTime} hrs (Mañana)` : `${formattedTime} hrs`
+            };
+        }
+
+        // Revisión cada minuto para notificaciones y actualización de pantalla
+        setInterval(() => {
+            const now = new Date();
+            const currentHHMM = now.toTimeString().substring(0,5);
+
+            state.pills.forEach(pill => {
+                const nextPill = getNextPillTime(pill.startTime, pill.interval);
+                
+                // Si falta menos de 1 minuto para la toma y no se ha notificado
+                const timeDiff = Math.abs(now - nextPill.nextDateObj);
+                const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
+
+                if (timeDiff <= 60000 && !notifiedPills[pillKey]) {
+                    notifiedPills[pillKey] = true;
+                    sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
+                }
+            });
+
+            // Volver a renderizar para actualizar el contador/horario si cambio de hora
+            if (state.currentTab === 'pastillero') {
+                renderPills();
+            }
+        }, 30000);
+
+        function switchAuthTab(tab) {
+            if(tab === 'login') {
+                document.getElementById('tabBtnLogin').classList.replace('text-slate-500', 'text-indigo-600');
+                document.getElementById('tabBtnLogin').classList.add('bg-white', 'shadow');
+                document.getElementById('tabBtnRegister').classList.remove('bg-white', 'shadow');
+                document.getElementById('tabBtnRegister').classList.replace('text-indigo-600', 'text-slate-500');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+            } else {
+                document.getElementById('tabBtnRegister').classList.replace('text-slate-500', 'text-indigo-600');
+                document.getElementById('tabBtnRegister').classList.add('bg-white', 'shadow');
+                document.getElementById('tabBtnLogin').classList.remove('bg-white', 'shadow');
+                document.getElementById('tabBtnLogin').classList.replace('text-indigo-600', 'text-slate-500');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('loginForm').classList.add('hidden');
+            }
+        }
+
+        function handleLogin() {
+            const reg = document.getElementById('loginRegNumber').value.trim();
+            const pass = document.getElementById('loginPassKey').value.trim();
+            const remember = document.getElementById('rememberMe').checked;
+
+            // Validaciones
+            if (!isValidRegNumber(reg)) {
+                return alert('El número de registro debe contener exactamente 8 dígitos.');
+            }
+            if (!isValidPassKey(pass)) {
+                return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números.');
+            }
+
+            userKey = buildUserKey(reg, pass);
+
+            db.ref(`users/${reg}`).once('value', snapshot => {
+                const val = snapshot.val();
+                if(val && val.pass === pass) {
+                    currentUserData = val;
+                    if(remember) {
+                        localStorage.setItem('omniapp_saved_reg', reg);
+                        localStorage.setItem('omniapp_saved_pass', pass);
+                    } else {
+                        localStorage.removeItem('omniapp_saved_reg');
+                        localStorage.removeItem('omniapp_saved_pass');
+                    }
+                    localStorage.setItem('omniapp_active_userKey', userKey);
+                    localStorage.setItem('omniapp_active_userReg', reg);
+                    unlockApp();
+                } else {
+                    alert('Número de registro o clave incorrecta.');
+                }
+            });
+        }
+
+        function handleRegister() {
+            const firstName = document.getElementById('regFirstName').value.trim();
+            const lastName = document.getElementById('regLastName').value.trim();
+            const reg = document.getElementById('regRegNumber').value.trim();
+            const pass = document.getElementById('regPassKey').value.trim();
+
+            // Validaciones
+            if (!firstName || !lastName || !reg || !pass) {
+                return alert('Completa todos los campos para continuar.');
+            }
+            if (!isValidRegNumber(reg)) {
+                return alert('El número de registro debe contener exactamente 8 dígitos.');
+            }
+            if (!isValidPassKey(pass)) {
+                return alert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números (sin espacios ni símbolos).');
+            }
+
+            db.ref(`users/${reg}`).once('value', snapshot => {
+                if(snapshot.exists()) return alert('Este número de registro ya existe.');
+
+                const newUser = { firstName, lastName, reg, pass };
+                db.ref(`users/${reg}`).set(newUser, (err) => {
+                    if(!err) {
+                        alert('¡Registro exitoso! Ya puedes iniciar sesión.');
+                        switchAuthTab('login');
+                    }
+                });
+            });
+        }
+
+        function checkActiveSession() {
+            const savedReg = localStorage.getItem('omniapp_saved_reg');
+            const savedPass = localStorage.getItem('omniapp_saved_pass');
+            if(savedReg && savedPass) {
+                document.getElementById('loginRegNumber').value = savedReg;
+                document.getElementById('loginPassKey').value = savedPass;
+                document.getElementById('rememberMe').checked = true;
+            }
+
+            const activeKey = localStorage.getItem('omniapp_active_userKey');
+            const activeReg = localStorage.getItem('omniapp_active_userReg');
+            if (activeKey && activeReg) {
+                userKey = activeKey;
+                db.ref(`users/${activeReg}`).once('value', snapshot => {
+                    currentUserData = snapshot.val() || {};
+                    unlockApp();
+                });
+            }
+        }
+
+        function unlockApp() {
+            document.getElementById('authOverlay').classList.add('hidden');
+            document.getElementById('appLayout').classList.remove('hidden');
+            initDates();
+            updateProfileUI();
+            listenToDatabase();
+        }
+
+        function logout() {
+            localStorage.removeItem('omniapp_active_userKey');
+            localStorage.removeItem('omniapp_active_userReg');
+            location.reload();
+        }
+
+        function updateProfileUI() {
+            const firstName = currentUserData.firstName || 'Usuario';
+            document.getElementById('userGreeting').innerText = `¡Hola, ${firstName}!`;
+            document.getElementById('sidebarUserReg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
+        }
+
+        function initDates() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const todayStr = new Date().toLocaleDateString('es-ES', options);
+            document.getElementById('current-date-display').innerText = todayStr.charAt(0).toUpperCase() + todayStr.slice(1);
+            document.getElementById('dev-today-date').innerText = new Date().toLocaleDateString('es-ES');
+            
+            const todayInput = new Date().toISOString().split('T')[0];
+            document.getElementById('task-date').value = todayInput;
+            document.getElementById('migDate').value = todayInput;
+            document.getElementById('migTime').value = new Date().toTimeString().substring(0,5);
+            document.getElementById('pillStartTime').value = new Date().toTimeString().substring(0,5);
+        }
+
+        function listenToDatabase() {
+            db.ref(`${userKey}/tasks`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.tasks = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderTasks();
+            });
+
+            db.ref(`${userKey}/timeblocks`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.horario = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderHorario();
+            });
+
+            db.ref(`${userKey}/pills`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.pills = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderPills();
+            });
+
+            db.ref(`${userKey}/migraines`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.migraines = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderMigraines();
+            });
+
+            db.ref(`${userKey}/notes`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.devotionals = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderDevotionals();
+            });
+
+            db.ref(`${userKey}/stores`).on('value', snapshot => {
+                state.stores = snapshot.val() || {};
+                renderSuper();
+            });
+        }
+
+        function switchTab(tabName) {
+            state.currentTab = tabName;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            const target = document.getElementById('tab-' + tabName);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn, .mobile-nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
+            });
+
+            const dBtn = document.getElementById('d-nav-' + tabName);
+            if (dBtn) dBtn.classList.add('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
+
+            const mBtn = document.getElementById('m-nav-' + tabName);
+            if (mBtn) mBtn.classList.add('text-brand-purple', 'font-bold');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function toggleAgendaView(view) {
+            state.agendaView = view;
+            const pBtn = document.getElementById('btn-view-planner');
+            const hBtn = document.getElementById('btn-view-horario');
+
+            if (view === 'planner') {
+                document.getElementById('subview-planner').classList.remove('hidden');
+                document.getElementById('subview-horario').classList.add('hidden');
+                pBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple";
+                hBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400";
+            } else {
+                document.getElementById('subview-planner').classList.add('hidden');
+                document.getElementById('subview-horario').classList.remove('hidden');
+                hBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple";
+                pBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400";
+            }
+        }
+
+        function handleAddTask(e) {
+            e.preventDefault();
+            const desc = document.getElementById('task-title').value.trim();
+            const priority = document.getElementById('task-priority').value;
+            const category = document.getElementById('task-category').value;
+            const date = document.getElementById('task-date').value;
+
+            if (!desc) return;
+
+            db.ref(`${userKey}/tasks`).push({ desc, priority, category, date, completed: false });
+            document.getElementById('form-add-task').reset();
+            initDates();
+        }
+
+        function filterTasks(type) {
+            state.taskFilter = type;
+            document.querySelectorAll('.filter-task-btn').forEach(b => {
+                b.classList.replace('bg-brand-500', 'bg-slate-200');
+                b.classList.replace('text-white', 'text-slate-600');
+            });
+            const activeBtn = document.getElementById('ftask-' + type);
+            if (activeBtn) {
+                activeBtn.classList.replace('bg-slate-200', 'bg-brand-500');
+                activeBtn.classList.replace('text-slate-600', 'text-white');
+            }
+            renderTasks();
+        }
+
+        function toggleTaskComplete(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (task) {
+                db.ref(`${userKey}/tasks/${id}`).update({ completed: !task.completed });
+            }
+        }
+
+        function deleteTask(id) {
+            db.ref(`${userKey}/tasks/${id}`).remove();
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+            let list = state.tasks;
+
+            if (state.taskFilter === 'pending') list = list.filter(t => !t.completed);
+            if (state.taskFilter === 'completed') list = list.filter(t => t.completed);
+
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No hay tareas pendientes.</p>`;
+                return;
+            }
+
+            container.innerHTML = list.map(t => `
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                        <button onclick="toggleTaskComplete('${t.id}')" class="text-lg text-slate-400 hover:text-brand-purple transition shrink-0">
+                            <i class="fa-${t.completed ? 'solid fa-circle-check text-brand-purple' : 'regular fa-circle'}"></i>
+                        </button>
+                        <div class="truncate">
+                            <p class="text-xs sm:text-sm font-medium ${t.completed ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-100'} truncate">${t.desc}</p>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30">${t.priority || 'Media'}</span>
+                                <span class="text-[10px] text-slate-400">${t.category || 'General'} • ${t.date || 'Sin fecha'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="deleteTask('${t.id}')" class="text-slate-300 hover:text-red-500 transition p-1">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function openModalHorario() { document.getElementById('modal-horario').classList.remove('hidden'); }
+        function closeModalHorario() { document.getElementById('modal-horario').classList.add('hidden'); }
+
+        function toggleModalDayChip(btn) {
+            btn.classList.toggle('active');
+            updateAllDaysChipState();
+        }
+
+        function toggleAllDaysModal() {
+            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
+            const allChip = document.getElementById('chip-all-days');
+            const shouldActivateAll = !allChip.classList.contains('active');
+
+            dayChips.forEach(chip => {
+                if (shouldActivateAll) chip.classList.add('active');
+                else chip.classList.remove('active');
+            });
+
+            if (shouldActivateAll) allChip.classList.add('active');
+            else allChip.classList.remove('active');
+        }
+
+        function updateAllDaysChipState() {
+            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
+            const activeChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
+            const allChip = document.getElementById('chip-all-days');
+
+            if (dayChips.length === activeChips.length) {
+                allChip.classList.add('active');
+            } else {
+                allChip.classList.remove('active');
+            }
+        }
+
+        function handleSaveHorario(e) {
+            e.preventDefault();
+            const activity = document.getElementById('horario-title').value.trim();
+            const hour = document.getElementById('horario-hour').value;
+            
+            const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
+
+            if (selectedDayChips.length === 0) {
+                return alert('Por favor selecciona al menos un día.');
+            }
+
+            selectedDayChips.forEach(chip => {
+                const day = parseInt(chip.getAttribute('data-day'));
+                db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
+            });
+
+            document.getElementById('horario-title').value = '';
+            closeModalHorario();
+        }
+
+        function deleteHorarioItem(id) { db.ref(`${userKey}/timeblocks/${id}`).remove(); }
+
+        function renderHorario() {
+            const container = document.getElementById('horario-grid-body');
+            const days = [1, 2, 3, 4, 5, 6, 0];
+
+            let html = '';
+            CUSTOM_HOURS.forEach(h => {
+                html += `<div class="p-2 font-bold text-slate-500 dark:text-slate-400 text-[10px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-center leading-tight">${h}</div>`;
+                days.forEach(d => {
+                    const block = state.horario.find(item => (item.day == d || item.day === undefined) && item.hour == h);
+                    if (block) {
+                        html += `
+                            <div class="p-1.5 rounded-lg grad-bg text-white text-[10px] font-semibold shadow-sm flex flex-col justify-between relative">
+                                <span class="truncate">${block.activity}</span>
+                                <button onclick="deleteHorarioItem('${block.id}')" class="text-white/70 hover:text-white text-[9px] text-right mt-1">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>`;
+                    } else {
+                        html += `<div class="p-2 rounded-lg bg-slate-100/50 dark:bg-slate-800/20 border border-dashed border-slate-200 dark:border-slate-800"></div>`;
+                    }
+                });
+            });
+            container.innerHTML = html;
+        }
+
+        /* GUARDAR MEDICAMENTO */
+        function handleSavePill(e) {
+            e.preventDefault();
+            const name = document.getElementById('pillName').value.trim();
+            const dose = document.getElementById('pillDose').value.trim();
+            const interval = document.getElementById('pillInterval').value;
+            const startTime = document.getElementById('pillStartTime').value;
+
+            if(!name || !dose || !startTime) return;
+
+            db.ref(`${userKey}/pills`).push({ name, dose, interval, startTime }, (err) => {
+                if(!err) {
+                    document.getElementById('pillName').value = '';
+                    document.getElementById('pillDose').value = '';
+                    alert('Medicamento agregado exitosamente a tu pastillero.');
+                }
+            });
+        }
+
+        function deletePill(id) {
+            db.ref(`${userKey}/pills/${id}`).remove();
+        }
+
+        /* RENDER DE PASTILLERO DINÁMICO */
+        function renderPills() {
+            const container = document.getElementById('pills-container');
+            if (state.pills.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No tienes medicamentos registrados.</p>`;
+                return;
+            }
+
+            container.innerHTML = state.pills.map(p => {
+                const nextPill = getNextPillTime(p.startTime, p.interval);
+
+                return `
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
+                                💊
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${p.name}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">${p.dose} • Cada ${p.interval} hrs</p>
+                                <div class="flex items-center gap-1.5 mt-1">
+                                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+                                        <i class="fa-solid fa-bell text-indigo-500"></i> Próxima toma: ${nextPill.displayLabel}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="deletePill('${p.id}')" class="text-slate-300 hover:text-red-500 transition p-2">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* LÓGICA COMPLETA DE MIGRAÑA */
+        function selectPainLevel(level, btn) {
+            selectedPainLevel = level;
+            document.querySelectorAll('#painScaleBox .pain-btn').forEach(b => b.classList.remove('selected'));
+            if(btn) btn.classList.add('selected');
+        }
+
+        function handleSaveMigraineDirect(e) {
+            e.preventDefault();
+            const date = document.getElementById('migDate').value;
+            const time = document.getElementById('migTime').value;
+            const duration = parseFloat(document.getElementById('migDuration').value) || 1;
+            const meds = document.getElementById('migMeds').value.trim();
+            const customTrigger = document.getElementById('migCustomTrigger').value.trim();
+
+            const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
+            const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
+
+            if(customTrigger) triggers.push(`✏️ ${customTrigger}`);
+
+            if(!date || !time) return alert('Selecciona la fecha y hora.');
+
+            const episode = { date, time, duration, pain: selectedPainLevel, symptoms, triggers, meds, timestamp: Date.now() };
+
+            db.ref(`${userKey}/migraines`).push(episode, (err) => {
+                if(!err) {
+                    alert('¡Episodio de migraña registrado con éxito!');
+                    document.getElementById('migMeds').value = '';
+                    document.getElementById('migCustomTrigger').value = '';
+                    document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
+                }
+            });
+        }
+
+        function deleteMigraine(id) { db.ref(`${userKey}/migraines/${id}`).remove(); }
+
+        function renderMigraines() {
+            const total = state.migraines.length;
+            document.getElementById('stat-total-migraines').innerText = total;
+
+            if (total > 0) {
+                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
+                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
+
+                const avgPain = (totalPain / total).toFixed(1);
+                const avgHours = (totalHours / total).toFixed(1);
+
+                document.getElementById('stat-avg-pain').innerText = avgPain + ' / 10';
+                document.getElementById('stat-avg-hours').innerText = avgHours + 'h';
+
+                const triggerCounts = {};
+                state.migraines.forEach(m => {
+                    if(m.triggers && Array.isArray(m.triggers)) {
+                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
+                    }
+                });
+                const topTrig = Object.keys(triggerCounts).sort((a,b) => triggerCounts[b] - triggerCounts[a])[0] || 'N/A';
+                document.getElementById('stat-top-trigger').innerText = topTrig.split(' ')[1] || topTrig;
+
+                document.getElementById('migPatternInsight').innerHTML = `
+                    Se han registrado <strong>${total} episodios</strong>. El detonante más recurrente detectado es <strong>${topTrig}</strong>. Se recomienda presentar este reporte a tu médico tratante.
+                `;
+            } else {
+                document.getElementById('stat-avg-pain').innerText = '0.0';
+                document.getElementById('stat-avg-hours').innerText = '0h';
+                document.getElementById('stat-top-trigger').innerText = 'N/A';
+                document.getElementById('migPatternInsight').innerText = 'Registra episodios para analizar patrones de salud.';
+            }
+
+            const container = document.getElementById('migraine-history-container');
+            if (total === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No hay episodios registrados.</p>`;
+                return;
+            }
+
+            container.innerHTML = state.migraines.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => `
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-8 h-8 rounded-xl font-bold text-xs text-white flex items-center justify-center ${m.pain >= 7 ? 'bg-red-500' : m.pain >= 4 ? 'bg-amber-500' : 'bg-blue-500'}">
+                                ${m.pain}
+                            </span>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Crisis de Migraña</h4>
+                                <p class="text-[10px] text-slate-400">${m.date} • ${m.time || ''} (${m.duration || 1} hrs)</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteMigraine('${m.id}')" class="text-slate-300 hover:text-red-500 text-xs">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                    ${m.symptoms && m.symptoms.length ? `<p class="text-[11px] text-slate-500">🤢 <strong>Síntomas:</strong> ${m.symptoms.join(', ')}</p>` : ''}
+                    ${m.triggers && m.triggers.length ? `<div class="flex flex-wrap gap-1 text-[10px]">${m.triggers.map(t => `<span class="bg-purple-50 dark:bg-purple-950/40 text-brand-purple px-2 py-0.5 rounded-md font-medium">${t}</span>`).join('')}</div>` : ''}
+                    ${m.meds ? `<p class="text-xs text-slate-600 dark:text-slate-300"><i class="fa-solid fa-pills text-brand-blue mr-1"></i> ${m.meds}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function handleAddDevotional(e) {
+            e.preventDefault();
+            const title = document.getElementById('dev-title').value.trim();
+            const body = document.getElementById('dev-text').value.trim();
+
+            if (!body) return;
+
+            db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
+            document.getElementById('dev-title').value = '';
+            document.getElementById('dev-text').value = '';
+        }
+
+        function deleteDevotional(id) { db.ref(`${userKey}/notes/${id}`).remove(); }
+
+        function renderDevotionals() {
+            const container = document.getElementById('devotional-entries-container');
+            if (state.devotionals.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Sin oraciones guardadas.</p>`;
+                return;
+            }
+
+            container.innerHTML = state.devotionals.map(d => `
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-brand-purple font-bold">${d.title || 'Reflexión'}</span>
+                        <span class="text-slate-400 text-[10px]">${d.date || ''}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed">${d.body || d.text}</p>
+                    <div class="flex justify-end">
+                        <button onclick="deleteDevotional('${d.id}')" class="text-slate-300 hover:text-red-500 text-xs">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* SECCIÓN DEL SÚPER */
+        function selectStore(storeKey) {
+            currentStoreKey = storeKey;
+            
+            document.querySelectorAll('.store-btn').forEach(b => {
+                b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
+            });
+            
+            const activeBtn = document.getElementById('btn-store-' + storeKey);
+            if(activeBtn) {
+                activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
+            }
+            renderSuper();
+        }
+
+        function handleAddSuperItem(e) {
+            e.preventDefault();
+            const name = document.getElementById('super-item-name').value.trim();
+            if(!name) return;
+
+            db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty: "", price: "", done: false });
+            document.getElementById('super-item-name').value = '';
+        }
+
+        function toggleSuperItem(key, currentDone) {
+            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ done: !currentDone });
+        }
+
+        function updateStoreField(key, field, val) {
+            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ [field]: val });
+        }
+
+        function deleteSuperItem(key) {
+            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
+        }
+
+        function clearCurrentStore() {
+            if(confirm('¿Deseas limpiar las cantidades y precios de esta tienda?')) {
+                const storeData = state.stores[currentStoreKey] || {};
+                Object.keys(storeData).forEach(key => {
+                    db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
+                });
+            }
+        }
+
+        function renderSuper() {
+            const container = document.getElementById('super-items-container');
+            const items = state.stores[currentStoreKey] || {};
+
+            if (Object.keys(items).length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Lista de tienda vacía.</p>`;
+                return;
+            }
+
+            container.innerHTML = Object.keys(items).map(key => {
+                const p = items[key];
+                return `
+                    <div class="super-product-item-wrapper bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-2 ${p.done ? 'opacity-60' : ''}">
+                        <div class="product-row-pill flex items-center gap-3 flex-1">
+                            <div class="pill-name-wrapper flex items-center gap-2 flex-1">
+                                <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleSuperItem('${key}', ${p.done})">
+                                <input type="text" class="pill-input pill-name-box flex-1 text-left ${p.done ? 'line-through' : ''}" value="${p.name || ''}" onchange="updateStoreField('${key}', 'name', this.value)">
+                            </div>
+                            <div class="pill-sub-group flex gap-2">
+                                <input type="text" class="pill-input pill-qty-box w-24" placeholder="Cant." value="${p.qty || ''}" onchange="updateStoreField('${key}', 'qty', this.value)">
+                                <input type="text" class="pill-input pill-price-box w-24" placeholder="Precio" value="${p.price || ''}" onchange="updateStoreField('${key}', 'price', this.value)">
+                            </div>
+                        </div>
+                        <button onclick="deleteSuperItem('${key}')" class="text-red-500 font-bold px-2 text-sm">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', checkActiveSession);
+    </script>
+</body>
+</html>
