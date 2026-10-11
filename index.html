@@ -105,7 +105,6 @@
             color: #f8fafc;
         }
 
-        /* Diseño de Píldoras del Súper en Móvil idéntico al diagrama adjunto */
         @media (max-width: 600px) {
             .super-product-item-wrapper {
                 flex-wrap: wrap;
@@ -159,7 +158,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
-        /* Chips interactivos de Síntomas y Desencadenantes */
+        /* Chips interactivos */
         .tag-chip {
             padding: 6px 12px;
             border-radius: 20px;
@@ -182,7 +181,6 @@
             border-color: #6366f1;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
@@ -191,7 +189,7 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 h-full flex flex-col md:flex-row overflow-hidden transition-colors duration-200">
 
-    <!-- AUTH OVERLAY DEGRADADO DE OMNIAPP -->
+    <!-- AUTH OVERLAY -->
     <div id="authOverlay" class="fixed inset-0 grad-bg z-[2000] flex flex-col justify-center items-center p-4 text-white overflow-y-auto">
         <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 text-slate-800 dark:text-slate-100 shadow-2xl text-center space-y-4">
             <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-20 h-20 rounded-full object-cover border-4 border-amber-400 mx-auto shadow-md" alt="Omniapp Logo">
@@ -256,12 +254,12 @@
         <!-- Sidebar / Navigation for Desktop -->
         <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
             <div>
-                <!-- Logo Brand Header -->
+                <!-- Logo Brand Header (SE ELIMINÓ LA INSIGNIA PWA) -->
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" alt="Omniapp Logo">
                     <div>
-                        <h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
-                            omniapp <span class="text-[10px] px-2 py-0.5 rounded-full grad-bg text-white font-normal">PWA</span>
+                        <h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-white">
+                            omniapp
                         </h1>
                         <p class="text-xs text-slate-500 dark:text-slate-400" id="sidebarUserReg">Reg: --------</p>
                     </div>
@@ -272,6 +270,11 @@
                     <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-calendar-check text-lg w-6"></i>
                         <span>Agenda & Horario</span>
+                    </button>
+
+                    <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                        <i class="fa-solid fa-pills text-lg w-6"></i>
+                        <span>Pastillero</span>
                     </button>
 
                     <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
@@ -293,6 +296,13 @@
 
             <!-- Footer actions desktop -->
             <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition">
+                    <span class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Activar Alarmas</span>
+                    </span>
+                    <i class="fa-solid fa-shield-halved"></i>
+                </button>
                 <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span class="flex items-center space-x-2">
                         <i class="fa-solid fa-moon text-brand-purple"></i>
@@ -321,6 +331,9 @@
                 </div>
 
                 <div class="flex items-center space-x-2">
+                    <button onclick="requestNotificationPermission()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Activar notificaciones">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
                     <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cambiar tema">
                         <i class="fa-solid fa-circle-half-stroke"></i>
                     </button>
@@ -411,9 +424,57 @@
                     </div>
                 </section>
 
-                <!-- SECTION 2: REGISTRO DE MIGRAÑA COMPLETO -->
+                <!-- SECTION 2: PASTILLERO (NUEVA SECCIÓN SOLICITADA) -->
+                <section id="tab-pastillero" class="tab-content hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-pills text-indigo-500"></i> Registrar Medicamento
+                        </h3>
+
+                        <form onsubmit="handleSavePill(event)" class="space-y-3 text-xs sm:text-sm">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre del medicamento</label>
+                                <input type="text" id="pillName" placeholder="Ej: Paracetamol, Ibuprofeno" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dosis</label>
+                                    <input type="text" id="pillDose" placeholder="Ej: 500 mg / 1 pastilla" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Cada cuántas horas</label>
+                                    <select id="pillInterval" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                        <option value="4">Cada 4 horas</option>
+                                        <option value="6">Cada 6 horas</option>
+                                        <option value="8" selected>Cada 8 horas</option>
+                                        <option value="12">Cada 12 horas</option>
+                                        <option value="24">Cada 24 horas (1 vez al día)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora de inicio / Primera toma</label>
+                                <input type="time" id="pillStartTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
+                                Guardar Medicamento
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-indigo-500"></i> Mis Medicamentos Programados
+                        </h3>
+                        <div id="pills-container" class="space-y-3"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: REGISTRO DE MIGRAÑA COMPLETO -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
-                    <!-- RESUMEN ESTADÍSTICO Y REPORTE MÉDICO -->
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2">
                             <i class="fa-solid fa-chart-line"></i> Estadísticas Mensuales & Análisis
@@ -447,14 +508,12 @@
                         </button>
                     </div>
 
-                    <!-- FORMULARIO DIRECTO EN PANTALLA -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
                             <i class="fa-solid fa-bolt text-red-500"></i> Registro de Episodio e Intensidad
                         </h3>
 
                         <form onsubmit="handleSaveMigraineDirect(event)" class="space-y-4 text-xs sm:text-sm">
-                            <!-- FECHA Y HORA EN FILA DE 2 COLUMNAS -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha</label>
@@ -466,13 +525,11 @@
                                 </div>
                             </div>
 
-                            <!-- DURACIÓN ABAJO ABARCANDO TODO EL ANCHO -->
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duración estimada (Horas)</label>
                                 <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                             </div>
 
-                            <!-- ESCALA DE DOLOR 1 A 10 -->
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad del dolor (1 = Leve, 10 = Insuportablemente fuerte)</label>
                                 <div class="flex justify-between gap-1 mt-1" id="painScaleBox">
@@ -489,7 +546,6 @@
                                 </div>
                             </div>
 
-                            <!-- SÍNTOMAS CHIPS MULTISELECT -->
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Síntomas experimentados</label>
                                 <div class="flex flex-wrap gap-1.5 mt-1" id="symptomsChipsBox">
@@ -503,7 +559,6 @@
                                 </div>
                             </div>
 
-                            <!-- DESENCADENANTES Y OTR0 CUSTOM TRIGGER -->
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desencadenantes probables</label>
                                 <div class="flex flex-wrap gap-1.5 mt-1" id="triggersChipsBox">
@@ -529,7 +584,6 @@
                         </form>
                     </div>
 
-                    <!-- HISTORIAL DE EPISODIOS -->
                     <div class="space-y-3">
                         <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                             <i class="fa-solid fa-clock-rotate-left text-brand-purple"></i> Historial de Crisis
@@ -538,7 +592,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: DEVOCIONAL -->
+                <!-- SECTION 4: DEVOCIONAL -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -568,9 +622,8 @@
                     </div>
                 </section>
 
-                <!-- SECTION 4: MI SÚPER (POR TIENDAS Y MÓVIL EXACTO) -->
+                <!-- SECTION 5: MI SÚPER -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
-                    <!-- Selector de Tienda -->
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow shrink-0">🥬 Mercado</button>
                         <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">🛒 Costco</button>
@@ -580,7 +633,6 @@
                         <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">⭐ Extras</button>
                     </div>
 
-                    <!-- Formularios de adición -->
                     <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-2">
                         <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                         <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0">
@@ -588,7 +640,6 @@
                         </button>
                     </form>
 
-                    <!-- Lista de Productos con Disposición Móvil Exacta -->
                     <div id="super-items-container" class="space-y-3"></div>
 
                     <button onclick="clearCurrentStore()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow">
@@ -598,23 +649,27 @@
 
             </div>
 
-            <!-- Mobile Bottom Nav Bar fixed -->
-            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-2 flex justify-around items-center z-30 shadow-lg">
-                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400 hover:text-brand-purple transition">
-                    <i class="fa-solid fa-calendar-check text-lg"></i>
-                    <span class="text-[10px] font-medium mt-1">Agenda</span>
+            <!-- Mobile Bottom Nav Bar -->
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg">
+                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-calendar-check text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Agenda</span>
                 </button>
-                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400 hover:text-brand-purple transition">
-                    <i class="fa-solid fa-brain text-lg"></i>
-                    <span class="text-[10px] font-medium mt-1">Migraña</span>
+                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-pills text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Pastillero</span>
                 </button>
-                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400 hover:text-brand-purple transition">
-                    <i class="fa-solid fa-book-bible text-lg"></i>
-                    <span class="text-[10px] font-medium mt-1">Devocional</span>
+                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-brain text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Migraña</span>
                 </button>
-                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-2 text-slate-400 hover:text-brand-purple transition">
-                    <i class="fa-solid fa-cart-shopping text-lg"></i>
-                    <span class="text-[10px] font-medium mt-1">Súper</span>
+                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-book-bible text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Devocional</span>
+                </button>
+                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Súper</span>
                 </button>
             </nav>
         </main>
@@ -699,8 +754,63 @@
             horario: [],
             migraines: [],
             devotionals: [],
+            pills: [],
             stores: {}
         };
+
+        /* SISTEMA DE NOTIFICACIONES MÓVILES / SEGUNDO PLANO */
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert("Este navegador no soporta notificaciones de sistema.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    alert("¡Notificaciones activadas con éxito! Te avisaremos cuando sea hora de tus medicamentos o citas.");
+                    sendSystemNotification("Omniapp Recordatorios", "Notificaciones activadas para citas y medicamentos.");
+                } else {
+                    alert("Para recibir alertas con la app cerrada, debes habilitar los permisos en la configuración de tu navegador.");
+                }
+            });
+        }
+
+        function sendSystemNotification(title, body) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification(title, {
+                            body: body,
+                            icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
+                            badge: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp',
+                            vibrate: [200, 100, 200]
+                        });
+                    });
+                } else {
+                    new Notification(title, {
+                        body: body,
+                        icon: 'https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp'
+                    });
+                }
+            }
+        }
+
+        /* REGISTRO DE SERVICE WORKER PARA SEGUNDO PLANO */
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
+        }
+
+        /* VERIFICADOR PERIÓDICO DE ALARMAS DE MEDICAMENTOS Y CITAS */
+        setInterval(() => {
+            const now = new Date();
+            const currentHHMM = now.toTimeString().substring(0,5);
+
+            // Verificar medicamentos
+            state.pills.forEach(pill => {
+                if(pill.startTime === currentHHMM) {
+                    sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
+                }
+            });
+        }, 60000);
 
         function switchAuthTab(tab) {
             if(tab === 'login') {
@@ -819,6 +929,7 @@
             document.getElementById('task-date').value = todayInput;
             document.getElementById('migDate').value = todayInput;
             document.getElementById('migTime').value = new Date().toTimeString().substring(0,5);
+            document.getElementById('pillStartTime').value = new Date().toTimeString().substring(0,5);
         }
 
         function listenToDatabase() {
@@ -832,6 +943,12 @@
                 const data = snapshot.val() || {};
                 state.horario = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderHorario();
+            });
+
+            db.ref(`${userKey}/pills`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.pills = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                renderPills();
             });
 
             db.ref(`${userKey}/migraines`).on('value', snapshot => {
@@ -1005,6 +1122,57 @@
             container.innerHTML = html;
         }
 
+        /* LOGICA PASTILLERO */
+        function handleSavePill(e) {
+            e.preventDefault();
+            const name = document.getElementById('pillName').value.trim();
+            const dose = document.getElementById('pillDose').value.trim();
+            const interval = document.getElementById('pillInterval').value;
+            const startTime = document.getElementById('pillStartTime').value;
+
+            if(!name || !dose || !startTime) return;
+
+            db.ref(`${userKey}/pills`).push({ name, dose, interval, startTime }, (err) => {
+                if(!err) {
+                    document.getElementById('pillName').value = '';
+                    document.getElementById('pillDose').value = '';
+                    alert('Medicamento agregado exitosamente a tu pastillero.');
+                }
+            });
+        }
+
+        function deletePill(id) {
+            db.ref(`${userKey}/pills/${id}`).remove();
+        }
+
+        function renderPills() {
+            const container = document.getElementById('pills-container');
+            if (state.pills.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No tienes medicamentos registrados.</p>`;
+                return;
+            }
+
+            container.innerHTML = state.pills.map(p => `
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
+                            💊
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${p.name}</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">${p.dose} • Cada ${p.interval} hrs</p>
+                            <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md mt-1 inline-block">
+                                ⏰ Primera toma: ${p.startTime} hrs
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="deletePill('${p.id}')" class="text-slate-300 hover:text-red-500 transition p-2">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
         /* LÓGICA COMPLETA DE MIGRAÑA */
         function selectPainLevel(level, btn) {
             selectedPainLevel = level;
@@ -1140,7 +1308,7 @@
             `).join('');
         }
 
-        /* SECCIÓN DEL SÚPER CON PÍLDORAS RESPONSIVAS AJUSTADAS */
+        /* SECCIÓN DEL SÚPER */
         function selectStore(storeKey) {
             currentStoreKey = storeKey;
             document.querySelectorAll('.store-btn').forEach(b => {
