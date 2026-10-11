@@ -12,16 +12,12 @@
     <meta name="application-name" content="Omniapp">
     <meta name="description" content="Agenda, pastillero, control de migraña, devocional y súper en un solo lugar.">
 
-    <!-- Favicons (locales) -->
     <link rel="icon" type="image/png" sizes="96x96" href="./icons/favicon-96x96.png">
     <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg">
     <link rel="shortcut icon" href="./icons/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-
-    <!-- Manifest PWA -->
     <link rel="manifest" href="./manifest.json">
 
-    <!-- Open Graph (para compartir en redes) -->
     <meta property="og:title" content="Omniapp — Tu Centro de Control">
     <meta property="og:description" content="Agenda, pastillero, control de migraña, devocional y súper en un solo lugar.">
     <meta property="og:image" content="./icons/web-app-manifest-512x512.png">
@@ -31,6 +27,9 @@
     <!-- Firebase Web SDK (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <!-- JSZip (para generar el backup ZIP) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +58,6 @@
         }
     </script>
     
-    <!-- Font Awesome Icons & Google Font DM Sans -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,7 +73,6 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
         }
 
-        /* Checkbox Círculo Personalizado */
         .custom-circle-check {
             width: 22px;
             height: 22px;
@@ -105,7 +102,6 @@
             transform: translate(-50%, -50%);
         }
 
-        /* Píldoras de Productos del Súper */
         .pill-input {
             border-radius: 9999px;
             background-color: #d0d7de;
@@ -152,7 +148,6 @@
             }
         }
 
-        /* Botones Escala de Dolor (Migraña) */
         .pain-btn {
             flex: 1;
             padding: 8px 0;
@@ -175,7 +170,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
-        /* Chips interactivos */
         .tag-chip {
             padding: 6px 12px;
             border-radius: 20px;
@@ -198,7 +192,6 @@
             border-color: #6366f1;
         }
 
-        /* Chips Selección de Días en Horario Modal */
         .day-chip {
             padding: 6px 10px;
             border-radius: 10px;
@@ -222,9 +215,7 @@
             border-color: #6366f1;
         }
 
-        /* ============================
-           TOASTS (notificaciones UI)
-           ============================ */
+        /* TOASTS */
         #toast-container {
             position: fixed;
             top: 1rem;
@@ -275,7 +266,6 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
     </style>
 
-    <!-- Detectar tema ANTES de cargar para evitar flash -->
     <script>
         (function() {
             try {
@@ -285,7 +275,6 @@
                 } else if (savedTheme === 'light') {
                     document.documentElement.classList.remove('dark');
                 } else {
-                    // Sin preferencia guardada: usar la del sistema
                     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                         document.documentElement.classList.add('dark');
                     }
@@ -298,7 +287,6 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 h-full flex flex-col md:flex-row overflow-hidden transition-colors duration-200">
 
-    <!-- TOASTS CONTAINER -->
     <div id="toast-container"></div>
 
     <!-- AUTH OVERLAY -->
@@ -363,10 +351,8 @@
     <!-- MAIN LAYOUT -->
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
-        <!-- Sidebar / Navigation for Desktop -->
         <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
             <div>
-                <!-- Logo Brand Header -->
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" alt="Omniapp Logo">
                     <div>
@@ -377,7 +363,6 @@
                     </div>
                 </div>
 
-                <!-- Nav Links -->
                 <nav class="space-y-1.5" id="desktop-nav">
                     <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-calendar-check text-lg w-6"></i>
@@ -406,7 +391,6 @@
                 </nav>
             </div>
 
-            <!-- Footer actions desktop -->
             <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
                 <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition">
                     <span class="flex items-center space-x-2">
@@ -414,6 +398,13 @@
                         <span>Activar Alarmas</span>
                     </span>
                     <i class="fa-solid fa-shield-halved"></i>
+                </button>
+                <button onclick="exportAllData()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 transition">
+                    <span class="flex items-center space-x-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Exportar datos</span>
+                    </span>
+                    <i class="fa-solid fa-file-zipper"></i>
                 </button>
                 <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span class="flex items-center space-x-2">
@@ -429,10 +420,8 @@
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="flex-1 flex flex-col h-full overflow-hidden relative">
             
-            <!-- Top App Bar -->
             <header class="grad-bg text-white px-4 py-3 sm:px-6 flex justify-between items-center shadow-md z-10 shrink-0">
                 <div class="flex items-center space-x-3">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-8 h-8 rounded-full border border-amber-400 md:hidden" alt="Logo">
@@ -443,6 +432,9 @@
                 </div>
 
                 <div class="flex items-center space-x-2">
+                    <button onclick="exportAllData()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Exportar datos">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
                     <button onclick="requestNotificationPermission()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Activar notificaciones">
                         <i class="fa-solid fa-bell"></i>
                     </button>
@@ -455,7 +447,6 @@
                 </div>
             </header>
 
-            <!-- View Sections Container -->
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6 space-y-6" id="app-viewport">
                 
                 <!-- SECTION 1: AGENDA & HORARIO -->
@@ -867,7 +858,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT & FIREBASE INTEGRATION -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
@@ -899,7 +889,6 @@
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
 
-            // Icono según el tipo
             const icons = {
                 success: '✅',
                 error: '❌',
@@ -914,21 +903,234 @@
 
             container.appendChild(toast);
 
-            // Auto-eliminar
             setTimeout(() => {
                 toast.classList.add('toast-out');
                 setTimeout(() => toast.remove(), 300);
             }, duration);
         }
 
-        // Alias para usar como si fuera alert pero elegante
         function toastAlert(message, type = 'info') {
             showToast(message, type, 3500);
         }
 
-        // Confirm personalizado usando toast + confirm nativo
-        function toastConfirm(message) {
-            return confirm(message);
+        /* =========================================
+           EXPORTAR DATOS (BACKUP ZIP con CSVs)
+           ========================================= */
+
+        /**
+         * Convierte un array de objetos a CSV string
+         * Escapa valores con comillas si contienen comas, comillas o saltos de línea
+         */
+        function arrayToCSV(rows, headers) {
+            if (!rows || rows.length === 0) {
+                return headers ? headers.join(',') + '\n' : '';
+            }
+
+            // Si no se pasan headers, usarlos del primer objeto
+            const allHeaders = headers || Object.keys(rows[0]);
+
+            const escapeCSV = (value) => {
+                if (value === null || value === undefined) return '';
+                const str = String(value);
+                // Si tiene coma, comilla, salto de línea → envolver en comillas y duplicar comillas
+                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+                    return '"' + str.replace(/"/g, '""') + '"';
+                }
+                return str;
+            };
+
+            const headerLine = allHeaders.map(escapeCSV).join(',');
+            const dataLines = rows.map(row => 
+                allHeaders.map(h => escapeCSV(row[h])).join(',')
+            );
+
+            return [headerLine, ...dataLines].join('\n');
+        }
+
+        /**
+         * Genera un timestamp para el nombre del archivo
+         */
+        function getBackupTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        }
+
+        /**
+         * Exporta TODOS los datos del usuario actual a un ZIP con múltiples CSVs
+         */
+        async function exportAllData() {
+            // 1. Verificar que hay sesión activa
+            if (!userKey || !currentUserData) {
+                toastAlert('Debes iniciar sesión para exportar datos.', 'warning');
+                return;
+            }
+
+            // 2. Verificar que JSZip está cargado
+            if (typeof JSZip === 'undefined') {
+                toastAlert('Error: la librería de compresión no cargó. Recarga la página.', 'error');
+                return;
+            }
+
+            // 3. Avisar al usuario
+            showToast('Generando backup...', 'info', 2000);
+
+            try {
+                const zip = new JSZip();
+                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
+
+                // ============ USUARIO ============
+                const userCSV = arrayToCSV([{
+                    firstName: currentUserData.firstName || '',
+                    lastName: currentUserData.lastName || '',
+                    reg: currentUserData.reg || '',
+                    tieneHash: currentUserData.passHash ? 'Sí' : 'No'
+                }], ['firstName', 'lastName', 'reg', 'tieneHash']);
+                folder.file('usuario.csv', '\uFEFF' + userCSV); // BOM para Excel
+
+                // ============ TAREAS ============
+                if (state.tasks.length > 0) {
+                    const tasks = state.tasks.map(t => ({
+                        descripcion: t.desc || '',
+                        prioridad: t.priority || '',
+                        categoria: t.category || '',
+                        fecha: t.date || '',
+                        completada: t.completed ? 'Sí' : 'No'
+                    }));
+                    folder.file('tareas.csv', '\uFEFF' + arrayToCSV(tasks, ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']));
+                } else {
+                    folder.file('tareas.csv', '\uFEFF' + 'descripcion,prioridad,categoria,fecha,completada\n');
+                }
+
+                // ============ HORARIO ============
+                if (state.horario.length > 0) {
+                    const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
+                    const horario = state.horario.map(h => ({
+                        dia: dayNames[h.day] || h.day,
+                        hora: h.hour || '',
+                        actividad: h.activity || ''
+                    }));
+                    folder.file('horario.csv', '\uFEFF' + arrayToCSV(horario, ['dia', 'hora', 'actividad']));
+                } else {
+                    folder.file('horario.csv', '\uFEFF' + 'dia,hora,actividad\n');
+                }
+
+                // ============ PASTILLAS ============
+                if (state.pills.length > 0) {
+                    const pills = state.pills.map(p => ({
+                        nombre: p.name || '',
+                        dosis: p.dose || '',
+                        intervalo_horas: p.interval || '',
+                        hora_inicio: p.startTime || ''
+                    }));
+                    folder.file('pastillas.csv', '\uFEFF' + arrayToCSV(pills, ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']));
+                } else {
+                    folder.file('pastillas.csv', '\uFEFF' + 'nombre,dosis,intervalo_horas,hora_inicio\n');
+                }
+
+                // ============ MIGRAÑA ============
+                if (state.migraines.length > 0) {
+                    const migraines = state.migraines
+                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+                        .map(m => ({
+                            fecha: m.date || '',
+                            hora: m.time || '',
+                            dolor: m.pain || '',
+                            duracion_horas: m.duration || '',
+                            sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
+                            desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
+                            medicamento: m.meds || ''
+                        }));
+                    folder.file('migrana.csv', '\uFEFF' + arrayToCSV(migraines, ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']));
+                } else {
+                    folder.file('migrana.csv', '\uFEFF' + 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n');
+                }
+
+                // ============ DEVOCIONAL ============
+                if (state.devotionals.length > 0) {
+                    const devotionals = state.devotionals.map(d => ({
+                        titulo: d.title || '',
+                        texto: d.body || d.text || '',
+                        fecha: d.date || ''
+                    }));
+                    folder.file('devocional.csv', '\uFEFF' + arrayToCSV(devotionals, ['titulo', 'texto', 'fecha']));
+                } else {
+                    folder.file('devocional.csv', '\uFEFF' + 'titulo,texto,fecha\n');
+                }
+
+                // ============ SÚPER ============
+                const superRows = [];
+                const storeNames = {
+                    mercado: 'Mercado',
+                    costco: 'Costco',
+                    sams: "Sam's",
+                    zorro: 'El Zorro',
+                    monarca: 'Monarca',
+                    extras: 'Extras'
+                };
+                Object.keys(state.stores || {}).forEach(storeKey => {
+                    const items = state.stores[storeKey] || {};
+                    Object.keys(items).forEach(itemKey => {
+                        const item = items[itemKey];
+                        superRows.push({
+                            tienda: storeNames[storeKey] || storeKey,
+                            producto: item.name || '',
+                            cantidad: item.qty || '',
+                            precio: item.price || '',
+                            comprado: item.done ? 'Sí' : 'No'
+                        });
+                    });
+                });
+                if (superRows.length > 0) {
+                    folder.file('super.csv', '\uFEFF' + arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']));
+                } else {
+                    folder.file('super.csv', '\uFEFF' + 'tienda,producto,cantidad,precio,comprado\n');
+                }
+
+                // ============ README ============
+                folder.file('LEEME.txt', 
+`Omniapp - Backup de datos
+=========================
+Usuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}
+Reg: ${currentUserData.reg || ''}
+Fecha del backup: ${new Date().toLocaleString('es-ES')}
+
+ARCHIVOS INCLUIDOS:
+- usuario.csv      → Datos de tu cuenta
+- tareas.csv       → Todas tus tareas del Planner
+- horario.csv      → Bloques de tu horario semanal
+- pastillas.csv    → Medicamentos del pastillero
+- migrana.csv      → Historial completo de migrañas
+- devocional.csv   → Tus reflexiones guardadas
+- super.csv        → Productos de tus tiendas
+
+CONSEJOS:
+- Los archivos están en formato CSV
+- Puedes abrirlos con Excel, Google Sheets o Numbers
+- Si ves caracteres raros (Ã± en vez de ñ), importa el CSV como UTF-8
+  (o simplemente abre con Google Sheets, que lo detecta solo)
+- Guarda este ZIP en un lugar seguro
+
+Generado automáticamente por Omniapp
+`);
+
+                // 4. Generar el ZIP
+                const blob = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast('¡Backup descargado exitosamente!', 'success', 4000);
+
+            } catch (err) {
+                console.error('Error al exportar:', err);
+                toastAlert('Error al generar el backup. Revisa la consola.', 'error');
+            }
         }
 
         /* =========================================
@@ -1019,17 +1221,11 @@
             stores: {}
         };
 
-        /* =========================================
-           MODO OSCURO PERSISTENTE
-           ========================================= */
-
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.toggle('dark');
-            // Guardar preferencia
             localStorage.setItem('omniapp_theme', isDark ? 'dark' : 'light');
         }
 
-        /* NOTIFICACIONES */
         function requestNotificationPermission() {
             if (!("Notification" in window)) {
                 toastAlert("Este navegador no soporta notificaciones de sistema.", 'warning');
@@ -1069,7 +1265,6 @@
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
         }
 
-        /* LÓGICA DINÁMICA DEL PASTILLERO */
         function getNextPillTime(startTime, intervalHours) {
             const now = new Date();
             const [startH, startM] = startTime.split(':').map(Number);
@@ -1332,7 +1527,6 @@
             const mBtn = document.getElementById('m-nav-' + tabName);
             if (mBtn) mBtn.classList.add('text-brand-purple', 'font-bold');
 
-            // Scroll suave al inicio
             const viewport = document.getElementById('app-viewport');
             if (viewport) {
                 viewport.scrollTo({ top: 0, behavior: 'smooth' });
