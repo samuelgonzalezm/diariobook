@@ -254,7 +254,7 @@
         <!-- Sidebar / Navigation for Desktop -->
         <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
             <div>
-                <!-- Logo Brand Header (SE ELIMINÓ LA INSIGNIA PWA) -->
+                <!-- Logo Brand Header -->
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" alt="Omniapp Logo">
                     <div>
@@ -424,7 +424,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 2: PASTILLERO (NUEVA SECCIÓN SOLICITADA) -->
+                <!-- SECTION 2: PASTILLERO -->
                 <section id="tab-pastillero" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -473,7 +473,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: REGISTRO DE MIGRAÑA COMPLETO -->
+                <!-- SECTION 3: REGISTRO DE MIGRAÑA -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2">
@@ -624,18 +624,20 @@
 
                 <!-- SECTION 5: MI SÚPER -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
+                    <!-- Selector de Tienda (Ajustado dinámicamente) -->
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
-                        <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow shrink-0">🥬 Mercado</button>
-                        <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">🛒 Costco</button>
-                        <button onclick="selectStore('sams')" id="btn-store-sams" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">📦 Sam's</button>
-                        <button onclick="selectStore('zorro')" id="btn-store-zorro" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">🦊 El Zorro</button>
-                        <button onclick="selectStore('monarca')" id="btn-store-monarca" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">👑 Monarca</button>
-                        <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">⭐ Extras</button>
+                        <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
+                        <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🛒 Costco</button>
+                        <button onclick="selectStore('sams')" id="btn-store-sams" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">📦 Sam's</button>
+                        <button onclick="selectStore('zorro')" id="btn-store-zorro" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🦊 El Zorro</button>
+                        <button onclick="selectStore('monarca')" id="btn-store-monarca" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">👑 Monarca</button>
+                        <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">⭐ Extras</button>
                     </div>
 
-                    <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex gap-2">
-                        <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0">
+                    <!-- Formulario de nuevo producto ajustado a la pantalla móvil -->
+                    <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 overflow-hidden">
+                        <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 min-w-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <button type="submit" class="grad-bg text-white px-3 sm:px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0 whitespace-nowrap">
                             + AGREGAR
                         </button>
                     </form>
@@ -758,7 +760,7 @@
             stores: {}
         };
 
-        /* SISTEMA DE NOTIFICACIONES MÓVILES / SEGUNDO PLANO */
+        /* NOTIFICACIONES */
         function requestNotificationPermission() {
             if (!("Notification" in window)) {
                 alert("Este navegador no soporta notificaciones de sistema.");
@@ -794,17 +796,14 @@
             }
         }
 
-        /* REGISTRO DE SERVICE WORKER PARA SEGUNDO PLANO */
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
         }
 
-        /* VERIFICADOR PERIÓDICO DE ALARMAS DE MEDICAMENTOS Y CITAS */
         setInterval(() => {
             const now = new Date();
             const currentHHMM = now.toTimeString().substring(0,5);
 
-            // Verificar medicamentos
             state.pills.forEach(pill => {
                 if(pill.startTime === currentHHMM) {
                     sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
@@ -1308,17 +1307,19 @@
             `).join('');
         }
 
-        /* SECCIÓN DEL SÚPER */
+        /* SECCIÓN DEL SÚPER - CORRECCIÓN DE PÍLDORAS DINÁMICAS */
         function selectStore(storeKey) {
             currentStoreKey = storeKey;
+            
+            // Restablecer estilos inactivos en todos los botones
             document.querySelectorAll('.store-btn').forEach(b => {
-                b.classList.replace('bg-indigo-600', 'bg-slate-200');
-                b.classList.replace('text-white', 'text-slate-600');
+                b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
             });
+            
+            // Aplicar estilo activo únicamente a la casilla seleccionada
             const activeBtn = document.getElementById('btn-store-' + storeKey);
             if(activeBtn) {
-                activeBtn.classList.replace('bg-slate-200', 'bg-indigo-600');
-                activeBtn.classList.replace('text-slate-600', 'text-white');
+                activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
             }
             renderSuper();
         }
