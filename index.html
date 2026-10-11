@@ -44,19 +44,12 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f0f3ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            purple: '#8b5cf6',
-                            blue: '#3b82f6',
-                            darkPurple: '#2e1065'
+                            50: '#f0f3ff', 100: '#e0e7ff', 500: '#6366f1',
+                            600: '#4f46e5', 700: '#4338ca', purple: '#8b5cf6',
+                            blue: '#3b82f6', darkPurple: '#2e1065'
                         }
                     },
-                    fontFamily: {
-                        sans: ['DM Sans', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['DM Sans', 'sans-serif'] }
                 }
             }
         }
@@ -78,49 +71,26 @@
         }
 
         .custom-circle-check {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid #cbd5e1;
-            appearance: none;
-            -webkit-appearance: none;
-            outline: none;
-            cursor: pointer;
-            background: #fff;
-            transition: all 0.2s;
-            flex-shrink: 0;
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid #cbd5e1; appearance: none; -webkit-appearance: none;
+            outline: none; cursor: pointer; background: #fff;
+            transition: all 0.2s; flex-shrink: 0;
         }
         .custom-circle-check:checked {
-            background: #6366f1;
-            border-color: #6366f1;
-            position: relative;
+            background: #6366f1; border-color: #6366f1; position: relative;
         }
         .custom-circle-check:checked::after {
-            content: '✓';
-            color: #fff;
-            font-size: 12px;
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            content: '✓'; color: #fff; font-size: 12px; font-weight: 900;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
 
         .pill-input {
-            border-radius: 9999px;
-            background-color: #d0d7de;
-            border: none;
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #0f172a;
-            outline: none;
-            text-align: center;
+            border-radius: 9999px; background-color: #d0d7de;
+            border: none; padding: 8px 14px; font-size: 0.85rem;
+            font-weight: 700; color: #0f172a; outline: none; text-align: center;
         }
-        .dark .pill-input {
-            background-color: #334155;
-            color: #f8fafc;
-        }
+        .dark .pill-input { background-color: #334155; color: #f8fafc; }
 
         @media (max-width: 600px) {
             .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -131,54 +101,33 @@
         }
 
         .pain-btn {
-            flex: 1;
-            padding: 8px 0;
-            border-radius: 8px;
-            border: 1.5px solid #e2e8f0;
-            background: #fafafc;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
+            flex: 1; padding: 8px 0; border-radius: 8px;
+            border: 1.5px solid #e2e8f0; background: #fafafc;
+            font-weight: 800; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.2s; text-align: center;
         }
         .dark .pain-btn { background: #1e293b; border-color: #334155; }
         .pain-btn.selected { border-color: transparent; transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
         .tag-chip {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: #fafafc;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #1e293b;
+            padding: 6px 12px; border-radius: 20px;
+            border: 1px solid #e2e8f0; background: #fafafc;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; color: #1e293b;
         }
         .dark .tag-chip { background: #1e293b; border-color: #334155; color: #f8fafc; }
         .tag-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
 
         .day-chip {
-            padding: 6px 10px;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #475569;
-            text-align: center;
+            padding: 6px 10px; border-radius: 10px;
+            border: 1px solid #e2e8f0; background: #f8fafc;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; color: #475569; text-align: center;
         }
         .dark .day-chip { background: #1e293b; border-color: #334155; color: #cbd5e1; }
         .day-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
 
-        /* ==========================================
-           PASO 3: ANIMACIONES
-           ========================================== */
-
-        /* Pestañas: fade + slide */
+        /* ANIMACIONES */
         .tab-content:not(.hidden) {
             animation: tabFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -187,16 +136,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Items de lista escalonados */
-        .stagger-item {
-            animation: staggerFadeIn 0.3s ease-out backwards;
-        }
+        .stagger-item { animation: staggerFadeIn 0.3s ease-out backwards; }
         @keyframes staggerFadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modal: fade + zoom */
         #modal-horario:not(.hidden) > div {
             animation: modalZoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -205,24 +150,13 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Botones con escala al presionar */
-        button:active {
-            transform: scale(0.97);
-            transition: transform 0.1s;
-        }
+        button:active { transform: scale(0.97); transition: transform 0.1s; }
 
-        /* Cards hover (solo desktop) */
         @media (hover: hover) {
-            .hover-card {
-                transition: box-shadow 0.2s, transform 0.2s;
-            }
-            .hover-card:hover {
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                transform: translateY(-1px);
-            }
+            .hover-card { transition: box-shadow 0.2s, transform 0.2s; }
+            .hover-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
         }
 
-        /* Accesibilidad: respetar preferencia del usuario */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -230,35 +164,20 @@
             }
         }
 
-        /* ==========================================
-           TOASTS
-           ========================================== */
+        /* TOASTS */
         #toast-container {
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            pointer-events: none;
-            max-width: 90vw;
-            width: 22rem;
+            position: fixed; top: 1rem; left: 50%;
+            transform: translateX(-50%); z-index: 9999;
+            display: flex; flex-direction: column; gap: 0.5rem;
+            pointer-events: none; max-width: 90vw; width: 22rem;
         }
         .toast {
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.85rem;
-            font-weight: 600;
+            background: #1e293b; color: #f8fafc;
+            padding: 0.75rem 1rem; border-radius: 0.75rem;
+            font-size: 0.85rem; font-weight: 600;
             box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            opacity: 0;
-            transform: translateY(-12px);
+            display: flex; align-items: center; gap: 0.6rem;
+            opacity: 0; transform: translateY(-12px);
             animation: toast-in 0.3s forwards;
             pointer-events: auto;
         }
@@ -271,68 +190,195 @@
         @keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
         @keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
 
-        /* ==========================================
-           PASO 5: CHAT (OmniChat)
-           ========================================== */
-        #chat-messages {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        /* CHAT */
+        #chat-messages { display: flex; flex-direction: column; gap: 0.5rem; }
         .chat-bubble {
-            max-width: 80%;
-            padding: 0.6rem 0.9rem;
-            border-radius: 1rem;
-            font-size: 0.875rem;
-            line-height: 1.4;
-            word-wrap: break-word;
-            position: relative;
-            animation: staggerFadeIn 0.25s ease-out;
+            max-width: 80%; padding: 0.6rem 0.9rem;
+            border-radius: 1rem; font-size: 0.875rem;
+            line-height: 1.4; word-wrap: break-word;
+            position: relative; animation: staggerFadeIn 0.25s ease-out;
         }
         .chat-bubble.mine {
             align-self: flex-end;
             background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-            color: white;
-            border-bottom-right-radius: 4px;
+            color: white; border-bottom-right-radius: 4px;
         }
-        .chat-bubble-time {
-            font-size: 0.6rem;
-            opacity: 0.7;
-            margin-top: 0.25rem;
-            text-align: right;
+        .chat-bubble-time { font-size: 0.6rem; opacity: 0.7; margin-top: 0.25rem; text-align: right; }
+        .chat-empty { text-align: center; padding: 3rem 1rem; color: #94a3b8; font-size: 0.85rem; }
+
+        /* OMNIban */
+        .omniban-card { position: relative; overflow: hidden; }
+        .omniban-card::before {
+            content: ''; position: absolute;
+            left: 0; top: 0; bottom: 0; width: 4px;
+            background: #6366f1;
         }
-        .chat-empty {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #94a3b8;
-            font-size: 0.85rem;
+        .omniban-card.completed::before { background: #10b981; }
+        .omniban-card.completed { opacity: 0.7; }
+
+        /* ==========================================
+           SOLUCIÓN SIDEBAR EN MÓVIL - CRÍTICO
+           ========================================== */
+        /* Ocultar SIEMPRE el sidebar en móvil */
+        @media (max-width: 767px) {
+            aside.sidebar-desktop {
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+                position: absolute !important;
+                left: -9999px !important;
+            }
+            /* Asegurar que el contenido ocupe el 100% */
+            main {
+                width: 100% !important;
+            }
         }
 
         /* ==========================================
-           PASO 6: OmniBan
+           FAB (Botón flotante) + DRAWER MÓVIL
            ========================================== */
-        .omniban-card {
-            position: relative;
-            overflow: hidden;
+        #fab-menu {
+            display: none;
+            position: fixed;
+            bottom: 5.5rem;
+            right: 1rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            z-index: 40;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1.25rem;
         }
-        .omniban-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #6366f1;
-        }
-        .omniban-card.completed::before {
-            background: #10b981;
-        }
-        .omniban-card.completed { opacity: 0.7; }
+        #fab-menu:active { transform: scale(0.95); }
+        #fab-menu.rotated i { transform: rotate(45deg); }
+        #fab-menu i { transition: transform 0.3s; }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
+        @media (max-width: 767px) {
+            #fab-menu { display: flex; }
+        }
+
+        /* Drawer móvil */
+        #mobile-drawer-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #mobile-drawer-overlay.open {
+            display: block;
+            opacity: 1;
+        }
+
+        #mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 82vw;
+            max-width: 320px;
+            background: #ffffff;
+            z-index: 51;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 1.25rem;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+        }
+        .dark #mobile-drawer { background: #0f172a; }
+        #mobile-drawer.open { transform: translateX(0); }
+
+        #mobile-drawer .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dark #mobile-drawer .drawer-header { border-color: #1e293b; }
+
+        .drawer-nav-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            transition: all 0.2s;
+            text-align: left;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .dark .drawer-nav-btn { color: #cbd5e1; }
+        .drawer-nav-btn:hover { background: #f1f5f9; }
+        .dark .drawer-nav-btn:hover { background: #1e293b; }
+        .drawer-nav-btn.active {
+            background: #eef2ff;
+            color: #6366f1;
+            font-weight: 700;
+        }
+        .dark .drawer-nav-btn.active { background: #1e1b4b; color: #a5b4fc; }
+
+        .drawer-section-title {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            padding: 0.75rem 1rem 0.25rem;
+        }
+
+        /* ==========================================
+           DASHBOARD "INICIO"
+           ========================================== */
+        .home-card {
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .home-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .home-hour {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
     </style>
 
     <script>
@@ -416,7 +462,8 @@
     <!-- MAIN LAYOUT -->
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
-        <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
+        <!-- SIDEBAR DESKTOP (oculto en móvil vía CSS) -->
+        <aside class="sidebar-desktop hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
             <div class="overflow-y-auto">
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" alt="Omniapp Logo">
@@ -427,36 +474,34 @@
                 </div>
 
                 <nav class="space-y-1.5" id="desktop-nav">
+                    <button onclick="switchTab('inicio')" id="d-nav-inicio" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
+                        <i class="fa-solid fa-house text-lg w-6"></i>
+                        <span>Inicio</span>
+                    </button>
                     <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-calendar-check text-lg w-6"></i>
                         <span>Agenda & Horario</span>
                     </button>
-
                     <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-pills text-lg w-6"></i>
                         <span>Pastillero</span>
                     </button>
-
                     <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-brain text-lg w-6"></i>
                         <span>Control Migraña</span>
                     </button>
-
                     <button onclick="switchTab('chat')" id="d-nav-chat" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-comments text-lg w-6"></i>
                         <span>OmniChat</span>
                     </button>
-
                     <button onclick="switchTab('omniban')" id="d-nav-omniban" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-hands-praying text-lg w-6"></i>
                         <span>OmniBan</span>
                     </button>
-
                     <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-book-bible text-lg w-6"></i>
                         <span>Devocional</span>
                     </button>
-
                     <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-cart-shopping text-lg w-6"></i>
                         <span>Mi Súper</span>
@@ -520,10 +565,79 @@
                 </div>
             </header>
 
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 md:pb-6 space-y-6" id="app-viewport">
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-32 md:pb-6 space-y-6" id="app-viewport">
                 
-                <!-- SECTION 1: AGENDA & HORARIO -->
-                <section id="tab-agenda" class="tab-content space-y-6">
+                <!-- ==================== INICIO ==================== -->
+                <section id="tab-inicio" class="tab-content space-y-6">
+                    <div class="text-center py-4">
+                        <h2 id="home-greeting" class="text-2xl font-black text-slate-800 dark:text-white mb-1">¡Hola!</h2>
+                        <p id="home-date" class="text-xs text-slate-500 dark:text-slate-400 mb-4">Cargando...</p>
+                        
+                        <div class="flex justify-center items-baseline gap-2">
+                            <div id="home-hour" class="home-hour">--:--</div>
+                            <div id="home-ampm" class="text-lg font-bold text-slate-400">--</div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2 flex items-center justify-center gap-1.5">
+                            <span class="pulse-dot"></span> En vivo
+                        </p>
+                    </div>
+
+                    <!-- Actividad AHORA -->
+                    <div id="home-now-card" class="home-card grad-bg text-white">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-wider opacity-90">📍 Ahora</span>
+                            <i class="fa-solid fa-circle-play text-lg opacity-80"></i>
+                        </div>
+                        <div id="home-now-content">
+                            <p class="text-sm opacity-80">Sin actividad programada</p>
+                        </div>
+                    </div>
+
+                    <!-- Próxima actividad -->
+                    <div id="home-next-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-indigo-500">⏭️ Siguiente</span>
+                            <i class="fa-solid fa-forward text-indigo-500 text-lg"></i>
+                        </div>
+                        <div id="home-next-content">
+                            <p class="text-sm text-slate-400">Sin próxima actividad</p>
+                        </div>
+                    </div>
+
+                    <!-- Próxima pastilla -->
+                    <div id="home-pill-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-red-500">💊 Próxima pastilla</span>
+                            <i class="fa-solid fa-pills text-red-500 text-lg"></i>
+                        </div>
+                        <div id="home-pill-content">
+                            <p class="text-sm text-slate-400">Sin medicamentos programados</p>
+                        </div>
+                    </div>
+
+                    <!-- Accesos rápidos -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="switchTab('agenda')" class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-2xl text-indigo-500"></i>
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Agenda</span>
+                        </button>
+                        <button onclick="switchTab('pastillero')" class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-pills text-2xl text-red-500"></i>
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Pastillero</span>
+                        </button>
+                        <button onclick="switchTab('chat')" class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-comments text-2xl text-emerald-500"></i>
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">OmniChat</span>
+                        </button>
+                        <button onclick="switchTab('omniban')" class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-hands-praying text-2xl text-purple-500"></i>
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">OmniBan</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ==================== AGENDA ==================== -->
+                <section id="tab-agenda" class="tab-content hidden space-y-6">
                     <div class="flex space-x-2 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl max-w-xs">
                         <button onclick="toggleAgendaView('planner')" id="btn-view-planner" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple">
                             <i class="fa-solid fa-list-check mr-1"></i> Planner
@@ -598,7 +712,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 2: PASTILLERO -->
+                <!-- ==================== PASTILLERO ==================== -->
                 <section id="tab-pastillero" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -610,11 +724,10 @@
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre del medicamento</label>
                                 <input type="text" id="pillName" placeholder="Ej: Paracetamol, Ibuprofeno" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                             </div>
-
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dosis</label>
-                                    <input type="text" id="pillDose" placeholder="Ej: 500 mg / 1 pastilla" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                    <input type="text" id="pillDose" placeholder="Ej: 500 mg" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Cada cuántas horas</label>
@@ -623,16 +736,14 @@
                                         <option value="6">Cada 6 horas</option>
                                         <option value="8" selected>Cada 8 horas</option>
                                         <option value="12">Cada 12 horas</option>
-                                        <option value="24">Cada 24 horas (1 vez al día)</option>
+                                        <option value="24">Cada 24 horas</option>
                                     </select>
                                 </div>
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora de inicio / Primera toma</label>
                                 <input type="time" id="pillStartTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                             </div>
-
                             <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
                                 Guardar Medicamento
                             </button>
@@ -647,7 +758,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: REGISTRO DE MIGRAÑA -->
+                <!-- ==================== MIGRAÑA ==================== -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2">
@@ -698,14 +809,12 @@
                                     <input type="time" id="migTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                                 </div>
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duración estimada (Horas)</label>
                                 <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                             </div>
-
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad del dolor (1 = Leve, 10 = Insuportablemente fuerte)</label>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad del dolor (1 a 10)</label>
                                 <div class="flex justify-between gap-1 mt-1" id="painScaleBox">
                                     <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(1, this)">1</button>
                                     <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(2, this)">2</button>
@@ -719,39 +828,35 @@
                                     <button type="button" class="pain-btn text-white" style="background:#8E0000;" onclick="selectPainLevel(10, this)">10</button>
                                 </div>
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Síntomas experimentados</label>
                                 <div class="flex flex-wrap gap-1.5 mt-1" id="symptomsChipsBox">
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🤢 Náuseas</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">💡 Sensible a la luz</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🔊 Sensible al ruido</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">✨ Aura visual</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">💫 Mareos</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">👁️ Visión borrosa</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">⚡ Pulsación / Latidos</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Náuseas</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Sensible a la luz</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Sensible al ruido</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Aura visual</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Mareos</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Visión borrosa</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Pulsación</span>
                                 </div>
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desencadenantes probables</label>
                                 <div class="flex flex-wrap gap-1.5 mt-1" id="triggersChipsBox">
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">😫 Estrés</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">😴 Falta de sueño</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🌤️ Cambio de clima</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">☕ Cafeína</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🍽️ Ayuno prolongado</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">📱 Brillo de pantallas</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">🩸 Cambio hormonal</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Estrés</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Falta de sueño</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cambio de clima</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cafeína</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Ayuno prolongado</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Brillo de pantallas</span>
+                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cambio hormonal</span>
                                 </div>
-                                <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante personalizado..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 mt-2 font-medium">
+                                <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 mt-2 font-medium">
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Medicamento consumido y dosis</label>
-                                <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg, Sumatriptán 50mg..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                                <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
                             </div>
-
                             <button type="submit" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
                                 Guardar Episodio
                             </button>
@@ -766,18 +871,16 @@
                     </div>
                 </section>
 
-                <!-- SECTION 4: OmniChat -->
+                <!-- ==================== OmniChat ==================== -->
                 <section id="tab-chat" class="tab-content hidden space-y-4">
-                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 200px); min-height: 400px;">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 220px); min-height: 400px;">
                         <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                             <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                                 <i class="fa-solid fa-comments text-indigo-500"></i> OmniChat
                             </h3>
                             <span class="text-[10px] text-slate-400">Tus notas personales</span>
                         </div>
-
                         <div id="chat-messages" class="flex-1 overflow-y-auto p-4"></div>
-
                         <form onsubmit="handleSendChatMessage(event)" class="p-3 border-t border-slate-200 dark:border-slate-800 flex gap-2 items-end">
                             <textarea id="chat-input" rows="1" placeholder="Escribe una nota rápida..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" style="max-height:100px;" onkeydown="handleChatKeydown(event)"></textarea>
                             <button type="submit" class="grad-bg text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-95 transition shadow-sm shrink-0">
@@ -787,7 +890,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 5: OmniBan -->
+                <!-- ==================== OmniBan ==================== -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -797,21 +900,18 @@
                         <form onsubmit="handleAddOmniBan(event)" class="space-y-3 text-xs sm:text-sm">
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre / Intención</label>
-                                <input type="text" id="omniban-name" placeholder="Ej: Juan Pérez, Mi familia, Por salud..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                <input type="text" id="omniban-name" placeholder="Ej: Juan Pérez, Mi familia..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                             </div>
-
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Motivo / Detalle (opcional)</label>
                                 <textarea id="omniban-reason" rows="2" placeholder="Detalles de la petición..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium resize-none"></textarea>
                             </div>
-
                             <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                                 <input type="checkbox" id="omniban-alldays" class="accent-indigo-600 w-4 h-4" onchange="toggleOmniBanAllDays()">
                                 <label for="omniban-alldays" class="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">
                                     Orar todos los días (sin fecha de fin)
                                 </label>
                             </div>
-
                             <div id="omniban-dates-box" class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desde</label>
@@ -822,7 +922,6 @@
                                     <input type="date" id="omniban-end" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
                                 </div>
                             </div>
-
                             <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
                                 Guardar Petición
                             </button>
@@ -840,7 +939,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 6: DEVOCIONAL -->
+                <!-- ==================== DEVOCIONAL ==================== -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -865,12 +964,11 @@
                                 </button>
                             </div>
                         </form>
-
                         <div id="devotional-entries-container" class="space-y-3"></div>
                     </div>
                 </section>
 
-                <!-- SECTION 7: MI SÚPER -->
+                <!-- ==================== MI SÚPER ==================== -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
@@ -897,38 +995,96 @@
 
             </div>
 
-            <!-- Mobile Bottom Nav Bar -->
-            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg overflow-x-auto">
-                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
+            <!-- FAB (botón flotante de menú) para móvil -->
+            <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Bottom Nav Bar (móvil) -->
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg">
+                <button onclick="switchTab('inicio')" id="m-nav-inicio" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-house text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Inicio</span>
+                </button>
+                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
                     <i class="fa-solid fa-calendar-check text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Agenda</span>
                 </button>
-                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
+                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
                     <i class="fa-solid fa-pills text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Pastillero</span>
                 </button>
-                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
+                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
                     <i class="fa-solid fa-brain text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Migraña</span>
                 </button>
-                <button onclick="switchTab('chat')" id="m-nav-chat" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
-                    <i class="fa-solid fa-comments text-base"></i>
-                    <span class="text-[9px] font-medium mt-0.5">Chat</span>
-                </button>
-                <button onclick="switchTab('omniban')" id="m-nav-omniban" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
-                    <i class="fa-solid fa-hands-praying text-base"></i>
-                    <span class="text-[9px] font-medium mt-0.5">OmniBan</span>
-                </button>
-                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
-                    <i class="fa-solid fa-book-bible text-base"></i>
-                    <span class="text-[9px] font-medium mt-0.5">Devocional</span>
-                </button>
-                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
-                    <i class="fa-solid fa-cart-shopping text-base"></i>
-                    <span class="text-[9px] font-medium mt-0.5">Súper</span>
+                <button onclick="toggleMobileDrawer()" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                    <i class="fa-solid fa-ellipsis text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Más</span>
                 </button>
             </nav>
         </main>
+    </div>
+
+    <!-- DRAWER MÓVIL -->
+    <div id="mobile-drawer-overlay" onclick="closeMobileDrawer()"></div>
+    <div id="mobile-drawer">
+        <div class="drawer-header">
+            <div class="flex items-center gap-2">
+                <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-8 h-8 rounded-full border-2 border-amber-400">
+                <div>
+                    <p class="text-xs font-black text-slate-800 dark:text-white">omniapp</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400" id="drawer-user-reg">Reg: --------</p>
+                </div>
+            </div>
+            <button onclick="closeMobileDrawer()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <p class="drawer-section-title">Navegación</p>
+        <div class="space-y-1">
+            <button onclick="switchTabAndClose('inicio')" class="drawer-nav-btn" data-tab="inicio">
+                <i class="fa-solid fa-house w-5"></i><span>Inicio</span>
+            </button>
+            <button onclick="switchTabAndClose('agenda')" class="drawer-nav-btn" data-tab="agenda">
+                <i class="fa-solid fa-calendar-check w-5"></i><span>Agenda & Horario</span>
+            </button>
+            <button onclick="switchTabAndClose('pastillero')" class="drawer-nav-btn" data-tab="pastillero">
+                <i class="fa-solid fa-pills w-5"></i><span>Pastillero</span>
+            </button>
+            <button onclick="switchTabAndClose('migrana')" class="drawer-nav-btn" data-tab="migrana">
+                <i class="fa-solid fa-brain w-5"></i><span>Control Migraña</span>
+            </button>
+            <button onclick="switchTabAndClose('chat')" class="drawer-nav-btn" data-tab="chat">
+                <i class="fa-solid fa-comments w-5"></i><span>OmniChat</span>
+            </button>
+            <button onclick="switchTabAndClose('omniban')" class="drawer-nav-btn" data-tab="omniban">
+                <i class="fa-solid fa-hands-praying w-5"></i><span>OmniBan</span>
+            </button>
+            <button onclick="switchTabAndClose('devocional')" class="drawer-nav-btn" data-tab="devocional">
+                <i class="fa-solid fa-book-bible w-5"></i><span>Devocional</span>
+            </button>
+            <button onclick="switchTabAndClose('super')" class="drawer-nav-btn" data-tab="super">
+                <i class="fa-solid fa-cart-shopping w-5"></i><span>Mi Súper</span>
+            </button>
+        </div>
+
+        <p class="drawer-section-title">Acciones</p>
+        <div class="space-y-1">
+            <button onclick="requestNotificationPermission(); closeMobileDrawer();" class="drawer-nav-btn">
+                <i class="fa-solid fa-bell text-amber-500 w-5"></i><span>Activar Alarmas</span>
+            </button>
+            <button onclick="exportAllData(); closeMobileDrawer();" class="drawer-nav-btn">
+                <i class="fa-solid fa-download text-emerald-500 w-5"></i><span>Exportar datos</span>
+            </button>
+            <button onclick="toggleDarkMode()" class="drawer-nav-btn">
+                <i class="fa-solid fa-circle-half-stroke text-purple-500 w-5"></i><span>Modo Oscuro</span>
+            </button>
+            <button onclick="closeMobileDrawer(); confirmLogout();" class="drawer-nav-btn text-red-500">
+                <i class="fa-solid fa-lock w-5"></i><span>Cerrar sesión</span>
+            </button>
+        </div>
     </div>
 
     <!-- MODAL: AGREGAR BLOQUE DE HORARIO -->
@@ -1030,6 +1186,9 @@
         let currentStoreKey = "mercado";
         let selectedPainLevel = 5;
         let notifiedPills = {};
+        let currentTab = 'inicio';
+        let homeTimer = null;
+        let dmSansLoaded = false;
 
         // =========================================
         // TOASTS
@@ -1038,31 +1197,24 @@
         function showToast(message, type = 'info', duration = 3000) {
             const container = document.getElementById('toast-container');
             if (!container) return;
-
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-
             const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
-
             toast.innerHTML = `
                 <span style="font-size:1.1rem; flex-shrink:0;">${icons[type] || icons.info}</span>
                 <span style="flex:1;">${escapeHtml(message)}</span>
             `;
-
             container.appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.add('toast-out');
                 setTimeout(() => toast.remove(), 300);
             }, duration);
         }
 
-        function toastAlert(message, type = 'info') {
-            showToast(message, type, 3500);
-        }
+        function toastAlert(message, type = 'info') { showToast(message, type, 3500); }
 
         // =========================================
-        // SANITIZACIÓN Y SEGURIDAD
+        // SANITIZACIÓN
         // =========================================
 
         const FIREBASE_FORBIDDEN_CHARS = /[.#$\[\]\/\u0000-\u001F\u007F]/g;
@@ -1072,13 +1224,8 @@
             return String(str).replace(FIREBASE_FORBIDDEN_CHARS, '_');
         }
 
-        function isValidPassKey(pass) {
-            return /^[a-z0-9]{4,}$/.test(pass);
-        }
-
-        function isValidRegNumber(reg) {
-            return /^\d{8}$/.test(reg);
-        }
+        function isValidPassKey(pass) { return /^[a-z0-9]{4,}$/.test(pass); }
+        function isValidRegNumber(reg) { return /^\d{8}$/.test(reg); }
 
         function buildUserKeyFromHash(reg, passHash) {
             const safeReg = sanitizeForKey(reg);
@@ -1097,323 +1244,17 @@
         function escapeHtml(str) {
             if (str == null) return '';
             return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
         }
 
         function escapeAttr(str) {
             if (str == null) return '';
             return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;')
-                .replace(/</g, '&lt;')
+                .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;').replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
-        }
-
-        // =========================================
-        // EXPORTAR DATOS (ZIP con CSVs)
-        // =========================================
-
-        function arrayToCSV(rows, headers) {
-            if (!rows || rows.length === 0) {
-                return headers ? headers.join(',') + '\n' : '';
-            }
-            const allHeaders = headers || Object.keys(rows[0]);
-            const escapeCSV = (value) => {
-                if (value === null || value === undefined) return '';
-                const str = String(value);
-                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-                    return '"' + str.replace(/"/g, '""') + '"';
-                }
-                return str;
-            };
-            const headerLine = allHeaders.map(escapeCSV).join(',');
-            const dataLines = rows.map(row => allHeaders.map(h => escapeCSV(row[h])).join(','));
-            return [headerLine, ...dataLines].join('\n');
-        }
-
-        function getBackupTimestamp() {
-            const now = new Date();
-            const pad = (n) => String(n).padStart(2, '0');
-            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-        }
-
-        async function exportAllData() {
-            if (!userKey || !currentUserData) {
-                toastAlert('Debes iniciar sesión para exportar datos.', 'warning');
-                return;
-            }
-            if (typeof JSZip === 'undefined') {
-                toastAlert('Error: la librería de compresión no cargó. Recarga la página.', 'error');
-                return;
-            }
-
-            showToast('Generando backup...', 'info', 2000);
-
-            try {
-                const zip = new JSZip();
-                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
-
-                const userCSV = arrayToCSV([{
-                    firstName: currentUserData.firstName || '',
-                    lastName: currentUserData.lastName || '',
-                    reg: currentUserData.reg || '',
-                    tieneHash: currentUserData.passHash ? 'Sí' : 'No'
-                }], ['firstName', 'lastName', 'reg', 'tieneHash']);
-                folder.file('usuario.csv', '\uFEFF' + userCSV);
-
-                if (state.tasks.length > 0) {
-                    const tasks = state.tasks.map(t => ({
-                        descripcion: t.desc || '',
-                        prioridad: t.priority || '',
-                        categoria: t.category || '',
-                        fecha: t.date || '',
-                        completada: t.completed ? 'Sí' : 'No'
-                    }));
-                    folder.file('tareas.csv', '\uFEFF' + arrayToCSV(tasks, ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']));
-                } else {
-                    folder.file('tareas.csv', '\uFEFF' + 'descripcion,prioridad,categoria,fecha,completada\n');
-                }
-
-                if (state.horario.length > 0) {
-                    const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
-                    const horario = state.horario.map(h => ({
-                        dia: dayNames[h.day] || h.day,
-                        hora: h.hour || '',
-                        actividad: h.activity || ''
-                    }));
-                    folder.file('horario.csv', '\uFEFF' + arrayToCSV(horario, ['dia', 'hora', 'actividad']));
-                } else {
-                    folder.file('horario.csv', '\uFEFF' + 'dia,hora,actividad\n');
-                }
-
-                if (state.pills.length > 0) {
-                    const pills = state.pills.map(p => ({
-                        nombre: p.name || '',
-                        dosis: p.dose || '',
-                        intervalo_horas: p.interval || '',
-                        hora_inicio: p.startTime || ''
-                    }));
-                    folder.file('pastillas.csv', '\uFEFF' + arrayToCSV(pills, ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']));
-                } else {
-                    folder.file('pastillas.csv', '\uFEFF' + 'nombre,dosis,intervalo_horas,hora_inicio\n');
-                }
-
-                if (state.migraines.length > 0) {
-                    const migraines = state.migraines
-                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-                        .map(m => ({
-                            fecha: m.date || '',
-                            hora: m.time || '',
-                            dolor: m.pain || '',
-                            duracion_horas: m.duration || '',
-                            sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
-                            desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
-                            medicamento: m.meds || ''
-                        }));
-                    folder.file('migrana.csv', '\uFEFF' + arrayToCSV(migraines, ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']));
-                } else {
-                    folder.file('migrana.csv', '\uFEFF' + 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n');
-                }
-
-                if (state.devotionals.length > 0) {
-                    const devotionals = state.devotionals.map(d => ({
-                        titulo: d.title || '',
-                        texto: d.body || d.text || '',
-                        fecha: d.date || ''
-                    }));
-                    folder.file('devocional.csv', '\uFEFF' + arrayToCSV(devotionals, ['titulo', 'texto', 'fecha']));
-                } else {
-                    folder.file('devocional.csv', '\uFEFF' + 'titulo,texto,fecha\n');
-                }
-
-                const superRows = [];
-                const storeNames = { mercado: 'Mercado', costco: 'Costco', sams: "Sam's", zorro: 'El Zorro', monarca: 'Monarca', extras: 'Extras' };
-                Object.keys(state.stores || {}).forEach(storeKey => {
-                    const items = state.stores[storeKey] || {};
-                    Object.keys(items).forEach(itemKey => {
-                        const item = items[itemKey];
-                        superRows.push({
-                            tienda: storeNames[storeKey] || storeKey,
-                            producto: item.name || '',
-                            cantidad: item.qty || '',
-                            precio: item.price || '',
-                            comprado: item.done ? 'Sí' : 'No'
-                        });
-                    });
-                });
-                if (superRows.length > 0) {
-                    folder.file('super.csv', '\uFEFF' + arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']));
-                } else {
-                    folder.file('super.csv', '\uFEFF' + 'tienda,producto,cantidad,precio,comprado\n');
-                }
-
-                folder.file('LEEME.txt', 
-`Omniapp - Backup de datos
-=========================
-Usuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}
-Reg: ${currentUserData.reg || ''}
-Fecha del backup: ${new Date().toLocaleString('es-ES')}
-`);
- 
-                const blob = await zip.generateAsync({ type: 'blob' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                showToast('¡Backup descargado exitosamente!', 'success', 4000);
-            } catch (err) {
-                console.error('Error al exportar:', err);
-                toastAlert('Error al generar el backup. Revisa la consola.', 'error');
-            }
-        }
-
-        // =========================================
-        // PASO 4: PDF DE MIGRAÑA
-        // =========================================
-
-        function downloadMigrainePDF() {
-            if (state.migraines.length === 0) {
-                toastAlert('No hay episodios de migraña para exportar.', 'warning');
-                return;
-            }
-
-            if (typeof window.jspdf === 'undefined') {
-                toastAlert('Error: la librería PDF no cargó. Recarga la página.', 'error');
-                return;
-            }
-
-            showToast('Generando PDF...', 'info', 2000);
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
-
-                // Encabezado
-                doc.setFillColor(99, 102, 241);
-                doc.rect(0, 0, 210, 30, 'F');
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(20);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Informe Médico — Migraña', 15, 15);
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Omniapp — Control de Migraña', 15, 23);
-
-                // Datos del paciente
-                doc.setTextColor(30, 41, 59);
-                doc.setFontSize(11);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Paciente:', 15, 45);
-                doc.setFont('helvetica', 'normal');
-                doc.text(userName, 40, 45);
-                
-                doc.setFont('helvetica', 'bold');
-                doc.text('N° Registro:', 15, 52);
-                doc.setFont('helvetica', 'normal');
-                doc.text(currentUserData.reg || '--', 45, 52);
-
-                doc.setFont('helvetica', 'bold');
-                doc.text('Fecha del informe:', 15, 59);
-                doc.setFont('helvetica', 'normal');
-                doc.text(new Date().toLocaleString('es-ES'), 55, 59);
-
-                // Estadísticas
-                const total = state.migraines.length;
-                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
-                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
-                const avgPain = (totalPain / total).toFixed(1);
-                const avgHours = (totalHours / total).toFixed(1);
-
-                const triggerCounts = {};
-                state.migraines.forEach(m => {
-                    if (m.triggers && Array.isArray(m.triggers)) {
-                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
-                    }
-                });
-                const topTriggers = Object.keys(triggerCounts)
-                    .sort((a, b) => triggerCounts[b] - triggerCounts[a])
-                    .slice(0, 3);
-
-                doc.setFontSize(13);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(99, 102, 241);
-                doc.text('Resumen Estadístico', 15, 75);
-
-                doc.setFontSize(10);
-                doc.setTextColor(30, 41, 59);
-                doc.setFont('helvetica', 'normal');
-                doc.text(`Total de episodios: ${total}`, 15, 84);
-                doc.text(`Promedio de dolor: ${avgPain} / 10`, 15, 91);
-                doc.text(`Duración promedio: ${avgHours} horas`, 15, 98);
-                doc.text(`Detonantes más frecuentes: ${topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos'}`, 15, 105);
-
-                // Tabla de episodios
-                doc.setFontSize(13);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(99, 102, 241);
-                doc.text('Historial Detallado de Episodios', 15, 122);
-
-                const sorted = [...state.migraines].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                const tableData = sorted.map(m => [
-                    m.date || '--',
-                    m.time || '--',
-                    `${m.pain || 0}/10`,
-                    `${m.duration || 1}h`,
-                    (Array.isArray(m.symptoms) ? m.symptoms.join(', ') : '').substring(0, 40),
-                    (Array.isArray(m.triggers) ? m.triggers.join(', ') : '').substring(0, 40),
-                    (m.meds || '').substring(0, 30)
-                ]);
-
-                doc.autoTable({
-                    startY: 127,
-                    head: [['Fecha', 'Hora', 'Dolor', 'Duración', 'Síntomas', 'Detonantes', 'Medicamento']],
-                    body: tableData,
-                    theme: 'striped',
-                    headStyles: { fillColor: [99, 102, 241], fontSize: 8, fontStyle: 'bold' },
-                    bodyStyles: { fontSize: 7, cellPadding: 2 },
-                    alternateRowStyles: { fillColor: [240, 243, 255] },
-                    margin: { left: 15, right: 15 },
-                    columnStyles: {
-                        0: { cellWidth: 20 },
-                        1: { cellWidth: 15 },
-                        2: { cellWidth: 15 },
-                        3: { cellWidth: 18 },
-                        4: { cellWidth: 40 },
-                        5: { cellWidth: 40 },
-                        6: { cellWidth: 30 }
-                    }
-                });
-
-                // Footer con pie de página
-                const pageCount = doc.internal.getNumberOfPages();
-                for (let i = 1; i <= pageCount; i++) {
-                    doc.setPage(i);
-                    doc.setFontSize(8);
-                    doc.setTextColor(150, 150, 150);
-                    doc.text(
-                        `Generado por Omniapp  |  Página ${i} de ${pageCount}`,
-                        105, 290, { align: 'center' }
-                    );
-                }
-
-                const fileName = `informe-migrana-${getBackupTimestamp()}.pdf`;
-                doc.save(fileName);
-                showToast('PDF generado exitosamente', 'success', 3000);
-            } catch (err) {
-                console.error('Error al generar PDF:', err);
-                toastAlert('Error al generar el PDF. Revisa la consola.', 'error');
-            }
         }
 
         // =========================================
@@ -1436,35 +1277,76 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         ];
 
         let state = {
-            currentTab: 'agenda',
-            agendaView: 'planner',
-            tasks: [],
-            taskFilter: 'all',
-            horario: [],
-            migraines: [],
-            devotionals: [],
-            pills: [],
-            stores: {},
-            chat: [],
-            omniban: []
+            tasks: [], taskFilter: 'all',
+            horario: [], migraines: [], devotionals: [],
+            pills: [], stores: {}, chat: [], omniban: []
         };
+
+        // =========================================
+        // TEMA Y UI
+        // =========================================
 
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('omniapp_theme', isDark ? 'dark' : 'light');
         }
 
+        // =========================================
+        // DRAWER MÓVIL
+        // =========================================
+
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobile-drawer');
+            const overlay = document.getElementById('mobile-drawer-overlay');
+            const fab = document.getElementById('fab-menu');
+
+            if (drawer.classList.contains('open')) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                fab.classList.add('rotated');
+                fab.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                updateDrawerActive();
+            }
+        }
+
+        function closeMobileDrawer() {
+            const drawer = document.getElementById('mobile-drawer');
+            const overlay = document.getElementById('mobile-drawer-overlay');
+            const fab = document.getElementById('fab-menu');
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+            fab.classList.remove('rotated');
+            fab.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        }
+
+        function switchTabAndClose(tabName) {
+            switchTab(tabName);
+            closeMobileDrawer();
+        }
+
+        function updateDrawerActive() {
+            document.querySelectorAll('.drawer-nav-btn[data-tab]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === currentTab);
+            });
+        }
+
+        // =========================================
+        // NOTIFICACIONES
+        // =========================================
+
         function requestNotificationPermission() {
             if (!("Notification" in window)) {
-                toastAlert("Este navegador no soporta notificaciones de sistema.", 'warning');
+                toastAlert("Este navegador no soporta notificaciones.", 'warning');
                 return;
             }
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    toastAlert("¡Notificaciones activadas con éxito!", 'success');
-                    sendSystemNotification("Omniapp Recordatorios", "Notificaciones activadas para citas y medicamentos.");
+                    toastAlert("¡Notificaciones activadas!", 'success');
+                    sendSystemNotification("Omniapp", "Notificaciones activadas.");
                 } else {
-                    toastAlert("Para recibir alertas, debes habilitar los permisos en tu navegador.", 'warning');
+                    toastAlert("Habilita los permisos en tu navegador.", 'warning');
                 }
             });
         }
@@ -1490,8 +1372,12 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         }
 
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW:', err));
         }
+
+        // =========================================
+        // PASTILLERO
+        // =========================================
 
         function getNextPillTime(startTime, intervalHours) {
             const now = new Date();
@@ -1518,13 +1404,15 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                 const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
                 if (timeDiff <= 60000 && !notifiedPills[pillKey]) {
                     notifiedPills[pillKey] = true;
-                    sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
+                    sendSystemNotification("Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
                 }
             });
-            if (state.currentTab === 'pastillero') {
-                updatePillLabels();
-            }
+            if (currentTab === 'pastillero') updatePillLabels();
         }, 30000);
+
+        // =========================================
+        // AUTENTICACIÓN
+        // =========================================
 
         function switchAuthTab(tab) {
             if(tab === 'login') {
@@ -1549,35 +1437,24 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const pass = document.getElementById('loginPassKey').value.trim();
             const remember = document.getElementById('rememberMe').checked;
 
-            if (!isValidRegNumber(reg)) {
-                return toastAlert('El número de registro debe contener exactamente 8 dígitos.', 'error');
-            }
-            if (!isValidPassKey(pass)) {
-                return toastAlert('La clave debe tener al menos 4 caracteres, solo letras minúsculas y números.', 'error');
-            }
+            if (!isValidRegNumber(reg)) return toastAlert('El N° de registro debe tener 8 dígitos.', 'error');
+            if (!isValidPassKey(pass)) return toastAlert('La clave debe tener mínimo 4 caracteres (minúsculas y números).', 'error');
 
             const passHash = await hashPassword(pass);
 
             db.ref(`users/${reg}`).once('value', async snapshot => {
                 const val = snapshot.val();
-                if (!val) return toastAlert('Número de registro o clave incorrecta.', 'error');
+                if (!val) return toastAlert('N° de registro o clave incorrecta.', 'error');
 
                 if (val.pass && !val.passHash) {
                     if (val.pass === pass) {
-                        await db.ref(`users/${reg}`).update({ passHash: passHash, pass: null });
+                        await db.ref(`users/${reg}`).update({ passHash, pass: null });
                         delete val.pass;
                         val.passHash = passHash;
-                        console.log('✅ Usuario migrado a hash');
-                    } else {
-                        return toastAlert('Número de registro o clave incorrecta.', 'error');
-                    }
+                    } else return toastAlert('N° de registro o clave incorrecta.', 'error');
                 } else if (val.passHash) {
-                    if (val.passHash !== passHash) {
-                        return toastAlert('Número de registro o clave incorrecta.', 'error');
-                    }
-                } else {
-                    return toastAlert('Número de registro o clave incorrecta.', 'error');
-                }
+                    if (val.passHash !== passHash) return toastAlert('N° de registro o clave incorrecta.', 'error');
+                } else return toastAlert('N° de registro o clave incorrecta.', 'error');
 
                 userKey = buildUserKeyFromHash(reg, passHash);
                 currentUserData = val;
@@ -1592,7 +1469,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                 localStorage.setItem('omniapp_active_userKey', userKey);
                 localStorage.setItem('omniapp_active_userReg', reg);
                 unlockApp();
-                showToast(`¡Bienvenido de nuevo, ${val.firstName}!`, 'success');
+                showToast(`¡Bienvenido, ${val.firstName}!`, 'success');
             });
         }
 
@@ -1602,29 +1479,20 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const reg = document.getElementById('regRegNumber').value.trim();
             const pass = document.getElementById('regPassKey').value.trim();
 
-            if (!firstName || !lastName || !reg || !pass) {
-                return toastAlert('Completa todos los campos para continuar.', 'error');
-            }
-            if (!isValidRegNumber(reg)) {
-                return toastAlert('El número de registro debe contener exactamente 8 dígitos.', 'error');
-            }
-            if (!isValidPassKey(pass)) {
-                return toastAlert('La clave debe tener al menos 4 caracteres, solo minúsculas y números.', 'error');
-            }
+            if (!firstName || !lastName || !reg || !pass) return toastAlert('Completa todos los campos.', 'error');
+            if (!isValidRegNumber(reg)) return toastAlert('El N° de registro debe tener 8 dígitos.', 'error');
+            if (!isValidPassKey(pass)) return toastAlert('La clave debe tener mínimo 4 caracteres.', 'error');
 
             const passHash = await hashPassword(pass);
 
             db.ref(`users/${reg}`).once('value', snapshot => {
-                if(snapshot.exists()) return toastAlert('Este número de registro ya existe.', 'error');
-
+                if(snapshot.exists()) return toastAlert('Este N° de registro ya existe.', 'error');
                 const newUser = { firstName, lastName, reg, passHash };
                 db.ref(`users/${reg}`).set(newUser, (err) => {
                     if(!err) {
                         toastAlert('¡Registro exitoso! Ya puedes iniciar sesión.', 'success');
                         switchAuthTab('login');
-                    } else {
-                        toastAlert('Error al registrar. Intenta de nuevo.', 'error');
-                    }
+                    } else toastAlert('Error al registrar.', 'error');
                 });
             });
         }
@@ -1655,12 +1523,12 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             initDates();
             updateProfileUI();
             listenToDatabase();
+            switchTab('inicio');
+            startHomeTimer();
         }
 
         function confirmLogout() {
-            if (confirm('¿Seguro que quieres cerrar sesión?')) {
-                logout();
-            }
+            if (confirm('¿Seguro que quieres cerrar sesión?')) logout();
         }
 
         function logout() {
@@ -1673,6 +1541,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const firstName = currentUserData.firstName || 'Usuario';
             document.getElementById('userGreeting').innerText = `¡Hola, ${firstName}!`;
             document.getElementById('sidebarUserReg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
+            document.getElementById('drawer-user-reg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
         }
 
         function initDates() {
@@ -1686,56 +1555,56 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             document.getElementById('migDate').value = todayInput;
             document.getElementById('migTime').value = new Date().toTimeString().substring(0,5);
             document.getElementById('pillStartTime').value = new Date().toTimeString().substring(0,5);
-            
+
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 7);
             document.getElementById('omniban-start').value = todayInput;
             document.getElementById('omniban-end').value = tomorrow.toISOString().split('T')[0];
         }
 
+        // =========================================
+        // LISTENERS DE BASE DE DATOS
+        // =========================================
+
         function listenToDatabase() {
             db.ref(`${userKey}/tasks`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.tasks = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderTasks();
+                renderHome();
             });
-
             db.ref(`${userKey}/timeblocks`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.horario = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderHorario();
+                renderHome();
             });
-
             db.ref(`${userKey}/pills`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.pills = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderPills();
+                renderHome();
             });
-
             db.ref(`${userKey}/migraines`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.migraines = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderMigraines();
             });
-
             db.ref(`${userKey}/notes`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.devotionals = Object.keys(data).map(k => ({ id: k, ...data[k] }));
                 renderDevotionals();
             });
-
             db.ref(`${userKey}/stores`).on('value', snapshot => {
                 state.stores = snapshot.val() || {};
                 renderSuper();
             });
-
             db.ref(`${userKey}/chat`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.chat = Object.keys(data).map(k => ({ id: k, ...data[k] }))
                     .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                 renderChat();
             });
-
             db.ref(`${userKey}/omniban`).on('value', snapshot => {
                 const data = snapshot.val() || {};
                 state.omniban = Object.keys(data).map(k => ({ id: k, ...data[k] }))
@@ -1744,42 +1613,39 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             });
         }
 
+        // =========================================
+        // NAVEGACIÓN
+        // =========================================
+
         function switchTab(tabName) {
-            state.currentTab = tabName;
+            currentTab = tabName;
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            
             const target = document.getElementById('tab-' + tabName);
             if (target) target.classList.remove('hidden');
 
             document.querySelectorAll('.nav-btn, .mobile-nav-btn').forEach(btn => {
                 btn.classList.remove('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
             });
-
             const dBtn = document.getElementById('d-nav-' + tabName);
             if (dBtn) dBtn.classList.add('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
-
             const mBtn = document.getElementById('m-nav-' + tabName);
             if (mBtn) mBtn.classList.add('text-brand-purple', 'font-bold');
 
             const viewport = document.getElementById('app-viewport');
-            if (viewport) {
-                viewport.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            if (viewport) viewport.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Auto-scroll chat al final si entras a esa pestaña
             if (tabName === 'chat') {
                 setTimeout(() => {
                     const chatBox = document.getElementById('chat-messages');
                     if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
                 }, 100);
             }
+            if (tabName === 'inicio') renderHome();
         }
 
         function toggleAgendaView(view) {
-            state.agendaView = view;
             const pBtn = document.getElementById('btn-view-planner');
             const hBtn = document.getElementById('btn-view-horario');
-
             if (view === 'planner') {
                 document.getElementById('subview-planner').classList.remove('hidden');
                 document.getElementById('subview-horario').classList.add('hidden');
@@ -1793,15 +1659,141 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             }
         }
 
+        // =========================================
+        // HOME (Dashboard)
+        // =========================================
+
+        function getGreeting() {
+            const h = new Date().getHours();
+            if (h < 12) return 'Buenos días';
+            if (h < 19) return 'Buenas tardes';
+            return 'Buenas noches';
+        }
+
+        function parseHourLabel(label) {
+            // Convierte "9:00 a.m" o "9:00 a.m a 10:00 a.m" a minutos del día (para start)
+            if (!label) return null;
+            // Tomar la primera hora
+            const part = label.split(' a ')[0].trim();
+            const match = part.match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
+            if (!match) return null;
+            let h = parseInt(match[1]);
+            const m = parseInt(match[2]);
+            const ap = (match[3] || '').toLowerCase();
+            if (ap.includes('p') && h < 12) h += 12;
+            if (ap.includes('a') && h === 12) h = 0;
+            return h * 60 + m;
+        }
+
+        function parseHourEndLabel(label) {
+            // Convierte el fin (después del "a") si existe
+            if (!label) return null;
+            const parts = label.split(' a ');
+            if (parts.length < 2) return null;
+            const part = parts[1].trim();
+            const match = part.match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
+            if (!match) return null;
+            let h = parseInt(match[1]);
+            const m = parseInt(match[2]);
+            const ap = (match[3] || '').toLowerCase();
+            if (ap.includes('p') && h < 12) h += 12;
+            if (ap.includes('a') && h === 12) h = 0;
+            return h * 60 + m;
+        }
+
+        function renderHome() {
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+
+            document.getElementById('home-hour').innerText = `${hh}:${mm}`;
+            document.getElementById('home-ampm').innerText = ampm;
+            document.getElementById('home-greeting').innerText = `${getGreeting()}, ${currentUserData.firstName || 'Usuario'}!`;
+            document.getElementById('home-date').innerText = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            // Actividad AHORA
+            const today = now.getDay(); // 0=Dom, 1=Lun...6=Sáb
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+            const todayBlocks = state.horario.filter(b => b.day == today);
+            const withTime = todayBlocks.map(b => ({
+                ...b,
+                startMin: parseHourLabel(b.hour),
+                endMin: parseHourEndLabel(b.hour) || (parseHourLabel(b.hour) + 60)
+            })).filter(b => b.startMin !== null).sort((a,b) => a.startMin - b.startMin);
+
+            const currentBlock = withTime.find(b => nowMinutes >= b.startMin && nowMinutes < b.endMin);
+            const nextBlock = withTime.find(b => b.startMin > nowMinutes);
+
+            const nowCard = document.getElementById('home-now-content');
+            if (currentBlock) {
+                nowCard.innerHTML = `
+                    <p class="text-lg font-black leading-tight">${escapeHtml(currentBlock.activity)}</p>
+                    <p class="text-xs opacity-90 mt-1">${escapeHtml(currentBlock.hour)}</p>
+                `;
+            } else {
+                nowCard.innerHTML = `
+                    <p class="text-sm opacity-80">Sin actividad programada</p>
+                    <p class="text-[10px] opacity-70 mt-1">Añade bloques en Agenda → Horario</p>
+                `;
+            }
+
+            const nextCard = document.getElementById('home-next-content');
+            if (nextBlock) {
+                const diffMin = nextBlock.startMin - nowMinutes;
+                const diffText = diffMin < 60 ? `En ${diffMin} min` : `En ${Math.floor(diffMin/60)}h ${diffMin%60}min`;
+                nextCard.innerHTML = `
+                    <p class="text-base font-bold text-slate-800 dark:text-white leading-tight">${escapeHtml(nextBlock.activity)}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(nextBlock.hour)} • <span class="text-indigo-500 font-bold">${diffText}</span></p>
+                `;
+            } else {
+                nextCard.innerHTML = `<p class="text-sm text-slate-400">No hay más actividades hoy</p>`;
+            }
+
+            // Próxima pastilla
+            const pillCard = document.getElementById('home-pill-content');
+            if (state.pills.length === 0) {
+                pillCard.innerHTML = `<p class="text-sm text-slate-400">Sin medicamentos programados</p>`;
+            } else {
+                let closest = null;
+                state.pills.forEach(p => {
+                    const n = getNextPillTime(p.startTime, p.interval);
+                    if (!closest || n.nextDateObj < closest.nextPill.nextDateObj) {
+                        closest = { pill: p, nextPill: n };
+                    }
+                });
+                if (closest) {
+                    const diffMs = closest.nextPill.nextDateObj - now;
+                    const diffMin = Math.round(diffMs / 60000);
+                    const diffText = diffMin < 60 ? `En ${diffMin} min` : `En ${Math.floor(diffMin/60)}h ${diffMin%60}min`;
+                    pillCard.innerHTML = `
+                        <p class="text-base font-bold text-slate-800 dark:text-white leading-tight">${escapeHtml(closest.pill.name)}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(closest.pill.dose)}</p>
+                        <p class="text-xs text-red-500 font-bold mt-1">${diffText} • ${escapeHtml(closest.nextPill.formattedTime)} hrs</p>
+                    `;
+                }
+            }
+        }
+
+        function startHomeTimer() {
+            if (homeTimer) clearInterval(homeTimer);
+            homeTimer = setInterval(() => {
+                if (currentTab === 'inicio') renderHome();
+            }, 30000);
+        }
+
+        // =========================================
+        // TAREAS
+        // =========================================
+
         function handleAddTask(e) {
             e.preventDefault();
             const desc = document.getElementById('task-title').value.trim();
             const priority = document.getElementById('task-priority').value;
             const category = document.getElementById('task-category').value;
             const date = document.getElementById('task-date').value;
-
             if (!desc) return;
-
             db.ref(`${userKey}/tasks`).push({ desc, priority, category, date, completed: false });
             document.getElementById('form-add-task').reset();
             initDates();
@@ -1824,9 +1816,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
 
         function toggleTaskComplete(id) {
             const task = state.tasks.find(t => t.id === id);
-            if (task) {
-                db.ref(`${userKey}/tasks/${id}`).update({ completed: !task.completed });
-            }
+            if (task) db.ref(`${userKey}/tasks/${id}`).update({ completed: !task.completed });
         }
 
         function deleteTask(id) {
@@ -1837,7 +1827,6 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         function renderTasks() {
             const container = document.getElementById('tasks-container');
             let list = state.tasks;
-
             if (state.taskFilter === 'pending') list = list.filter(t => !t.completed);
             if (state.taskFilter === 'completed') list = list.filter(t => t.completed);
 
@@ -1867,6 +1856,10 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             `).join('');
         }
 
+        // =========================================
+        // HORARIO
+        // =========================================
+
         function openModalHorario() { document.getElementById('modal-horario').classList.remove('hidden'); }
         function closeModalHorario() { document.getElementById('modal-horario').classList.add('hidden'); }
 
@@ -1879,12 +1872,10 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
             const allChip = document.getElementById('chip-all-days');
             const shouldActivateAll = !allChip.classList.contains('active');
-
             dayChips.forEach(chip => {
                 if (shouldActivateAll) chip.classList.add('active');
                 else chip.classList.remove('active');
             });
-
             if (shouldActivateAll) allChip.classList.add('active');
             else allChip.classList.remove('active');
         }
@@ -1893,12 +1884,8 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
             const activeChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
             const allChip = document.getElementById('chip-all-days');
-
-            if (dayChips.length === activeChips.length) {
-                allChip.classList.add('active');
-            } else {
-                allChip.classList.remove('active');
-            }
+            if (dayChips.length === activeChips.length) allChip.classList.add('active');
+            else allChip.classList.remove('active');
         }
 
         function handleSaveHorario(e) {
@@ -1906,16 +1893,11 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const activity = document.getElementById('horario-title').value.trim();
             const hour = document.getElementById('horario-hour').value;
             const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
-
-            if (selectedDayChips.length === 0) {
-                return toastAlert('Por favor selecciona al menos un día.', 'warning');
-            }
-
+            if (selectedDayChips.length === 0) return toastAlert('Selecciona al menos un día.', 'warning');
             selectedDayChips.forEach(chip => {
                 const day = parseInt(chip.getAttribute('data-day'));
                 db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
             });
-
             document.getElementById('horario-title').value = '';
             closeModalHorario();
             showToast(`Bloque agregado a ${selectedDayChips.length} día(s)`, 'success');
@@ -1926,7 +1908,6 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         function renderHorario() {
             const container = document.getElementById('horario-grid-body');
             const days = [1, 2, 3, 4, 5, 6, 0];
-
             let html = '';
             CUSTOM_HOURS.forEach(h => {
                 html += `<div class="p-2 font-bold text-slate-500 dark:text-slate-400 text-[10px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-center leading-tight">${escapeHtml(h)}</div>`;
@@ -1948,15 +1929,17 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             container.innerHTML = html;
         }
 
+        // =========================================
+        // PASTILLERO
+        // =========================================
+
         function handleSavePill(e) {
             e.preventDefault();
             const name = document.getElementById('pillName').value.trim();
             const dose = document.getElementById('pillDose').value.trim();
             const interval = document.getElementById('pillInterval').value;
             const startTime = document.getElementById('pillStartTime').value;
-
             if(!name || !dose || !startTime) return;
-
             db.ref(`${userKey}/pills`).push({ name, dose, interval, startTime }, (err) => {
                 if(!err) {
                     document.getElementById('pillName').value = '';
@@ -1977,15 +1960,12 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                 container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No tienes medicamentos registrados.</p>`;
                 return;
             }
-
             container.innerHTML = state.pills.map((p, idx) => {
                 const nextPill = getNextPillTime(p.startTime, p.interval);
                 return `
                     <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
-                                💊
-                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">💊</div>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${escapeHtml(p.name)}</h4>
                                 <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(p.dose)} • Cada ${escapeHtml(p.interval)} hrs</p>
@@ -2015,6 +1995,10 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             });
         }
 
+        // =========================================
+        // MIGRAÑA
+        // =========================================
+
         function selectPainLevel(level, btn) {
             selectedPainLevel = level;
             document.querySelectorAll('#painScaleBox .pain-btn').forEach(b => b.classList.remove('selected'));
@@ -2028,16 +2012,12 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const duration = parseFloat(document.getElementById('migDuration').value) || 1;
             const meds = document.getElementById('migMeds').value.trim();
             const customTrigger = document.getElementById('migCustomTrigger').value.trim();
-
             const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
             const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
-
-            if(customTrigger) triggers.push(`✏️ ${customTrigger}`);
-
+            if(customTrigger) triggers.push(customTrigger);
             if(!date || !time) return toastAlert('Selecciona la fecha y hora.', 'warning');
 
             const episode = { date, time, duration, pain: selectedPainLevel, symptoms, triggers, meds, timestamp: Date.now() };
-
             db.ref(`${userKey}/migraines`).push(episode, (err) => {
                 if(!err) {
                     toastAlert('Episodio de migraña registrado', 'success');
@@ -2048,8 +2028,8 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             });
         }
 
-        function deleteMigraine(id) { 
-            db.ref(`${userKey}/migraines/${id}`).remove(); 
+        function deleteMigraine(id) {
+            db.ref(`${userKey}/migraines/${id}`).remove();
             showToast('Episodio eliminado', 'info', 2000);
         }
 
@@ -2072,16 +2052,16 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                     }
                 });
                 const topTrig = Object.keys(triggerCounts).sort((a,b) => triggerCounts[b] - triggerCounts[a])[0] || 'N/A';
-                document.getElementById('stat-top-trigger').innerText = topTrig.split(' ')[1] || topTrig;
+                document.getElementById('stat-top-trigger').innerText = topTrig.length > 15 ? topTrig.substring(0, 15) + '...' : topTrig;
 
                 document.getElementById('migPatternInsight').innerHTML = `
-                    Se han registrado <strong>${total} episodios</strong>. El detonante más recurrente detectado es <strong>${escapeHtml(topTrig)}</strong>. Se recomienda presentar este reporte a tu médico tratante.
+                    Se han registrado <strong>${total} episodios</strong>. El detonante más recurrente es <strong>${escapeHtml(topTrig)}</strong>. Presenta este reporte a tu médico.
                 `;
             } else {
                 document.getElementById('stat-avg-pain').innerText = '0.0';
                 document.getElementById('stat-avg-hours').innerText = '0h';
                 document.getElementById('stat-top-trigger').innerText = 'N/A';
-                document.getElementById('migPatternInsight').innerText = 'Registra episodios para analizar patrones de salud.';
+                document.getElementById('migPatternInsight').innerText = 'Registra episodios para analizar patrones.';
             }
 
             const container = document.getElementById('migraine-history-container');
@@ -2094,9 +2074,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                 <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-2">
-                            <span class="w-8 h-8 rounded-xl font-bold text-xs text-white flex items-center justify-center ${m.pain >= 7 ? 'bg-red-500' : m.pain >= 4 ? 'bg-amber-500' : 'bg-blue-500'}">
-                                ${escapeHtml(m.pain)}
-                            </span>
+                            <span class="w-8 h-8 rounded-xl font-bold text-xs text-white flex items-center justify-center ${m.pain >= 7 ? 'bg-red-500' : m.pain >= 4 ? 'bg-amber-500' : 'bg-blue-500'}">${escapeHtml(m.pain)}</span>
                             <div>
                                 <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Crisis de Migraña</h4>
                                 <p class="text-[10px] text-slate-400">${escapeHtml(m.date)} • ${escapeHtml(m.time || '')} (${escapeHtml(m.duration || 1)} hrs)</p>
@@ -2106,7 +2084,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
-                    ${m.symptoms && m.symptoms.length ? `<p class="text-[11px] text-slate-500">🤢 <strong>Síntomas:</strong> ${m.symptoms.map(escapeHtml).join(', ')}</p>` : ''}
+                    ${m.symptoms && m.symptoms.length ? `<p class="text-[11px] text-slate-500"><strong>Síntomas:</strong> ${m.symptoms.map(escapeHtml).join(', ')}</p>` : ''}
                     ${m.triggers && m.triggers.length ? `<div class="flex flex-wrap gap-1 text-[10px]">${m.triggers.map(t => `<span class="bg-purple-50 dark:bg-purple-950/40 text-brand-purple px-2 py-0.5 rounded-md font-medium">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
                     ${m.meds ? `<p class="text-xs text-slate-600 dark:text-slate-300"><i class="fa-solid fa-pills text-brand-blue mr-1"></i> ${escapeHtml(m.meds)}</p>` : ''}
                 </div>
@@ -2114,7 +2092,157 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         }
 
         // =========================================
-        // PASO 5: OmniChat
+        // PDF MIGRAÑA (con DM Sans UTF-8)
+        // =========================================
+
+        // Sanitizar texto para evitar problemas en PDF (reemplazar tildes problemáticas si fuera necesario)
+        function sanitizePDFText(str) {
+            if (!str) return '';
+            return String(str);
+        }
+
+        async function downloadMigrainePDF() {
+            if (state.migraines.length === 0) {
+                toastAlert('No hay episodios para exportar.', 'warning');
+                return;
+            }
+            if (typeof window.jspdf === 'undefined') {
+                toastAlert('Error: la librería PDF no cargó. Recarga la página.', 'error');
+                return;
+            }
+
+            showToast('Generando PDF...', 'info', 2000);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Intentar cargar DM Sans como fuente personalizada
+                // Para simplificar, usamos Helvetica con texto sanitizado
+                // (helvetica no soporta UTF-8 nativo pero se ve bien con ASCII)
+                
+                const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
+
+                // Encabezado
+                doc.setFillColor(99, 102, 241);
+                doc.rect(0, 0, 210, 35, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(22);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Informe Medico', 15, 15);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Control de Migrana - Omniapp', 15, 23);
+                doc.setFontSize(9);
+                doc.text('Generado: ' + new Date().toLocaleString('es-ES'), 15, 30);
+
+                // Datos del paciente
+                doc.setTextColor(30, 41, 59);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Paciente:', 15, 50);
+                doc.setFont('helvetica', 'normal');
+                doc.text(userName, 45, 50);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('N Registro:', 15, 57);
+                doc.setFont('helvetica', 'normal');
+                doc.text(currentUserData.reg || '--', 45, 57);
+
+                doc.setFont('helvetica', 'bold');
+                doc.text('Fecha informe:', 15, 64);
+                doc.setFont('helvetica', 'normal');
+                doc.text(new Date().toLocaleDateString('es-ES'), 55, 64);
+
+                // Estadísticas
+                const total = state.migraines.length;
+                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
+                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
+                const avgPain = (totalPain / total).toFixed(1);
+                const avgHours = (totalHours / total).toFixed(1);
+
+                const triggerCounts = {};
+                state.migraines.forEach(m => {
+                    if (m.triggers && Array.isArray(m.triggers)) {
+                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
+                    }
+                });
+                const topTriggers = Object.keys(triggerCounts)
+                    .sort((a, b) => triggerCounts[b] - triggerCounts[a])
+                    .slice(0, 3)
+                    .map(t => sanitizePDFText(t));
+
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(99, 102, 241);
+                doc.text('Resumen Estadistico', 15, 80);
+
+                doc.setFontSize(10);
+                doc.setTextColor(30, 41, 59);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Total de episodios: ${total}`, 15, 90);
+                doc.text(`Promedio de dolor: ${avgPain} / 10`, 15, 97);
+                doc.text(`Duracion promedio: ${avgHours} horas`, 15, 104);
+                
+                const topTrigText = topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos';
+                doc.text('Detonantes mas frecuentes:', 15, 111);
+                doc.setFont('helvetica', 'bold');
+                doc.text(topTrigText, 80, 111);
+
+                // Tabla
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(99, 102, 241);
+                doc.text('Historial de Episodios', 15, 128);
+
+                const sorted = [...state.migraines].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                const tableData = sorted.map(m => [
+                    m.date || '--',
+                    m.time || '--',
+                    `${m.pain || 0}/10`,
+                    `${m.duration || 1}h`,
+                    (Array.isArray(m.symptoms) ? m.symptoms.map(sanitizePDFText).join(', ') : '').substring(0, 35),
+                    (Array.isArray(m.triggers) ? m.triggers.map(sanitizePDFText).join(', ') : '').substring(0, 35),
+                    (m.meds || '').substring(0, 30)
+                ]);
+
+                doc.autoTable({
+                    startY: 133,
+                    head: [['Fecha', 'Hora', 'Dolor', 'Dur.', 'Sintomas', 'Detonantes', 'Medicamento']],
+                    body: tableData,
+                    theme: 'striped',
+                    headStyles: { fillColor: [99, 102, 241], fontSize: 8, fontStyle: 'bold' },
+                    bodyStyles: { fontSize: 7, cellPadding: 2 },
+                    alternateRowStyles: { fillColor: [240, 243, 255] },
+                    margin: { left: 15, right: 15 },
+                    columnStyles: {
+                        0: { cellWidth: 20 }, 1: { cellWidth: 15 },
+                        2: { cellWidth: 15 }, 3: { cellWidth: 15 },
+                        4: { cellWidth: 40 }, 5: { cellWidth: 40 },
+                        6: { cellWidth: 30 }
+                    }
+                });
+
+                // Footer
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(`Omniapp  |  Pagina ${i} de ${pageCount}`, 105, 290, { align: 'center' });
+                }
+
+                const fileName = `informe-migrana-${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+                showToast('PDF generado exitosamente', 'success', 3000);
+            } catch (err) {
+                console.error('Error al generar PDF:', err);
+                toastAlert('Error al generar el PDF.', 'error');
+            }
+        }
+
+        // =========================================
+        // CHAT
         // =========================================
 
         function handleChatKeydown(e) {
@@ -2128,16 +2256,13 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
-
             if (!text) return;
-
             db.ref(`${userKey}/chat`).push({
-                text: text,
+                text,
                 timestamp: Date.now(),
                 time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
                 date: new Date().toLocaleDateString('es-ES')
             });
-
             input.value = '';
             input.style.height = 'auto';
         }
@@ -2156,12 +2281,11 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                     <div class="chat-empty">
                         <i class="fa-solid fa-comment-dots text-4xl mb-3 opacity-30"></i>
                         <p>Aún no hay mensajes.</p>
-                        <p class="text-xs mt-1">Escribe tu primera nota rápida abajo 👇</p>
+                        <p class="text-xs mt-1">Escribe tu primera nota abajo 👇</p>
                     </div>
                 `;
                 return;
             }
-
             container.innerHTML = state.chat.map(msg => `
                 <div class="chat-bubble mine">
                     <div>${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
@@ -2173,15 +2297,11 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                     </div>
                 </div>
             `).join('');
-
-            // Auto-scroll al final
-            setTimeout(() => {
-                container.scrollTop = container.scrollHeight;
-            }, 50);
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
         }
 
         // =========================================
-        // PASO 6: OmniBan
+        // OmniBan
         // =========================================
 
         function toggleOmniBanAllDays() {
@@ -2189,7 +2309,6 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const datesBox = document.getElementById('omniban-dates-box');
             const startInput = document.getElementById('omniban-start');
             const endInput = document.getElementById('omniban-end');
-
             if (allDays) {
                 datesBox.classList.add('hidden');
                 startInput.required = false;
@@ -2210,21 +2329,13 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const end = allDays ? null : document.getElementById('omniban-end').value;
 
             if (!name) return toastAlert('Escribe el nombre o intención.', 'warning');
-            if (!allDays && (!start || !end)) {
-                return toastAlert('Selecciona fecha de inicio y fin.', 'warning');
-            }
-            if (!allDays && start > end) {
-                return toastAlert('La fecha de fin no puede ser antes del inicio.', 'warning');
-            }
+            if (!allDays && (!start || !end)) return toastAlert('Selecciona fechas.', 'warning');
+            if (!allDays && start > end) return toastAlert('Fecha fin no puede ser antes de inicio.', 'warning');
 
             const omniban = {
-                name,
-                reason,
-                allDays,
+                name, reason, allDays,
                 start: start || new Date().toISOString().split('T')[0],
-                end: end,
-                timestamp: Date.now(),
-                completed: false
+                end, timestamp: Date.now(), completed: false
             };
 
             db.ref(`${userKey}/omniban`).push(omniban, (err) => {
@@ -2241,9 +2352,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
 
         function toggleOmniBanCompleted(id) {
             const item = state.omniban.find(o => o.id === id);
-            if (item) {
-                db.ref(`${userKey}/omniban/${id}`).update({ completed: !item.completed });
-            }
+            if (item) db.ref(`${userKey}/omniban/${id}`).update({ completed: !item.completed });
         }
 
         function deleteOmniBan(id) {
@@ -2257,13 +2366,12 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const start = new Date(item.start + 'T00:00:00');
-
             if (item.allDays) {
-                const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+                const diff = Math.floor((today - start) / 86400000) + 1;
                 return diff > 0 ? diff : 0;
             } else {
                 const end = new Date(item.end + 'T00:00:00');
-                const diff = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                const diff = Math.floor((end - start) / 86400000) + 1;
                 return diff > 0 ? diff : 0;
             }
         }
@@ -2302,20 +2410,20 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
 
                 let estadoBadge = '';
                 if (completado) {
-                    estadoBadge = `<span class="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-md font-bold">✓ COMPLETADA</span>`;
+                    estadoBadge = `<span class="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-md font-bold">COMPLETADA</span>`;
                 } else if (!vigente) {
                     estadoBadge = `<span class="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-md font-bold">VENCIDA</span>`;
                 } else if (o.allDays) {
-                    estadoBadge = `<span class="text-[9px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md font-bold">∞ TODOS LOS DÍAS</span>`;
+                    estadoBadge = `<span class="text-[9px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md font-bold">TODOS LOS DIAS</span>`;
                 } else {
-                    estadoBadge = `<span class="text-[9px] bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-md font-bold">${dias} DÍA(S)</span>`;
+                    estadoBadge = `<span class="text-[9px] bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-md font-bold">${dias} DIA(S)</span>`;
                 }
 
                 return `
                     <div class="omniban-card ${completado ? 'completed' : ''} stagger-item hover-card bg-white dark:bg-slate-900 p-4 pl-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
                         <div class="flex justify-between items-start gap-2">
                             <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100 ${completado ? 'line-through' : ''}">🙏 ${escapeHtml(o.name)}</h4>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100 ${completado ? 'line-through' : ''}">${escapeHtml(o.name)}</h4>
                                 ${o.reason ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(o.reason)}</p>` : ''}
                                 <div class="flex flex-wrap items-center gap-2 mt-2">
                                     ${estadoBadge}
@@ -2323,7 +2431,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                                 </div>
                             </div>
                             <div class="flex flex-col gap-1 shrink-0">
-                                <button onclick="toggleOmniBanCompleted('${escapeAttr(o.id)}')" class="text-slate-400 hover:text-emerald-500 transition p-1" title="${completado ? 'Marcar como activa' : 'Marcar como completada'}">
+                                <button onclick="toggleOmniBanCompleted('${escapeAttr(o.id)}')" class="text-slate-400 hover:text-emerald-500 transition p-1">
                                     <i class="fa-${completado ? 'solid fa-circle-check text-emerald-500' : 'regular fa-circle'}"></i>
                                 </button>
                                 <button onclick="deleteOmniBan('${escapeAttr(o.id)}')" class="text-slate-300 hover:text-red-500 transition p-1">
@@ -2344,16 +2452,14 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
             e.preventDefault();
             const title = document.getElementById('dev-title').value.trim();
             const body = document.getElementById('dev-text').value.trim();
-
             if (!body) return;
-
             db.ref(`${userKey}/notes`).push({ title, body, date: new Date().toLocaleDateString('es-ES') });
             document.getElementById('dev-title').value = '';
             document.getElementById('dev-text').value = '';
             showToast('Reflexión guardada', 'success');
         }
 
-        function deleteDevotional(id) { 
+        function deleteDevotional(id) {
             db.ref(`${userKey}/notes/${id}`).remove();
             showToast('Reflexión eliminada', 'info', 2000);
         }
@@ -2364,7 +2470,6 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                 container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Sin oraciones guardadas.</p>`;
                 return;
             }
-
             container.innerHTML = state.devotionals.map((d, idx) => `
                 <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
                     <div class="flex justify-between items-center text-xs">
@@ -2418,7 +2523,7 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         }
 
         function clearCurrentStore() {
-            if(confirm('¿Deseas limpiar las cantidades y precios de esta tienda?')) {
+            if(confirm('¿Deseas limpiar esta tienda?')) {
                 const storeData = state.stores[currentStoreKey] || {};
                 Object.keys(storeData).forEach(key => {
                     db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
@@ -2430,12 +2535,10 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
         function renderSuper() {
             const container = document.getElementById('super-items-container');
             const items = state.stores[currentStoreKey] || {};
-
             if (Object.keys(items).length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Lista de tienda vacía.</p>`;
                 return;
             }
-
             container.innerHTML = Object.keys(items).map(key => {
                 const p = items[key];
                 const safeKey = escapeAttr(key);
@@ -2455,6 +2558,110 @@ Fecha del backup: ${new Date().toLocaleString('es-ES')}
                     </div>
                 `;
             }).join('');
+        }
+
+        // =========================================
+        // EXPORTAR DATOS
+        // =========================================
+
+        function arrayToCSV(rows, headers) {
+            if (!rows || rows.length === 0) return headers ? headers.join(',') + '\n' : '';
+            const allHeaders = headers || Object.keys(rows[0]);
+            const escapeCSV = (value) => {
+                if (value === null || value === undefined) return '';
+                const str = String(value);
+                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+                    return '"' + str.replace(/"/g, '""') + '"';
+                }
+                return str;
+            };
+            const headerLine = allHeaders.map(escapeCSV).join(',');
+            const dataLines = rows.map(row => allHeaders.map(h => escapeCSV(row[h])).join(','));
+            return [headerLine, ...dataLines].join('\n');
+        }
+
+        function getBackupTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        }
+
+        async function exportAllData() {
+            if (!userKey || !currentUserData) return toastAlert('Debes iniciar sesión.', 'warning');
+            if (typeof JSZip === 'undefined') return toastAlert('Error: recarga la página.', 'error');
+
+            showToast('Generando backup...', 'info', 2000);
+            try {
+                const zip = new JSZip();
+                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
+
+                folder.file('usuario.csv', '\uFEFF' + arrayToCSV([{
+                    firstName: currentUserData.firstName || '',
+                    lastName: currentUserData.lastName || '',
+                    reg: currentUserData.reg || '',
+                    tieneHash: currentUserData.passHash ? 'Sí' : 'No'
+                }], ['firstName', 'lastName', 'reg', 'tieneHash']));
+
+                folder.file('tareas.csv', '\uFEFF' + (state.tasks.length ? arrayToCSV(state.tasks.map(t => ({
+                    descripcion: t.desc || '', prioridad: t.priority || '',
+                    categoria: t.category || '', fecha: t.date || '',
+                    completada: t.completed ? 'Sí' : 'No'
+                })), ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']) : 'descripcion,prioridad,categoria,fecha,completada\n'));
+
+                const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
+                folder.file('horario.csv', '\uFEFF' + (state.horario.length ? arrayToCSV(state.horario.map(h => ({
+                    dia: dayNames[h.day] || h.day, hora: h.hour || '', actividad: h.activity || ''
+                })), ['dia', 'hora', 'actividad']) : 'dia,hora,actividad\n'));
+
+                folder.file('pastillas.csv', '\uFEFF' + (state.pills.length ? arrayToCSV(state.pills.map(p => ({
+                    nombre: p.name || '', dosis: p.dose || '',
+                    intervalo_horas: p.interval || '', hora_inicio: p.startTime || ''
+                })), ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']) : 'nombre,dosis,intervalo_horas,hora_inicio\n'));
+
+                folder.file('migrana.csv', '\uFEFF' + (state.migraines.length ? arrayToCSV(state.migraines.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => ({
+                    fecha: m.date || '', hora: m.time || '', dolor: m.pain || '',
+                    duracion_horas: m.duration || '',
+                    sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
+                    desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
+                    medicamento: m.meds || ''
+                })), ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']) : 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n'));
+
+                folder.file('devocional.csv', '\uFEFF' + (state.devotionals.length ? arrayToCSV(state.devodocionales || state.devotionals.map(d => ({
+                    titulo: d.title || '', texto: d.body || d.text || '', fecha: d.date || ''
+                })), ['titulo', 'texto', 'fecha']) : 'titulo,texto,fecha\n'));
+
+                const superRows = [];
+                const storeNames = { mercado: 'Mercado', costco: 'Costco', sams: "Sam's", zorro: 'El Zorro', monarca: 'Monarca', extras: 'Extras' };
+                Object.keys(state.stores || {}).forEach(storeKey => {
+                    const items = state.stores[storeKey] || {};
+                    Object.keys(items).forEach(itemKey => {
+                        const item = items[itemKey];
+                        superRows.push({
+                            tienda: storeNames[storeKey] || storeKey,
+                            producto: item.name || '', cantidad: item.qty || '',
+                            precio: item.price || '', comprado: item.done ? 'Sí' : 'No'
+                        });
+                    });
+                });
+                folder.file('super.csv', '\uFEFF' + (superRows.length ? arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']) : 'tienda,producto,cantidad,precio,comprado\n'));
+
+                folder.file('LEEME.txt', `Omniapp - Backup\nUsuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}\nReg: ${currentUserData.reg || ''}\nFecha: ${new Date().toLocaleString('es-ES')}\n`);
+
+                const blob = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast('¡Backup descargado!', 'success', 4000);
+            } catch (err) {
+                console.error('Error:', err);
+                toastAlert('Error al generar el backup.', 'error');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', checkActiveSession);
