@@ -1,21 +1,23 @@
 {
-  "name": "CondoApp",
-  "short_name": "CondoApp",
-  "description": "Tu espacio personal de organización, salud y devocional.",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0A192F",
-  "theme_color": "#0056B3",
+  "short_name": "Omniapp",
+  "name": "Omniapp — Tu Centro de Control",
   "icons": [
     {
-      "src": "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza",
+      "src": "https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://lh3.googleusercontent.com/d/13hRhykw7dbuVJxKWOBU_dkKMV5RXycza",
+      "src": "https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "display": "standalone",
+  "orientation": "portrait"
 }
