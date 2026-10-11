@@ -997,10 +997,9 @@
             };
         }
 
-        // Revisión cada minuto para notificaciones y actualización de pantalla
+        // Revisión cada 30 segundos para notificaciones y actualización ligera de labels
         setInterval(() => {
             const now = new Date();
-            const currentHHMM = now.toTimeString().substring(0,5);
 
             state.pills.forEach(pill => {
                 const nextPill = getNextPillTime(pill.startTime, pill.interval);
@@ -1015,9 +1014,10 @@
                 }
             });
 
-            // Volver a renderizar para actualizar el contador/horario si cambio de hora
+            // Actualizar SOLO el texto de "Próxima toma" si el usuario está en el pastillero
+            // (sin re-renderizar toda la lista, para no perder foco ni scroll)
             if (state.currentTab === 'pastillero') {
-                renderPills();
+                updatePillLabels();
             }
         }, 30000);
 
@@ -1471,8 +1471,8 @@
                                 <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${escapeHtml(p.name)}</h4>
                                 <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(p.dose)} • Cada ${escapeHtml(p.interval)} hrs</p>
                                 <div class="flex items-center gap-1.5 mt-1">
-                                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
-                                        <i class="fa-solid fa-bell text-indigo-500"></i> Próxima toma: ${escapeHtml(nextPill.displayLabel)}
+                                    <span id="pill-next-${escapeAttr(p.id)}" class="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+                                        <i class="fa-solid fa-bell text-indigo-500"></i> Próxima toma: <span class="pill-next-label">${escapeHtml(nextPill.displayLabel)}</span>
                                     </span>
                                 </div>
                             </div>
@@ -1483,6 +1483,23 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        /**
+         * Actualiza SOLO el texto de "Próxima toma" en cada medicamento,
+         * sin re-renderizar toda la lista (evita perder el foco, el scroll, etc.)
+         */
+        function updatePillLabels() {
+            state.pills.forEach(p => {
+                const container = document.getElementById(`pill-next-${p.id}`);
+                if (!container) return; // No está en el DOM (otro tab, etc.)
+                
+                const label = container.querySelector('.pill-next-label');
+                if (!label) return;
+                
+                const nextPill = getNextPillTime(p.startTime, p.interval);
+                label.textContent = nextPill.displayLabel;
+            });
         }
 
         /* LÓGICA COMPLETA DE MIGRAÑA */
