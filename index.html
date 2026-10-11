@@ -399,7 +399,7 @@
                         </div>
                     </div>
 
-                    <!-- VIEW 2: HORARIO SEMANAL -->
+                    <!-- VIEW 2: HORARIO SEMANAL CON HORARIOS PERSONALIZADOS DE LA IMAGEN -->
                     <div id="subview-horario" class="hidden space-y-4">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-slate-500 dark:text-slate-400">Organiza tus clases o rutina semanal.</p>
@@ -408,8 +408,8 @@
                             </button>
                         </div>
                         <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
-                            <div class="min-w-[650px] grid grid-cols-8 gap-1.5 text-center text-xs">
-                                <div class="p-2 font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 rounded-lg">Hora</div>
+                            <div class="min-w-[750px] grid grid-cols-8 gap-1.5 text-center text-xs">
+                                <div class="p-2 font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 rounded-lg">Horario</div>
                                 <div class="p-2 font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-300 rounded-lg">Lun</div>
                                 <div class="p-2 font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-300 rounded-lg">Mar</div>
                                 <div class="p-2 font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 rounded-lg">Mié</div>
@@ -624,7 +624,6 @@
 
                 <!-- SECTION 5: MI SÚPER -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
-                    <!-- Selector de Tienda (Ajustado dinámicamente) -->
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
                         <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🛒 Costco</button>
@@ -634,7 +633,6 @@
                         <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">⭐ Extras</button>
                     </div>
 
-                    <!-- Formulario de nuevo producto ajustado a la pantalla móvil -->
                     <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 overflow-hidden">
                         <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 min-w-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                         <button type="submit" class="grad-bg text-white px-3 sm:px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0 whitespace-nowrap">
@@ -708,14 +706,37 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block font-semibold mb-1">Hora inicio</label>
-                        <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
-                            <option value="8">08:00 AM</option>
-                            <option value="10">10:00 AM</option>
-                            <option value="12">12:00 PM</option>
-                            <option value="14">02:00 PM</option>
-                            <option value="16">04:00 PM</option>
-                            <option value="18">06:00 PM</option>
+                        <label class="block font-semibold mb-1">Horario</label>
+                        <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
+                            <option value="6:00 a.m">6:00 a.m</option>
+                            <option value="6:30 a.m">6:30 a.m</option>
+                            <option value="7:30 a.m">7:30 a.m</option>
+                            <option value="8:00 a.m">8:00 a.m</option>
+                            <option value="8:30 a.m a 9:00 a.m">8:30 a.m a 9:00 a.m</option>
+                            <option value="9:00 a.m a 10:00 a.m">9:00 a.m a 10:00 a.m</option>
+                            <option value="10:00 a.m a 10:15 a.m">10:00 a.m a 10:15 a.m</option>
+                            <option value="10:15 a.m a 10:55 a.m">10:15 a.m a 10:55 a.m</option>
+                            <option value="10:55 a.m a 11:10 a.m">10:55 a.m a 11:10 a.m</option>
+                            <option value="11:10 a.m a 11:50 a.m">11:10 a.m a 11:50 a.m</option>
+                            <option value="11:50 a.m a 12:00 p.m">11:50 a.m a 12:00 p.m</option>
+                            <option value="12:00 p.m">12:00 p.m</option>
+                            <option value="12:10 p.m a 1:10 p.m">12:10 p.m a 1:10 p.m</option>
+                            <option value="1:10 p.m a 2:00 p.m">1:10 p.m a 2:00 p.m</option>
+                            <option value="2:00 p.m a 2:10 p.m">2:00 p.m a 2:10 p.m</option>
+                            <option value="2:10 p.m">2:10 p.m</option>
+                            <option value="2:20 p.m">2:20 p.m</option>
+                            <option value="3:00 p.m a 3:45 p.m">3:00 p.m a 3:45 p.m</option>
+                            <option value="3:45 p.m a 4:00 p.m">3:45 p.m a 4:00 p.m</option>
+                            <option value="4:00 p.m a 4:50 p.m">4:00 p.m a 4:50 p.m</option>
+                            <option value="4:50 p.m a 5:00 p.m">4:50 p.m a 5:00 p.m</option>
+                            <option value="5:00 p.m a 5:55 p.m">5:00 p.m a 5:55 p.m</option>
+                            <option value="6:00 p.m a 7:00 p.m">6:00 p.m a 7:00 p.m</option>
+                            <option value="7:00 p.m a 7:15 p.m">7:00 p.m a 7:15 p.m</option>
+                            <option value="7:15 p.m a 8:30 p.m">7:15 p.m a 8:30 p.m</option>
+                            <option value="8:30 p.m">8:30 p.m</option>
+                            <option value="9:00 a 9:40 pm">9:00 a 9:40 pm</option>
+                            <option value="9:40 p.m">9:40 p.m</option>
+                            <option value="10:00 p.m">10:00 p.m</option>
                         </select>
                     </div>
                 </div>
@@ -747,6 +768,39 @@
         let currentUserData = {};
         let currentStoreKey = "mercado";
         let selectedPainLevel = 5;
+
+        // Lista de franjas horarias tomadas directamente de la imagen adjunta
+        const CUSTOM_HOURS = [
+            "6:00 a.m",
+            "6:30 a.m",
+            "7:30 a.m",
+            "8:00 a.m",
+            "8:30 a.m a 9:00 a.m",
+            "9:00 a.m a 10:00 a.m",
+            "10:00 a.m a 10:15 a.m",
+            "10:15 a.m a 10:55 a.m",
+            "10:55 a.m a 11:10 a.m",
+            "11:10 a.m a 11:50 a.m",
+            "11:50 a.m a 12:00 p.m",
+            "12:00 p.m",
+            "12:10 p.m a 1:10 p.m",
+            "1:10 p.m a 2:00 p.m",
+            "2:00 p.m a 2:10 p.m",
+            "2:10 p.m",
+            "2:20 p.m",
+            "3:00 p.m a 3:45 p.m",
+            "3:45 p.m a 4:00 p.m",
+            "4:00 p.m a 4:50 p.m",
+            "4:50 p.m a 5:00 p.m",
+            "5:00 p.m a 5:55 p.m",
+            "6:00 p.m a 7:00 p.m",
+            "7:00 p.m a 7:15 p.m",
+            "7:15 p.m a 8:30 p.m",
+            "8:30 p.m",
+            "9:00 a 9:40 pm",
+            "9:40 p.m",
+            "10:00 p.m"
+        ];
 
         let state = {
             currentTab: 'agenda',
@@ -1087,7 +1141,7 @@
             e.preventDefault();
             const activity = document.getElementById('horario-title').value;
             const day = parseInt(document.getElementById('horario-day').value);
-            const hour = parseInt(document.getElementById('horario-hour').value);
+            const hour = document.getElementById('horario-hour').value;
 
             db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
             closeModalHorario();
@@ -1097,12 +1151,11 @@
 
         function renderHorario() {
             const container = document.getElementById('horario-grid-body');
-            const hours = [8, 10, 12, 14, 16, 18];
             const days = [1, 2, 3, 4, 5, 6, 0];
 
             let html = '';
-            hours.forEach(h => {
-                html += `<div class="p-2 font-bold text-slate-400 text-[11px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center">${h}:00</div>`;
+            CUSTOM_HOURS.forEach(h => {
+                html += `<div class="p-2 font-bold text-slate-500 dark:text-slate-400 text-[10px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-center leading-tight">${h}</div>`;
                 days.forEach(d => {
                     const block = state.horario.find(item => (item.day == d || item.day === undefined) && item.hour == h);
                     if (block) {
@@ -1307,16 +1360,14 @@
             `).join('');
         }
 
-        /* SECCIÓN DEL SÚPER - CORRECCIÓN DE PÍLDORAS DINÁMICAS */
+        /* SECCIÓN DEL SÚPER */
         function selectStore(storeKey) {
             currentStoreKey = storeKey;
             
-            // Restablecer estilos inactivos en todos los botones
             document.querySelectorAll('.store-btn').forEach(b => {
                 b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
             });
             
-            // Aplicar estilo activo únicamente a la casilla seleccionada
             const activeBtn = document.getElementById('btn-store-' + storeKey);
             if(activeBtn) {
                 activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
