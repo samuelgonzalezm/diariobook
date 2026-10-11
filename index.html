@@ -28,8 +28,12 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    <!-- JSZip (para generar el backup ZIP) -->
+    <!-- JSZip (para backup ZIP) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- jsPDF (para exportar PDF de migraña) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -119,33 +123,11 @@
         }
 
         @media (max-width: 600px) {
-            .super-product-item-wrapper {
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 8px;
-            }
-            .product-row-pill {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-                flex: 1;
-            }
-            .pill-name-wrapper {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                width: 100%;
-            }
-            .pill-name-box {
-                flex: 1;
-                width: 100%;
-            }
-            .pill-sub-group {
-                display: flex;
-                gap: 8px;
-                width: 100%;
-                padding-left: 32px;
-            }
+            .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
+            .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
+            .pill-name-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
+            .pill-name-box { flex: 1; width: 100%; }
+            .pill-sub-group { display: flex; gap: 8px; width: 100%; padding-left: 32px; }
         }
 
         .pain-btn {
@@ -160,15 +142,8 @@
             transition: all 0.2s;
             text-align: center;
         }
-        .dark .pain-btn {
-            background: #1e293b;
-            border-color: #334155;
-        }
-        .pain-btn.selected {
-            border-color: transparent;
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
+        .dark .pain-btn { background: #1e293b; border-color: #334155; }
+        .pain-btn.selected { border-color: transparent; transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
         .tag-chip {
             padding: 6px 12px;
@@ -181,16 +156,8 @@
             transition: all 0.2s;
             color: #1e293b;
         }
-        .dark .tag-chip {
-            background: #1e293b;
-            border-color: #334155;
-            color: #f8fafc;
-        }
-        .tag-chip.active {
-            background: #6366f1;
-            color: #ffffff;
-            border-color: #6366f1;
-        }
+        .dark .tag-chip { background: #1e293b; border-color: #334155; color: #f8fafc; }
+        .tag-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
 
         .day-chip {
             padding: 6px 10px;
@@ -204,18 +171,68 @@
             color: #475569;
             text-align: center;
         }
-        .dark .day-chip {
-            background: #1e293b;
-            border-color: #334155;
-            color: #cbd5e1;
+        .dark .day-chip { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+        .day-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
+
+        /* ==========================================
+           PASO 3: ANIMACIONES
+           ========================================== */
+
+        /* Pestañas: fade + slide */
+        .tab-content:not(.hidden) {
+            animation: tabFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .day-chip.active {
-            background: #6366f1;
-            color: #ffffff;
-            border-color: #6366f1;
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TOASTS */
+        /* Items de lista escalonados */
+        .stagger-item {
+            animation: staggerFadeIn 0.3s ease-out backwards;
+        }
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal: fade + zoom */
+        #modal-horario:not(.hidden) > div {
+            animation: modalZoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalZoomIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Botones con escala al presionar */
+        button:active {
+            transform: scale(0.97);
+            transition: transform 0.1s;
+        }
+
+        /* Cards hover (solo desktop) */
+        @media (hover: hover) {
+            .hover-card {
+                transition: box-shadow 0.2s, transform 0.2s;
+            }
+            .hover-card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                transform: translateY(-1px);
+            }
+        }
+
+        /* Accesibilidad: respetar preferencia del usuario */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ==========================================
+           TOASTS
+           ========================================== */
         #toast-container {
             position: fixed;
             top: 1rem;
@@ -245,20 +262,72 @@
             animation: toast-in 0.3s forwards;
             pointer-events: auto;
         }
-        .toast.toast-out {
-            animation: toast-out 0.3s forwards;
-        }
+        .toast.toast-out { animation: toast-out 0.3s forwards; }
         .toast-success { border-left: 4px solid #10b981; }
         .toast-error   { border-left: 4px solid #ef4444; }
         .toast-info    { border-left: 4px solid #6366f1; }
         .toast-warning { border-left: 4px solid #f59e0b; }
 
-        @keyframes toast-in {
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
+        @keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
+
+        /* ==========================================
+           PASO 5: CHAT (OmniChat)
+           ========================================== */
+        #chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
-        @keyframes toast-out {
-            to { opacity: 0; transform: translateY(-12px); }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            position: relative;
+            animation: staggerFadeIn 0.25s ease-out;
         }
+        .chat-bubble.mine {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble-time {
+            font-size: 0.6rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+        .chat-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        /* ==========================================
+           PASO 6: OmniBan
+           ========================================== */
+        .omniban-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .omniban-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #6366f1;
+        }
+        .omniban-card.completed::before {
+            background: #10b981;
+        }
+        .omniban-card.completed { opacity: 0.7; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -279,9 +348,7 @@
                         document.documentElement.classList.add('dark');
                     }
                 }
-            } catch (e) {
-                console.warn('Theme detection failed:', e);
-            }
+            } catch (e) {}
         })();
     </script>
 </head>
@@ -303,7 +370,6 @@
                 <button id="tabBtnRegister" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 dark:text-slate-400" onclick="switchAuthTab('register')">Registrarse</button>
             </div>
 
-            <!-- LOGIN FORM -->
             <form id="loginForm" class="space-y-3 text-left" onsubmit="event.preventDefault(); handleLogin();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">N° DE REGISTRO (8 DÍGITOS)</label>
@@ -323,7 +389,6 @@
                 </button>
             </form>
 
-            <!-- REGISTER FORM -->
             <form id="registerForm" class="space-y-3 text-left hidden" onsubmit="event.preventDefault(); handleRegister();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">NOMBRE(S)</label>
@@ -352,46 +417,54 @@
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
         <aside class="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
-            <div>
+            <div class="overflow-y-auto">
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-10 h-10 rounded-full object-cover border-2 border-amber-400" alt="Omniapp Logo">
                     <div>
-                        <h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                            omniapp
-                        </h1>
+                        <h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-white">omniapp</h1>
                         <p class="text-xs text-slate-500 dark:text-slate-400" id="sidebarUserReg">Reg: --------</p>
                     </div>
                 </div>
 
                 <nav class="space-y-1.5" id="desktop-nav">
-                    <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-calendar-check text-lg w-6"></i>
                         <span>Agenda & Horario</span>
                     </button>
 
-                    <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-pills text-lg w-6"></i>
                         <span>Pastillero</span>
                     </button>
 
-                    <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-brain text-lg w-6"></i>
                         <span>Control Migraña</span>
                     </button>
 
-                    <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <button onclick="switchTab('chat')" id="d-nav-chat" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
+                        <i class="fa-solid fa-comments text-lg w-6"></i>
+                        <span>OmniChat</span>
+                    </button>
+
+                    <button onclick="switchTab('omniban')" id="d-nav-omniban" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
+                        <i class="fa-solid fa-hands-praying text-lg w-6"></i>
+                        <span>OmniBan</span>
+                    </button>
+
+                    <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-book-bible text-lg w-6"></i>
                         <span>Devocional</span>
                     </button>
 
-                    <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200">
+                    <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
                         <i class="fa-solid fa-cart-shopping text-lg w-6"></i>
                         <span>Mi Súper</span>
                     </button>
                 </nav>
             </div>
 
-            <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
                 <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition">
                     <span class="flex items-center space-x-2">
                         <i class="fa-solid fa-bell"></i>
@@ -460,7 +533,6 @@
                         </button>
                     </div>
 
-                    <!-- VIEW 1: PLANNER -->
                     <div id="subview-planner" class="space-y-6">
                         <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
                             <form id="form-add-task" onsubmit="handleAddTask(event)" class="space-y-3">
@@ -502,7 +574,6 @@
                         </div>
                     </div>
 
-                    <!-- VIEW 2: HORARIO SEMANAL -->
                     <div id="subview-horario" class="hidden space-y-4">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-slate-500 dark:text-slate-400">Organiza tus clases o rutina semanal.</p>
@@ -606,8 +677,8 @@
                             Cargando análisis de patrones...
                         </p>
 
-                        <button onclick="window.print()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> Generar Informe para el Médico (PDF / Imprimir)
+                        <button onclick="downloadMigrainePDF()" class="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-pdf"></i> Descargar Informe Médico en PDF
                         </button>
                     </div>
 
@@ -695,7 +766,81 @@
                     </div>
                 </section>
 
-                <!-- SECTION 4: DEVOCIONAL -->
+                <!-- SECTION 4: OmniChat -->
+                <section id="tab-chat" class="tab-content hidden space-y-4">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 200px); min-height: 400px;">
+                        <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-indigo-500"></i> OmniChat
+                            </h3>
+                            <span class="text-[10px] text-slate-400">Tus notas personales</span>
+                        </div>
+
+                        <div id="chat-messages" class="flex-1 overflow-y-auto p-4"></div>
+
+                        <form onsubmit="handleSendChatMessage(event)" class="p-3 border-t border-slate-200 dark:border-slate-800 flex gap-2 items-end">
+                            <textarea id="chat-input" rows="1" placeholder="Escribe una nota rápida..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" style="max-height:100px;" onkeydown="handleChatKeydown(event)"></textarea>
+                            <button type="submit" class="grad-bg text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-95 transition shadow-sm shrink-0">
+                                <i class="fa-solid fa-paper-plane text-sm"></i>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: OmniBan -->
+                <section id="tab-omniban" class="tab-content hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-hands-praying text-indigo-500"></i> Nueva Petición de Oración
+                        </h3>
+
+                        <form onsubmit="handleAddOmniBan(event)" class="space-y-3 text-xs sm:text-sm">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre / Intención</label>
+                                <input type="text" id="omniban-name" placeholder="Ej: Juan Pérez, Mi familia, Por salud..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Motivo / Detalle (opcional)</label>
+                                <textarea id="omniban-reason" rows="2" placeholder="Detalles de la petición..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium resize-none"></textarea>
+                            </div>
+
+                            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <input type="checkbox" id="omniban-alldays" class="accent-indigo-600 w-4 h-4" onchange="toggleOmniBanAllDays()">
+                                <label for="omniban-alldays" class="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">
+                                    Orar todos los días (sin fecha de fin)
+                                </label>
+                            </div>
+
+                            <div id="omniban-dates-box" class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desde</label>
+                                    <input type="date" id="omniban-start" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hasta</label>
+                                    <input type="date" id="omniban-end" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
+                                Guardar Petición
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-book-open text-indigo-500"></i> Mis Peticiones
+                            </h3>
+                            <span id="omniban-active-count" class="text-[10px] font-bold text-slate-400"></span>
+                        </div>
+                        <div id="omniban-container" class="space-y-3"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: DEVOCIONAL -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -725,7 +870,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 5: MI SÚPER -->
+                <!-- SECTION 7: MI SÚPER -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
@@ -753,24 +898,32 @@
             </div>
 
             <!-- Mobile Bottom Nav Bar -->
-            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg">
-                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-1 py-2 flex justify-around items-center z-30 shadow-lg overflow-x-auto">
+                <button onclick="switchTab('agenda')" id="m-nav-agenda" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
                     <i class="fa-solid fa-calendar-check text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Agenda</span>
                 </button>
-                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                <button onclick="switchTab('pastillero')" id="m-nav-pastillero" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
                     <i class="fa-solid fa-pills text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Pastillero</span>
                 </button>
-                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                <button onclick="switchTab('migrana')" id="m-nav-migrana" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
                     <i class="fa-solid fa-brain text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Migraña</span>
                 </button>
-                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                <button onclick="switchTab('chat')" id="m-nav-chat" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
+                    <i class="fa-solid fa-comments text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">Chat</span>
+                </button>
+                <button onclick="switchTab('omniban')" id="m-nav-omniban" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
+                    <i class="fa-solid fa-hands-praying text-base"></i>
+                    <span class="text-[9px] font-medium mt-0.5">OmniBan</span>
+                </button>
+                <button onclick="switchTab('devocional')" id="m-nav-devocional" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
                     <i class="fa-solid fa-book-bible text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Devocional</span>
                 </button>
-                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition">
+                <button onclick="switchTab('super')" id="m-nav-super" class="mobile-nav-btn flex flex-col items-center p-1 text-slate-400 hover:text-brand-purple transition shrink-0">
                     <i class="fa-solid fa-cart-shopping text-base"></i>
                     <span class="text-[9px] font-medium mt-0.5">Súper</span>
                 </button>
@@ -878,9 +1031,9 @@
         let selectedPainLevel = 5;
         let notifiedPills = {};
 
-        /* =========================================
-           SISTEMA DE TOASTS
-           ========================================= */
+        // =========================================
+        // TOASTS
+        // =========================================
 
         function showToast(message, type = 'info', duration = 3000) {
             const container = document.getElementById('toast-container');
@@ -889,12 +1042,7 @@
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
 
-            const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️',
-                warning: '⚠️'
-            };
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
 
             toast.innerHTML = `
                 <span style="font-size:1.1rem; flex-shrink:0;">${icons[type] || icons.info}</span>
@@ -913,229 +1061,9 @@
             showToast(message, type, 3500);
         }
 
-        /* =========================================
-           EXPORTAR DATOS (BACKUP ZIP con CSVs)
-           ========================================= */
-
-        /**
-         * Convierte un array de objetos a CSV string
-         * Escapa valores con comillas si contienen comas, comillas o saltos de línea
-         */
-        function arrayToCSV(rows, headers) {
-            if (!rows || rows.length === 0) {
-                return headers ? headers.join(',') + '\n' : '';
-            }
-
-            // Si no se pasan headers, usarlos del primer objeto
-            const allHeaders = headers || Object.keys(rows[0]);
-
-            const escapeCSV = (value) => {
-                if (value === null || value === undefined) return '';
-                const str = String(value);
-                // Si tiene coma, comilla, salto de línea → envolver en comillas y duplicar comillas
-                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-                    return '"' + str.replace(/"/g, '""') + '"';
-                }
-                return str;
-            };
-
-            const headerLine = allHeaders.map(escapeCSV).join(',');
-            const dataLines = rows.map(row => 
-                allHeaders.map(h => escapeCSV(row[h])).join(',')
-            );
-
-            return [headerLine, ...dataLines].join('\n');
-        }
-
-        /**
-         * Genera un timestamp para el nombre del archivo
-         */
-        function getBackupTimestamp() {
-            const now = new Date();
-            const pad = (n) => String(n).padStart(2, '0');
-            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-        }
-
-        /**
-         * Exporta TODOS los datos del usuario actual a un ZIP con múltiples CSVs
-         */
-        async function exportAllData() {
-            // 1. Verificar que hay sesión activa
-            if (!userKey || !currentUserData) {
-                toastAlert('Debes iniciar sesión para exportar datos.', 'warning');
-                return;
-            }
-
-            // 2. Verificar que JSZip está cargado
-            if (typeof JSZip === 'undefined') {
-                toastAlert('Error: la librería de compresión no cargó. Recarga la página.', 'error');
-                return;
-            }
-
-            // 3. Avisar al usuario
-            showToast('Generando backup...', 'info', 2000);
-
-            try {
-                const zip = new JSZip();
-                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
-
-                // ============ USUARIO ============
-                const userCSV = arrayToCSV([{
-                    firstName: currentUserData.firstName || '',
-                    lastName: currentUserData.lastName || '',
-                    reg: currentUserData.reg || '',
-                    tieneHash: currentUserData.passHash ? 'Sí' : 'No'
-                }], ['firstName', 'lastName', 'reg', 'tieneHash']);
-                folder.file('usuario.csv', '\uFEFF' + userCSV); // BOM para Excel
-
-                // ============ TAREAS ============
-                if (state.tasks.length > 0) {
-                    const tasks = state.tasks.map(t => ({
-                        descripcion: t.desc || '',
-                        prioridad: t.priority || '',
-                        categoria: t.category || '',
-                        fecha: t.date || '',
-                        completada: t.completed ? 'Sí' : 'No'
-                    }));
-                    folder.file('tareas.csv', '\uFEFF' + arrayToCSV(tasks, ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']));
-                } else {
-                    folder.file('tareas.csv', '\uFEFF' + 'descripcion,prioridad,categoria,fecha,completada\n');
-                }
-
-                // ============ HORARIO ============
-                if (state.horario.length > 0) {
-                    const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
-                    const horario = state.horario.map(h => ({
-                        dia: dayNames[h.day] || h.day,
-                        hora: h.hour || '',
-                        actividad: h.activity || ''
-                    }));
-                    folder.file('horario.csv', '\uFEFF' + arrayToCSV(horario, ['dia', 'hora', 'actividad']));
-                } else {
-                    folder.file('horario.csv', '\uFEFF' + 'dia,hora,actividad\n');
-                }
-
-                // ============ PASTILLAS ============
-                if (state.pills.length > 0) {
-                    const pills = state.pills.map(p => ({
-                        nombre: p.name || '',
-                        dosis: p.dose || '',
-                        intervalo_horas: p.interval || '',
-                        hora_inicio: p.startTime || ''
-                    }));
-                    folder.file('pastillas.csv', '\uFEFF' + arrayToCSV(pills, ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']));
-                } else {
-                    folder.file('pastillas.csv', '\uFEFF' + 'nombre,dosis,intervalo_horas,hora_inicio\n');
-                }
-
-                // ============ MIGRAÑA ============
-                if (state.migraines.length > 0) {
-                    const migraines = state.migraines
-                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-                        .map(m => ({
-                            fecha: m.date || '',
-                            hora: m.time || '',
-                            dolor: m.pain || '',
-                            duracion_horas: m.duration || '',
-                            sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
-                            desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
-                            medicamento: m.meds || ''
-                        }));
-                    folder.file('migrana.csv', '\uFEFF' + arrayToCSV(migraines, ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']));
-                } else {
-                    folder.file('migrana.csv', '\uFEFF' + 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n');
-                }
-
-                // ============ DEVOCIONAL ============
-                if (state.devotionals.length > 0) {
-                    const devotionals = state.devotionals.map(d => ({
-                        titulo: d.title || '',
-                        texto: d.body || d.text || '',
-                        fecha: d.date || ''
-                    }));
-                    folder.file('devocional.csv', '\uFEFF' + arrayToCSV(devotionals, ['titulo', 'texto', 'fecha']));
-                } else {
-                    folder.file('devocional.csv', '\uFEFF' + 'titulo,texto,fecha\n');
-                }
-
-                // ============ SÚPER ============
-                const superRows = [];
-                const storeNames = {
-                    mercado: 'Mercado',
-                    costco: 'Costco',
-                    sams: "Sam's",
-                    zorro: 'El Zorro',
-                    monarca: 'Monarca',
-                    extras: 'Extras'
-                };
-                Object.keys(state.stores || {}).forEach(storeKey => {
-                    const items = state.stores[storeKey] || {};
-                    Object.keys(items).forEach(itemKey => {
-                        const item = items[itemKey];
-                        superRows.push({
-                            tienda: storeNames[storeKey] || storeKey,
-                            producto: item.name || '',
-                            cantidad: item.qty || '',
-                            precio: item.price || '',
-                            comprado: item.done ? 'Sí' : 'No'
-                        });
-                    });
-                });
-                if (superRows.length > 0) {
-                    folder.file('super.csv', '\uFEFF' + arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']));
-                } else {
-                    folder.file('super.csv', '\uFEFF' + 'tienda,producto,cantidad,precio,comprado\n');
-                }
-
-                // ============ README ============
-                folder.file('LEEME.txt', 
-`Omniapp - Backup de datos
-=========================
-Usuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}
-Reg: ${currentUserData.reg || ''}
-Fecha del backup: ${new Date().toLocaleString('es-ES')}
-
-ARCHIVOS INCLUIDOS:
-- usuario.csv      → Datos de tu cuenta
-- tareas.csv       → Todas tus tareas del Planner
-- horario.csv      → Bloques de tu horario semanal
-- pastillas.csv    → Medicamentos del pastillero
-- migrana.csv      → Historial completo de migrañas
-- devocional.csv   → Tus reflexiones guardadas
-- super.csv        → Productos de tus tiendas
-
-CONSEJOS:
-- Los archivos están en formato CSV
-- Puedes abrirlos con Excel, Google Sheets o Numbers
-- Si ves caracteres raros (Ã± en vez de ñ), importa el CSV como UTF-8
-  (o simplemente abre con Google Sheets, que lo detecta solo)
-- Guarda este ZIP en un lugar seguro
-
-Generado automáticamente por Omniapp
-`);
-
-                // 4. Generar el ZIP
-                const blob = await zip.generateAsync({ type: 'blob' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                showToast('¡Backup descargado exitosamente!', 'success', 4000);
-
-            } catch (err) {
-                console.error('Error al exportar:', err);
-                toastAlert('Error al generar el backup. Revisa la consola.', 'error');
-            }
-        }
-
-        /* =========================================
-           SANITIZACIÓN DE CLAVES PARA FIREBASE
-           ========================================= */
+        // =========================================
+        // SANITIZACIÓN Y SEGURIDAD
+        // =========================================
 
         const FIREBASE_FORBIDDEN_CHARS = /[.#$\[\]\/\u0000-\u001F\u007F]/g;
 
@@ -1158,10 +1086,6 @@ Generado automáticamente por Omniapp
             return `user_${safeReg}_${safeHash.substring(0, 24)}`;
         }
 
-        /* =========================================
-           HASH DE CONTRASEÑAS (SHA-256)
-           ========================================= */
-
         async function hashPassword(password) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password);
@@ -1169,10 +1093,6 @@ Generado automáticamente por Omniapp
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
-
-        /* =========================================
-           ESCAPE HTML (ANTI-XSS)
-           ========================================= */
 
         function escapeHtml(str) {
             if (str == null) return '';
@@ -1193,6 +1113,312 @@ Generado automáticamente por Omniapp
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
         }
+
+        // =========================================
+        // EXPORTAR DATOS (ZIP con CSVs)
+        // =========================================
+
+        function arrayToCSV(rows, headers) {
+            if (!rows || rows.length === 0) {
+                return headers ? headers.join(',') + '\n' : '';
+            }
+            const allHeaders = headers || Object.keys(rows[0]);
+            const escapeCSV = (value) => {
+                if (value === null || value === undefined) return '';
+                const str = String(value);
+                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+                    return '"' + str.replace(/"/g, '""') + '"';
+                }
+                return str;
+            };
+            const headerLine = allHeaders.map(escapeCSV).join(',');
+            const dataLines = rows.map(row => allHeaders.map(h => escapeCSV(row[h])).join(','));
+            return [headerLine, ...dataLines].join('\n');
+        }
+
+        function getBackupTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        }
+
+        async function exportAllData() {
+            if (!userKey || !currentUserData) {
+                toastAlert('Debes iniciar sesión para exportar datos.', 'warning');
+                return;
+            }
+            if (typeof JSZip === 'undefined') {
+                toastAlert('Error: la librería de compresión no cargó. Recarga la página.', 'error');
+                return;
+            }
+
+            showToast('Generando backup...', 'info', 2000);
+
+            try {
+                const zip = new JSZip();
+                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
+
+                const userCSV = arrayToCSV([{
+                    firstName: currentUserData.firstName || '',
+                    lastName: currentUserData.lastName || '',
+                    reg: currentUserData.reg || '',
+                    tieneHash: currentUserData.passHash ? 'Sí' : 'No'
+                }], ['firstName', 'lastName', 'reg', 'tieneHash']);
+                folder.file('usuario.csv', '\uFEFF' + userCSV);
+
+                if (state.tasks.length > 0) {
+                    const tasks = state.tasks.map(t => ({
+                        descripcion: t.desc || '',
+                        prioridad: t.priority || '',
+                        categoria: t.category || '',
+                        fecha: t.date || '',
+                        completada: t.completed ? 'Sí' : 'No'
+                    }));
+                    folder.file('tareas.csv', '\uFEFF' + arrayToCSV(tasks, ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']));
+                } else {
+                    folder.file('tareas.csv', '\uFEFF' + 'descripcion,prioridad,categoria,fecha,completada\n');
+                }
+
+                if (state.horario.length > 0) {
+                    const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
+                    const horario = state.horario.map(h => ({
+                        dia: dayNames[h.day] || h.day,
+                        hora: h.hour || '',
+                        actividad: h.activity || ''
+                    }));
+                    folder.file('horario.csv', '\uFEFF' + arrayToCSV(horario, ['dia', 'hora', 'actividad']));
+                } else {
+                    folder.file('horario.csv', '\uFEFF' + 'dia,hora,actividad\n');
+                }
+
+                if (state.pills.length > 0) {
+                    const pills = state.pills.map(p => ({
+                        nombre: p.name || '',
+                        dosis: p.dose || '',
+                        intervalo_horas: p.interval || '',
+                        hora_inicio: p.startTime || ''
+                    }));
+                    folder.file('pastillas.csv', '\uFEFF' + arrayToCSV(pills, ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']));
+                } else {
+                    folder.file('pastillas.csv', '\uFEFF' + 'nombre,dosis,intervalo_horas,hora_inicio\n');
+                }
+
+                if (state.migraines.length > 0) {
+                    const migraines = state.migraines
+                        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+                        .map(m => ({
+                            fecha: m.date || '',
+                            hora: m.time || '',
+                            dolor: m.pain || '',
+                            duracion_horas: m.duration || '',
+                            sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
+                            desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
+                            medicamento: m.meds || ''
+                        }));
+                    folder.file('migrana.csv', '\uFEFF' + arrayToCSV(migraines, ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']));
+                } else {
+                    folder.file('migrana.csv', '\uFEFF' + 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n');
+                }
+
+                if (state.devotionals.length > 0) {
+                    const devotionals = state.devotionals.map(d => ({
+                        titulo: d.title || '',
+                        texto: d.body || d.text || '',
+                        fecha: d.date || ''
+                    }));
+                    folder.file('devocional.csv', '\uFEFF' + arrayToCSV(devotionals, ['titulo', 'texto', 'fecha']));
+                } else {
+                    folder.file('devocional.csv', '\uFEFF' + 'titulo,texto,fecha\n');
+                }
+
+                const superRows = [];
+                const storeNames = { mercado: 'Mercado', costco: 'Costco', sams: "Sam's", zorro: 'El Zorro', monarca: 'Monarca', extras: 'Extras' };
+                Object.keys(state.stores || {}).forEach(storeKey => {
+                    const items = state.stores[storeKey] || {};
+                    Object.keys(items).forEach(itemKey => {
+                        const item = items[itemKey];
+                        superRows.push({
+                            tienda: storeNames[storeKey] || storeKey,
+                            producto: item.name || '',
+                            cantidad: item.qty || '',
+                            precio: item.price || '',
+                            comprado: item.done ? 'Sí' : 'No'
+                        });
+                    });
+                });
+                if (superRows.length > 0) {
+                    folder.file('super.csv', '\uFEFF' + arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']));
+                } else {
+                    folder.file('super.csv', '\uFEFF' + 'tienda,producto,cantidad,precio,comprado\n');
+                }
+
+                folder.file('LEEME.txt', 
+`Omniapp - Backup de datos
+=========================
+Usuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}
+Reg: ${currentUserData.reg || ''}
+Fecha del backup: ${new Date().toLocaleString('es-ES')}
+`);
+ 
+                const blob = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showToast('¡Backup descargado exitosamente!', 'success', 4000);
+            } catch (err) {
+                console.error('Error al exportar:', err);
+                toastAlert('Error al generar el backup. Revisa la consola.', 'error');
+            }
+        }
+
+        // =========================================
+        // PASO 4: PDF DE MIGRAÑA
+        // =========================================
+
+        function downloadMigrainePDF() {
+            if (state.migraines.length === 0) {
+                toastAlert('No hay episodios de migraña para exportar.', 'warning');
+                return;
+            }
+
+            if (typeof window.jspdf === 'undefined') {
+                toastAlert('Error: la librería PDF no cargó. Recarga la página.', 'error');
+                return;
+            }
+
+            showToast('Generando PDF...', 'info', 2000);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
+
+                // Encabezado
+                doc.setFillColor(99, 102, 241);
+                doc.rect(0, 0, 210, 30, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(20);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Informe Médico — Migraña', 15, 15);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Omniapp — Control de Migraña', 15, 23);
+
+                // Datos del paciente
+                doc.setTextColor(30, 41, 59);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Paciente:', 15, 45);
+                doc.setFont('helvetica', 'normal');
+                doc.text(userName, 40, 45);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('N° Registro:', 15, 52);
+                doc.setFont('helvetica', 'normal');
+                doc.text(currentUserData.reg || '--', 45, 52);
+
+                doc.setFont('helvetica', 'bold');
+                doc.text('Fecha del informe:', 15, 59);
+                doc.setFont('helvetica', 'normal');
+                doc.text(new Date().toLocaleString('es-ES'), 55, 59);
+
+                // Estadísticas
+                const total = state.migraines.length;
+                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
+                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
+                const avgPain = (totalPain / total).toFixed(1);
+                const avgHours = (totalHours / total).toFixed(1);
+
+                const triggerCounts = {};
+                state.migraines.forEach(m => {
+                    if (m.triggers && Array.isArray(m.triggers)) {
+                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
+                    }
+                });
+                const topTriggers = Object.keys(triggerCounts)
+                    .sort((a, b) => triggerCounts[b] - triggerCounts[a])
+                    .slice(0, 3);
+
+                doc.setFontSize(13);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(99, 102, 241);
+                doc.text('Resumen Estadístico', 15, 75);
+
+                doc.setFontSize(10);
+                doc.setTextColor(30, 41, 59);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Total de episodios: ${total}`, 15, 84);
+                doc.text(`Promedio de dolor: ${avgPain} / 10`, 15, 91);
+                doc.text(`Duración promedio: ${avgHours} horas`, 15, 98);
+                doc.text(`Detonantes más frecuentes: ${topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos'}`, 15, 105);
+
+                // Tabla de episodios
+                doc.setFontSize(13);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(99, 102, 241);
+                doc.text('Historial Detallado de Episodios', 15, 122);
+
+                const sorted = [...state.migraines].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                const tableData = sorted.map(m => [
+                    m.date || '--',
+                    m.time || '--',
+                    `${m.pain || 0}/10`,
+                    `${m.duration || 1}h`,
+                    (Array.isArray(m.symptoms) ? m.symptoms.join(', ') : '').substring(0, 40),
+                    (Array.isArray(m.triggers) ? m.triggers.join(', ') : '').substring(0, 40),
+                    (m.meds || '').substring(0, 30)
+                ]);
+
+                doc.autoTable({
+                    startY: 127,
+                    head: [['Fecha', 'Hora', 'Dolor', 'Duración', 'Síntomas', 'Detonantes', 'Medicamento']],
+                    body: tableData,
+                    theme: 'striped',
+                    headStyles: { fillColor: [99, 102, 241], fontSize: 8, fontStyle: 'bold' },
+                    bodyStyles: { fontSize: 7, cellPadding: 2 },
+                    alternateRowStyles: { fillColor: [240, 243, 255] },
+                    margin: { left: 15, right: 15 },
+                    columnStyles: {
+                        0: { cellWidth: 20 },
+                        1: { cellWidth: 15 },
+                        2: { cellWidth: 15 },
+                        3: { cellWidth: 18 },
+                        4: { cellWidth: 40 },
+                        5: { cellWidth: 40 },
+                        6: { cellWidth: 30 }
+                    }
+                });
+
+                // Footer con pie de página
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(
+                        `Generado por Omniapp  |  Página ${i} de ${pageCount}`,
+                        105, 290, { align: 'center' }
+                    );
+                }
+
+                const fileName = `informe-migrana-${getBackupTimestamp()}.pdf`;
+                doc.save(fileName);
+                showToast('PDF generado exitosamente', 'success', 3000);
+            } catch (err) {
+                console.error('Error al generar PDF:', err);
+                toastAlert('Error al generar el PDF. Revisa la consola.', 'error');
+            }
+        }
+
+        // =========================================
+        // ESTADO GLOBAL
+        // =========================================
 
         const CUSTOM_HOURS = [
             "6:00 a.m", "6:30 a.m", "7:30 a.m", "8:00 a.m",
@@ -1218,7 +1444,9 @@ Generado automáticamente por Omniapp
             migraines: [],
             devotionals: [],
             pills: [],
-            stores: {}
+            stores: {},
+            chat: [],
+            omniban: []
         };
 
         function toggleDarkMode() {
@@ -1269,16 +1497,12 @@ Generado automáticamente por Omniapp
             const now = new Date();
             const [startH, startM] = startTime.split(':').map(Number);
             const interval = parseInt(intervalHours) || 8;
-
             let pillDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startH, startM, 0, 0);
-
             while (pillDate <= now) {
                 pillDate.setHours(pillDate.getHours() + interval);
             }
-
             const formattedTime = pillDate.toTimeString().substring(0,5);
             const isTomorrow = pillDate.getDate() !== now.getDate();
-            
             return {
                 nextDateObj: pillDate,
                 formattedTime: formattedTime,
@@ -1288,18 +1512,15 @@ Generado automáticamente por Omniapp
 
         setInterval(() => {
             const now = new Date();
-
             state.pills.forEach(pill => {
                 const nextPill = getNextPillTime(pill.startTime, pill.interval);
                 const timeDiff = Math.abs(now - nextPill.nextDateObj);
                 const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
-
                 if (timeDiff <= 60000 && !notifiedPills[pillKey]) {
                     notifiedPills[pillKey] = true;
                     sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
                 }
             });
-
             if (state.currentTab === 'pastillero') {
                 updatePillLabels();
             }
@@ -1339,17 +1560,11 @@ Generado automáticamente por Omniapp
 
             db.ref(`users/${reg}`).once('value', async snapshot => {
                 const val = snapshot.val();
-
-                if (!val) {
-                    return toastAlert('Número de registro o clave incorrecta.', 'error');
-                }
+                if (!val) return toastAlert('Número de registro o clave incorrecta.', 'error');
 
                 if (val.pass && !val.passHash) {
                     if (val.pass === pass) {
-                        await db.ref(`users/${reg}`).update({
-                            passHash: passHash,
-                            pass: null
-                        });
+                        await db.ref(`users/${reg}`).update({ passHash: passHash, pass: null });
                         delete val.pass;
                         val.passHash = passHash;
                         console.log('✅ Usuario migrado a hash');
@@ -1471,6 +1686,11 @@ Generado automáticamente por Omniapp
             document.getElementById('migDate').value = todayInput;
             document.getElementById('migTime').value = new Date().toTimeString().substring(0,5);
             document.getElementById('pillStartTime').value = new Date().toTimeString().substring(0,5);
+            
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 7);
+            document.getElementById('omniban-start').value = todayInput;
+            document.getElementById('omniban-end').value = tomorrow.toISOString().split('T')[0];
         }
 
         function listenToDatabase() {
@@ -1508,6 +1728,20 @@ Generado automáticamente por Omniapp
                 state.stores = snapshot.val() || {};
                 renderSuper();
             });
+
+            db.ref(`${userKey}/chat`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.chat = Object.keys(data).map(k => ({ id: k, ...data[k] }))
+                    .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                renderChat();
+            });
+
+            db.ref(`${userKey}/omniban`).on('value', snapshot => {
+                const data = snapshot.val() || {};
+                state.omniban = Object.keys(data).map(k => ({ id: k, ...data[k] }))
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                renderOmniBan();
+            });
         }
 
         function switchTab(tabName) {
@@ -1530,6 +1764,14 @@ Generado automáticamente por Omniapp
             const viewport = document.getElementById('app-viewport');
             if (viewport) {
                 viewport.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Auto-scroll chat al final si entras a esa pestaña
+            if (tabName === 'chat') {
+                setTimeout(() => {
+                    const chatBox = document.getElementById('chat-messages');
+                    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+                }, 100);
             }
         }
 
@@ -1604,8 +1846,8 @@ Generado automáticamente por Omniapp
                 return;
             }
 
-            container.innerHTML = list.map(t => `
-                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+            container.innerHTML = list.map((t, idx) => `
+                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
                     <div class="flex items-center space-x-3 flex-1 min-w-0">
                         <button onclick="toggleTaskComplete('${escapeAttr(t.id)}')" class="text-lg text-slate-400 hover:text-brand-purple transition shrink-0">
                             <i class="fa-${t.completed ? 'solid fa-circle-check text-brand-purple' : 'regular fa-circle'}"></i>
@@ -1663,7 +1905,6 @@ Generado automáticamente por Omniapp
             e.preventDefault();
             const activity = document.getElementById('horario-title').value.trim();
             const hour = document.getElementById('horario-hour').value;
-            
             const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
 
             if (selectedDayChips.length === 0) {
@@ -1737,11 +1978,10 @@ Generado automáticamente por Omniapp
                 return;
             }
 
-            container.innerHTML = state.pills.map(p => {
+            container.innerHTML = state.pills.map((p, idx) => {
                 const nextPill = getNextPillTime(p.startTime, p.interval);
-
                 return `
-                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+                    <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
                                 💊
@@ -1768,10 +2008,8 @@ Generado automáticamente por Omniapp
             state.pills.forEach(p => {
                 const container = document.getElementById(`pill-next-${p.id}`);
                 if (!container) return;
-                
                 const label = container.querySelector('.pill-next-label');
                 if (!label) return;
-                
                 const nextPill = getNextPillTime(p.startTime, p.interval);
                 label.textContent = nextPill.displayLabel;
             });
@@ -1822,10 +2060,8 @@ Generado automáticamente por Omniapp
             if (total > 0) {
                 const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
                 const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
-
                 const avgPain = (totalPain / total).toFixed(1);
                 const avgHours = (totalHours / total).toFixed(1);
-
                 document.getElementById('stat-avg-pain').innerText = avgPain + ' / 10';
                 document.getElementById('stat-avg-hours').innerText = avgHours + 'h';
 
@@ -1854,8 +2090,8 @@ Generado automáticamente por Omniapp
                 return;
             }
 
-            container.innerHTML = state.migraines.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => `
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+            container.innerHTML = state.migraines.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map((m, idx) => `
+                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center space-x-2">
                             <span class="w-8 h-8 rounded-xl font-bold text-xs text-white flex items-center justify-center ${m.pain >= 7 ? 'bg-red-500' : m.pain >= 4 ? 'bg-amber-500' : 'bg-blue-500'}">
@@ -1876,6 +2112,233 @@ Generado automáticamente por Omniapp
                 </div>
             `).join('');
         }
+
+        // =========================================
+        // PASO 5: OmniChat
+        // =========================================
+
+        function handleChatKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendChatMessage(e);
+            }
+        }
+
+        function handleSendChatMessage(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            db.ref(`${userKey}/chat`).push({
+                text: text,
+                timestamp: Date.now(),
+                time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('es-ES')
+            });
+
+            input.value = '';
+            input.style.height = 'auto';
+        }
+
+        function deleteChatMessage(id) {
+            if (confirm('¿Eliminar este mensaje?')) {
+                db.ref(`${userKey}/chat/${id}`).remove();
+                showToast('Mensaje eliminado', 'info', 2000);
+            }
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chat-messages');
+            if (state.chat.length === 0) {
+                container.innerHTML = `
+                    <div class="chat-empty">
+                        <i class="fa-solid fa-comment-dots text-4xl mb-3 opacity-30"></i>
+                        <p>Aún no hay mensajes.</p>
+                        <p class="text-xs mt-1">Escribe tu primera nota rápida abajo 👇</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.chat.map(msg => `
+                <div class="chat-bubble mine">
+                    <div>${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+                    <div class="chat-bubble-time">
+                        ${escapeHtml(msg.time || '')} • ${escapeHtml(msg.date || '')}
+                        <button onclick="deleteChatMessage('${escapeAttr(msg.id)}')" class="ml-2 text-white/60 hover:text-white transition">
+                            <i class="fa-solid fa-xmark text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Auto-scroll al final
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 50);
+        }
+
+        // =========================================
+        // PASO 6: OmniBan
+        // =========================================
+
+        function toggleOmniBanAllDays() {
+            const allDays = document.getElementById('omniban-alldays').checked;
+            const datesBox = document.getElementById('omniban-dates-box');
+            const startInput = document.getElementById('omniban-start');
+            const endInput = document.getElementById('omniban-end');
+
+            if (allDays) {
+                datesBox.classList.add('hidden');
+                startInput.required = false;
+                endInput.required = false;
+            } else {
+                datesBox.classList.remove('hidden');
+                startInput.required = true;
+                endInput.required = true;
+            }
+        }
+
+        function handleAddOmniBan(e) {
+            e.preventDefault();
+            const name = document.getElementById('omniban-name').value.trim();
+            const reason = document.getElementById('omniban-reason').value.trim();
+            const allDays = document.getElementById('omniban-alldays').checked;
+            const start = document.getElementById('omniban-start').value;
+            const end = allDays ? null : document.getElementById('omniban-end').value;
+
+            if (!name) return toastAlert('Escribe el nombre o intención.', 'warning');
+            if (!allDays && (!start || !end)) {
+                return toastAlert('Selecciona fecha de inicio y fin.', 'warning');
+            }
+            if (!allDays && start > end) {
+                return toastAlert('La fecha de fin no puede ser antes del inicio.', 'warning');
+            }
+
+            const omniban = {
+                name,
+                reason,
+                allDays,
+                start: start || new Date().toISOString().split('T')[0],
+                end: end,
+                timestamp: Date.now(),
+                completed: false
+            };
+
+            db.ref(`${userKey}/omniban`).push(omniban, (err) => {
+                if (!err) {
+                    document.getElementById('omniban-name').value = '';
+                    document.getElementById('omniban-reason').value = '';
+                    document.getElementById('omniban-alldays').checked = false;
+                    toggleOmniBanAllDays();
+                    initDates();
+                    showToast('Petición agregada', 'success');
+                }
+            });
+        }
+
+        function toggleOmniBanCompleted(id) {
+            const item = state.omniban.find(o => o.id === id);
+            if (item) {
+                db.ref(`${userKey}/omniban/${id}`).update({ completed: !item.completed });
+            }
+        }
+
+        function deleteOmniBan(id) {
+            if (confirm('¿Eliminar esta petición?')) {
+                db.ref(`${userKey}/omniban/${id}`).remove();
+                showToast('Petición eliminada', 'info', 2000);
+            }
+        }
+
+        function calcularDiasOmniBan(item) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const start = new Date(item.start + 'T00:00:00');
+
+            if (item.allDays) {
+                const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+                return diff > 0 ? diff : 0;
+            } else {
+                const end = new Date(item.end + 'T00:00:00');
+                const diff = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                return diff > 0 ? diff : 0;
+            }
+        }
+
+        function estaVigenteOmniBan(item) {
+            if (item.allDays) return true;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const start = new Date(item.start + 'T00:00:00');
+            const end = new Date(item.end + 'T00:00:00');
+            return today >= start && today <= end;
+        }
+
+        function renderOmniBan() {
+            const container = document.getElementById('omniban-container');
+            const countEl = document.getElementById('omniban-active-count');
+
+            if (state.omniban.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <i class="fa-solid fa-hands-praying text-4xl mb-3 opacity-30"></i>
+                        <p class="text-xs">Aún no hay peticiones guardadas.</p>
+                    </div>
+                `;
+                if (countEl) countEl.innerText = '';
+                return;
+            }
+
+            const activos = state.omniban.filter(o => !o.completed && estaVigenteOmniBan(o)).length;
+            if (countEl) countEl.innerText = `${activos} activa(s)`;
+
+            container.innerHTML = state.omniban.map((o, idx) => {
+                const dias = calcularDiasOmniBan(o);
+                const vigente = estaVigenteOmniBan(o);
+                const completado = o.completed;
+
+                let estadoBadge = '';
+                if (completado) {
+                    estadoBadge = `<span class="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-md font-bold">✓ COMPLETADA</span>`;
+                } else if (!vigente) {
+                    estadoBadge = `<span class="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-md font-bold">VENCIDA</span>`;
+                } else if (o.allDays) {
+                    estadoBadge = `<span class="text-[9px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md font-bold">∞ TODOS LOS DÍAS</span>`;
+                } else {
+                    estadoBadge = `<span class="text-[9px] bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-md font-bold">${dias} DÍA(S)</span>`;
+                }
+
+                return `
+                    <div class="omniban-card ${completado ? 'completed' : ''} stagger-item hover-card bg-white dark:bg-slate-900 p-4 pl-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
+                        <div class="flex justify-between items-start gap-2">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100 ${completado ? 'line-through' : ''}">🙏 ${escapeHtml(o.name)}</h4>
+                                ${o.reason ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(o.reason)}</p>` : ''}
+                                <div class="flex flex-wrap items-center gap-2 mt-2">
+                                    ${estadoBadge}
+                                    ${o.allDays ? `<span class="text-[9px] text-slate-400">Desde ${escapeHtml(o.start)}</span>` : `<span class="text-[9px] text-slate-400">${escapeHtml(o.start)} → ${escapeHtml(o.end || '')}</span>`}
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1 shrink-0">
+                                <button onclick="toggleOmniBanCompleted('${escapeAttr(o.id)}')" class="text-slate-400 hover:text-emerald-500 transition p-1" title="${completado ? 'Marcar como activa' : 'Marcar como completada'}">
+                                    <i class="fa-${completado ? 'solid fa-circle-check text-emerald-500' : 'regular fa-circle'}"></i>
+                                </button>
+                                <button onclick="deleteOmniBan('${escapeAttr(o.id)}')" class="text-slate-300 hover:text-red-500 transition p-1">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // =========================================
+        // DEVOCIONAL
+        // =========================================
 
         function handleAddDevotional(e) {
             e.preventDefault();
@@ -1902,8 +2365,8 @@ Generado automáticamente por Omniapp
                 return;
             }
 
-            container.innerHTML = state.devotionals.map(d => `
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+            container.innerHTML = state.devotionals.map((d, idx) => `
+                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
                     <div class="flex justify-between items-center text-xs">
                         <span class="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/30 text-brand-purple font-bold">${escapeHtml(d.title || 'Reflexión')}</span>
                         <span class="text-slate-400 text-[10px]">${escapeHtml(d.date || '')}</span>
@@ -1918,13 +2381,15 @@ Generado automáticamente por Omniapp
             `).join('');
         }
 
+        // =========================================
+        // SÚPER
+        // =========================================
+
         function selectStore(storeKey) {
             currentStoreKey = storeKey;
-            
             document.querySelectorAll('.store-btn').forEach(b => {
                 b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
             });
-            
             const activeBtn = document.getElementById('btn-store-' + storeKey);
             if(activeBtn) {
                 activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
@@ -1936,7 +2401,6 @@ Generado automáticamente por Omniapp
             e.preventDefault();
             const name = document.getElementById('super-item-name').value.trim();
             if(!name) return;
-
             db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty: "", price: "", done: false });
             document.getElementById('super-item-name').value = '';
         }
