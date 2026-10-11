@@ -699,7 +699,7 @@
         </main>
     </div>
 
-    <!-- MODAL: AGREGAR BLOQUE DE HORARIO (CON SELECCIÓN MÚLTIPLE DE DÍAS Y 'TODOS LOS DÍAS') -->
+    <!-- MODAL: AGREGAR BLOQUE DE HORARIO -->
     <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex justify-between items-center">
@@ -798,6 +798,7 @@
         let currentUserData = {};
         let currentStoreKey = "mercado";
         let selectedPainLevel = 5;
+        let notifiedPills = {}; // Evitar notificaciones duplicadas en el mismo minuto
 
         const CUSTOM_HOURS = [
             "6:00 a.m",
@@ -883,16 +884,52 @@
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW setup:', err));
         }
 
+        /* LÓGICA DINÁMICA DEL PASTILLERO */
+        function getNextPillTime(startTime, intervalHours) {
+            const now = new Date();
+            const [startH, startM] = startTime.split(':').map(Number);
+            const interval = parseInt(intervalHours) || 8;
+
+            let pillDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startH, startM, 0, 0);
+
+            // Si la hora calculada ya pasó, avanzar intervalos hasta la siguiente futura toma
+            while (pillDate <= now) {
+                pillDate.setHours(pillDate.getHours() + interval);
+            }
+
+            const formattedTime = pillDate.toTimeString().substring(0,5);
+            const isTomorrow = pillDate.getDate() !== now.getDate();
+            
+            return {
+                nextDateObj: pillDate,
+                formattedTime: formattedTime,
+                displayLabel: isTomorrow ? `${formattedTime} hrs (Mañana)` : `${formattedTime} hrs`
+            };
+        }
+
+        // Revisión cada minuto para notificaciones y actualización de pantalla
         setInterval(() => {
             const now = new Date();
             const currentHHMM = now.toTimeString().substring(0,5);
 
             state.pills.forEach(pill => {
-                if(pill.startTime === currentHHMM) {
+                const nextPill = getNextPillTime(pill.startTime, pill.interval);
+                
+                // Si falta menos de 1 minuto para la toma y no se ha notificado
+                const timeDiff = Math.abs(now - nextPill.nextDateObj);
+                const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
+
+                if (timeDiff <= 60000 && !notifiedPills[pillKey]) {
+                    notifiedPills[pillKey] = true;
                     sendSystemNotification("💊 Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
                 }
             });
-        }, 60000);
+
+            // Volver a renderizar para actualizar el contador/horario si cambio de hora
+            if (state.currentTab === 'pastillero') {
+                renderPills();
+            }
+        }, 30000);
 
         function switchAuthTab(tab) {
             if(tab === 'login') {
@@ -1166,7 +1203,6 @@
         function openModalHorario() { document.getElementById('modal-horario').classList.remove('hidden'); }
         function closeModalHorario() { document.getElementById('modal-horario').classList.add('hidden'); }
 
-        /* LÓGICA DE SELECCIÓN MÚLTIPLE DE DÍAS Y 'TODOS' */
         function toggleModalDayChip(btn) {
             btn.classList.toggle('active');
             updateAllDaysChipState();
@@ -1209,7 +1245,6 @@
                 return alert('Por favor selecciona al menos un día.');
             }
 
-            // Guardar bloque por cada día seleccionado
             selectedDayChips.forEach(chip => {
                 const day = parseInt(chip.getAttribute('data-day'));
                 db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
@@ -1246,7 +1281,7 @@
             container.innerHTML = html;
         }
 
-        /* LOGICA PASTILLERO */
+        /* GUARDAR MEDICAMENTO */
         function handleSavePill(e) {
             e.preventDefault();
             const name = document.getElementById('pillName').value.trim();
@@ -1269,6 +1304,7 @@
             db.ref(`${userKey}/pills/${id}`).remove();
         }
 
+        /* RENDER DE PASTILLERO DINÁMICO */
         function renderPills() {
             const container = document.getElementById('pills-container');
             if (state.pills.length === 0) {
@@ -1276,25 +1312,31 @@
                 return;
             }
 
-            container.innerHTML = state.pills.map(p => `
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
-                            💊
+            container.innerHTML = state.pills.map(p => {
+                const nextPill = getNextPillTime(p.startTime, p.interval);
+
+                return `
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">
+                                💊
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${p.name}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">${p.dose} • Cada ${p.interval} hrs</p>
+                                <div class="flex items-center gap-1.5 mt-1">
+                                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+                                        <i class="fa-solid fa-bell text-indigo-500"></i> Próxima toma: ${nextPill.displayLabel}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${p.name}</h4>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">${p.dose} • Cada ${p.interval} hrs</p>
-                            <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md mt-1 inline-block">
-                                ⏰ Primera toma: ${p.startTime} hrs
-                            </span>
-                        </div>
+                        <button onclick="deletePill('${p.id}')" class="text-slate-300 hover:text-red-500 transition p-2">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
                     </div>
-                    <button onclick="deletePill('${p.id}')" class="text-slate-300 hover:text-red-500 transition p-2">
-                        <i class="fa-solid fa-trash-can text-sm"></i>
-                    </button>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         /* LÓGICA COMPLETA DE MIGRAÑA */
