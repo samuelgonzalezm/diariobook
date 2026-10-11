@@ -1,23 +1,34 @@
 {
+  "id": "/diariobook/",
   "short_name": "Omniapp",
   "name": "Omniapp — Tu Centro de Control",
+  "description": "Agenda, pastillero, control de migraña, devocional y súper en un solo lugar.",
+  "lang": "es",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp",
+      "src": "./icons/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp",
+      "src": "./icons/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "./index.html",
+  "scope": "./",
   "background_color": "#0f172a",
   "theme_color": "#6366f1",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "any"
 }
