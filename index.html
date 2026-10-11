@@ -24,18 +24,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://samuelgonzalezM.github.io/diariobook/">
 
-    <!-- Firebase Web SDK (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    <!-- JSZip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -127,7 +123,6 @@
         .dark .day-chip { background: #1e293b; border-color: #334155; color: #cbd5e1; }
         .day-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
 
-        /* ANIMACIONES */
         .tab-content:not(.hidden) {
             animation: tabFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -164,7 +159,6 @@
             }
         }
 
-        /* TOASTS */
         #toast-container {
             position: fixed; top: 1rem; left: 50%;
             transform: translateX(-50%); z-index: 9999;
@@ -190,7 +184,6 @@
         @keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
         @keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
 
-        /* CHAT */
         #chat-messages { display: flex; flex-direction: column; gap: 0.5rem; }
         .chat-bubble {
             max-width: 80%; padding: 0.6rem 0.9rem;
@@ -206,7 +199,6 @@
         .chat-bubble-time { font-size: 0.6rem; opacity: 0.7; margin-top: 0.25rem; text-align: right; }
         .chat-empty { text-align: center; padding: 3rem 1rem; color: #94a3b8; font-size: 0.85rem; }
 
-        /* OMNIban */
         .omniban-card { position: relative; overflow: hidden; }
         .omniban-card::before {
             content: ''; position: absolute;
@@ -216,7 +208,6 @@
         .omniban-card.completed::before { background: #10b981; }
         .omniban-card.completed { opacity: 0.7; }
 
-        /* SIDEBAR EN MÓVIL - OCULTO */
         @media (max-width: 767px) {
             aside.sidebar-desktop {
                 display: none !important;
@@ -228,7 +219,6 @@
             main { width: 100% !important; }
         }
 
-        /* FAB */
         #fab-menu {
             display: none;
             position: fixed;
@@ -256,7 +246,6 @@
             #fab-menu { display: flex; }
         }
 
-        /* Drawer móvil */
         #mobile-drawer-overlay {
             display: none;
             position: fixed;
@@ -335,7 +324,6 @@
             padding: 0.75rem 1rem 0.25rem;
         }
 
-        /* DASHBOARD INICIO */
         .home-card {
             border-radius: 1.25rem;
             padding: 1.25rem;
@@ -357,7 +345,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Padding inferior para que el FAB no tape contenido */
         @media (max-width: 767px) {
             #app-viewport { padding-bottom: 6rem !important; }
         }
@@ -449,7 +436,6 @@
     <!-- MAIN LAYOUT -->
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
-        <!-- SIDEBAR DESKTOP -->
         <aside class="sidebar-desktop hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
             <div class="overflow-y-auto">
                 <div class="flex items-center space-x-3 px-3 py-4 mb-4">
@@ -554,7 +540,7 @@
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-6 space-y-6" id="app-viewport">
                 
-                <!-- ==================== INICIO ==================== -->
+                <!-- INICIO -->
                 <section id="tab-inicio" class="tab-content space-y-6">
                     <div class="text-center py-6">
                         <h2 id="home-greeting" class="text-2xl font-black text-slate-800 dark:text-white mb-1">¡Hola!</h2>
@@ -566,7 +552,6 @@
                         </div>
                     </div>
 
-                    <!-- Actividad AHORA -->
                     <div id="home-now-card" class="home-card grad-bg text-white">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-black uppercase tracking-wider opacity-90">📍 Ahora</span>
@@ -577,7 +562,6 @@
                         </div>
                     </div>
 
-                    <!-- Próxima actividad -->
                     <div id="home-next-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-black uppercase tracking-wider text-indigo-500">⏭️ Siguiente</span>
@@ -588,7 +572,6 @@
                         </div>
                     </div>
 
-                    <!-- Próxima pastilla -->
                     <div id="home-pill-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-[10px] font-black uppercase tracking-wider text-red-500">💊 Próxima pastilla</span>
@@ -600,7 +583,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== AGENDA ==================== -->
+                <!-- AGENDA -->
                 <section id="tab-agenda" class="tab-content hidden space-y-6">
                     <div class="flex space-x-2 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl max-w-xs">
                         <button onclick="toggleAgendaView('planner')" id="btn-view-planner" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple">
@@ -676,7 +659,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== PASTILLERO ==================== -->
+                <!-- PASTILLERO -->
                 <section id="tab-pastillero" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -722,7 +705,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== MIGRAÑA ==================== -->
+                <!-- MIGRAÑA -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2">
@@ -835,7 +818,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== OmniChat ==================== -->
+                <!-- OmniChat -->
                 <section id="tab-chat" class="tab-content hidden space-y-4">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 220px); min-height: 400px;">
                         <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -854,7 +837,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== OmniBan ==================== -->
+                <!-- OmniBan -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -903,7 +886,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== DEVOCIONAL ==================== -->
+                <!-- DEVOCIONAL -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -932,7 +915,7 @@
                     </div>
                 </section>
 
-                <!-- ==================== MI SÚPER ==================== -->
+                <!-- MI SÚPER -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
                     <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
@@ -959,7 +942,7 @@
 
             </div>
 
-            <!-- FAB (único elemento de navegación en móvil) -->
+            <!-- FAB -->
             <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -1533,7 +1516,6 @@
             if (h < 19) return 'Buenas tardes';
             return 'Buenas noches';
         }
-
         function parseHourLabel(label) {
             if (!label) return null;
             const part = label.split(' a ')[0].trim();
@@ -1546,7 +1528,6 @@
             if (ap.includes('a') && h === 12) h = 0;
             return h * 60 + m;
         }
-
         function parseHourEndLabel(label) {
             if (!label) return null;
             const parts = label.split(' a ');
@@ -1561,7 +1542,6 @@
             if (ap.includes('a') && h === 12) h = 0;
             return h * 60 + m;
         }
-
         function renderHome() {
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
@@ -1575,7 +1555,6 @@
 
             const today = now.getDay();
             const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
             const todayBlocks = state.horario.filter(b => b.day == today);
             const withTime = todayBlocks.map(b => ({
                 ...b,
@@ -1634,7 +1613,6 @@
                 }
             }
         }
-
         function startHomeTimer() {
             if (homeTimer) clearInterval(homeTimer);
             homeTimer = setInterval(() => {
@@ -1912,42 +1890,99 @@
             `).join('');
         }
 
-        // PDF MIGRAÑA
-        function sanitizePDFText(str) { return !str ? '' : String(str); }
+        // PDF MIGRAÑA (con DM Sans UTF-8)
+        let dmSansRegularBase64 = null;
+        let dmSansBoldBase64 = null;
+        let dmSansLoaded = false;
+
+        async function loadDMSansForPDF() {
+            if (dmSansLoaded) return true;
+            try {
+                const [resRegular, resBold] = await Promise.all([
+                    fetch('./fonts/DMSans-Regular.ttf'),
+                    fetch('./fonts/DMSans-Bold.ttf')
+                ]);
+                if (!resRegular.ok || !resBold.ok) throw new Error('No se pudieron descargar las fuentes');
+
+                const [bufReg, bufBold] = await Promise.all([
+                    resRegular.arrayBuffer(),
+                    resBold.arrayBuffer()
+                ]);
+
+                const toBase64 = (buf) => {
+                    const bytes = new Uint8Array(buf);
+                    let binary = '';
+                    const chunkSize = 8192;
+                    for (let i = 0; i < bytes.length; i += chunkSize) {
+                        const chunk = bytes.subarray(i, i + chunkSize);
+                        binary += String.fromCharCode.apply(null, chunk);
+                    }
+                    return btoa(binary);
+                };
+
+                dmSansRegularBase64 = toBase64(bufReg);
+                dmSansBoldBase64 = toBase64(bufBold);
+                dmSansLoaded = true;
+                console.log('✅ DM Sans cargada para PDF');
+                return true;
+            } catch (err) {
+                console.warn('⚠️ No se pudo cargar DM Sans, usando helvetica:', err);
+                return false;
+            }
+        }
+
         async function downloadMigrainePDF() {
             if (state.migraines.length === 0) return toastAlert('No hay episodios para exportar.', 'warning');
             if (typeof window.jspdf === 'undefined') return toastAlert('Error: recarga la página.', 'error');
+
             showToast('Generando PDF...', 'info', 2000);
+
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
+
+                const hasDM = await loadDMSansForPDF();
+                let fontName = 'helvetica';
+                if (hasDM && dmSansRegularBase64 && dmSansBoldBase64) {
+                    doc.addFileToVFS('DMSans-Regular.ttf', dmSansRegularBase64);
+                    doc.addFont('DMSans-Regular.ttf', 'DMSans', 'normal');
+                    doc.addFileToVFS('DMSans-Bold.ttf', dmSansBoldBase64);
+                    doc.addFont('DMSans-Bold.ttf', 'DMSans', 'bold');
+                    fontName = 'DMSans';
+                    console.log('✅ Usando DM Sans en el PDF');
+                } else {
+                    console.warn('⚠️ Usando Helvetica (fallback)');
+                }
+
                 const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
 
                 doc.setFillColor(99, 102, 241);
                 doc.rect(0, 0, 210, 35, 'F');
                 doc.setTextColor(255, 255, 255);
+                doc.setFont(fontName, 'bold');
                 doc.setFontSize(22);
-                doc.setFont('helvetica', 'bold');
-                doc.text('Informe Medico', 15, 15);
+                doc.text('Informe Médico', 15, 15);
+                doc.setFont(fontName, 'normal');
                 doc.setFontSize(12);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Control de Migrana - Omniapp', 15, 23);
+                doc.text('Control de Migraña — Omniapp', 15, 23);
                 doc.setFontSize(9);
                 doc.text('Generado: ' + new Date().toLocaleString('es-ES'), 15, 30);
 
                 doc.setTextColor(30, 41, 59);
+                doc.setFont(fontName, 'bold');
                 doc.setFontSize(11);
-                doc.setFont('helvetica', 'bold');
                 doc.text('Paciente:', 15, 50);
-                doc.setFont('helvetica', 'normal');
+                doc.setFont(fontName, 'normal');
                 doc.text(userName, 45, 50);
-                doc.setFont('helvetica', 'bold');
-                doc.text('N Registro:', 15, 57);
-                doc.setFont('helvetica', 'normal');
-                doc.text(currentUserData.reg || '--', 45, 57);
-                doc.setFont('helvetica', 'bold');
+
+                doc.setFont(fontName, 'bold');
+                doc.text('N° Registro:', 15, 57);
+                doc.setFont(fontName, 'normal');
+                doc.text(currentUserData.reg || '--', 48, 57);
+
+                doc.setFont(fontName, 'bold');
                 doc.text('Fecha informe:', 15, 64);
-                doc.setFont('helvetica', 'normal');
+                doc.setFont(fontName, 'normal');
                 doc.text(new Date().toLocaleDateString('es-ES'), 55, 64);
 
                 const total = state.migraines.length;
@@ -1966,21 +2001,21 @@
                     .sort((a, b) => triggerCounts[b] - triggerCounts[a])
                     .slice(0, 3);
 
+                doc.setFont(fontName, 'bold');
                 doc.setFontSize(14);
-                doc.setFont('helvetica', 'bold');
                 doc.setTextColor(99, 102, 241);
-                doc.text('Resumen Estadistico', 15, 80);
+                doc.text('Resumen Estadístico', 15, 80);
 
+                doc.setFont(fontName, 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(30, 41, 59);
-                doc.setFont('helvetica', 'normal');
                 doc.text(`Total de episodios: ${total}`, 15, 90);
                 doc.text(`Promedio de dolor: ${avgPain} / 10`, 15, 97);
-                doc.text(`Duracion promedio: ${avgHours} horas`, 15, 104);
-                doc.text(`Detonantes mas frecuentes: ${topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos'}`, 15, 111);
+                doc.text(`Duración promedio: ${avgHours} horas`, 15, 104);
+                doc.text(`Detonantes más frecuentes: ${topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos'}`, 15, 111);
 
+                doc.setFont(fontName, 'bold');
                 doc.setFontSize(14);
-                doc.setFont('helvetica', 'bold');
                 doc.setTextColor(99, 102, 241);
                 doc.text('Historial de Episodios', 15, 128);
 
@@ -1997,11 +2032,17 @@
 
                 doc.autoTable({
                     startY: 133,
-                    head: [['Fecha', 'Hora', 'Dolor', 'Dur.', 'Sintomas', 'Detonantes', 'Medicamento']],
+                    head: [['Fecha', 'Hora', 'Dolor', 'Dur.', 'Síntomas', 'Detonantes', 'Medicamento']],
                     body: tableData,
                     theme: 'striped',
-                    headStyles: { fillColor: [99, 102, 241], fontSize: 8, fontStyle: 'bold' },
-                    bodyStyles: { fontSize: 7, cellPadding: 2 },
+                    headStyles: {
+                        fillColor: [99, 102, 241],
+                        textColor: [255, 255, 255],
+                        fontSize: 8,
+                        fontStyle: 'bold',
+                        font: fontName
+                    },
+                    bodyStyles: { fontSize: 7, cellPadding: 2, font: fontName },
                     alternateRowStyles: { fillColor: [240, 243, 255] },
                     margin: { left: 15, right: 15 }
                 });
@@ -2009,13 +2050,14 @@
                 const pageCount = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
+                    doc.setFont(fontName, 'normal');
                     doc.setFontSize(8);
                     doc.setTextColor(150, 150, 150);
-                    doc.text(`Omniapp  |  Pagina ${i} de ${pageCount}`, 105, 290, { align: 'center' });
+                    doc.text(`Omniapp  |  Página ${i} de ${pageCount}`, 105, 290, { align: 'center' });
                 }
 
                 doc.save(`informe-migrana-${new Date().toISOString().split('T')[0]}.pdf`);
-                showToast('PDF generado', 'success', 3000);
+                showToast('PDF generado exitosamente', 'success', 3000);
             } catch (err) {
                 console.error('Error PDF:', err);
                 toastAlert('Error al generar el PDF.', 'error');
