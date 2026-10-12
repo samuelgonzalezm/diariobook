@@ -347,7 +347,6 @@
             #app-viewport { padding-bottom: 6rem !important; }
         }
 
-        /* CATEGORÍA CHIP (Devocional) */
         .category-group {
             background: white;
             border-radius: 1rem;
@@ -403,6 +402,21 @@
         }
         .dark .devotional-item-body { border-color: #1e293b; background: #1e293b; }
         .devotional-item-body.open { display: block; }
+
+        /* Bloques del horario con botón editar */
+        .horario-block {
+            position: relative;
+            cursor: pointer;
+        }
+        .horario-block .edit-indicator {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 8px;
+        }
+        .horario-block:hover .edit-indicator { opacity: 0.7; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -894,12 +908,10 @@
 
                 <!-- OmniBan -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
-                    <!-- Botón para mostrar formulario -->
                     <button id="omniban-toggle-btn" onclick="toggleOmniBanForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> Agregar nueva intención
                     </button>
 
-                    <!-- Formulario colapsable -->
                     <div id="omniban-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <div class="flex justify-between items-center">
                             <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
@@ -952,7 +964,7 @@
                     </div>
                 </section>
 
-                <!-- DEVOCIONAL (con categorías) -->
+                <!-- DEVOCIONAL -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -966,12 +978,10 @@
                         <p class="text-xs text-white/90 text-right font-bold" id="dev-daily-ref">— Filipenses 4:13</p>
                     </div>
 
-                    <!-- Botón para mostrar formulario -->
                     <button id="dev-toggle-btn" onclick="toggleDevForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración
                     </button>
 
-                    <!-- Formulario colapsable -->
                     <div id="dev-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                         <div class="flex justify-between items-center mb-2">
                             <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Nueva Entrada</h4>
@@ -1112,11 +1122,11 @@
         </div>
     </div>
 
-    <!-- MODAL HORARIO -->
+    <!-- MODAL HORARIO (con edición) -->
     <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <h3 id="modal-horario-title" class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                     <i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque
                 </h3>
                 <button onclick="closeModalHorario()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
@@ -1150,43 +1160,25 @@
                 </div>
 
                 <div>
-                    <label class="block font-semibold mb-1">Horario</label>
-                    <select id="horario-hour" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
-                        <option value="6:00 a.m">6:00 a.m</option>
-                        <option value="6:30 a.m">6:30 a.m</option>
-                        <option value="7:30 a.m">7:30 a.m</option>
-                        <option value="8:00 a.m">8:00 a.m</option>
-                        <option value="8:30 a.m a 9:00 a.m">8:30 a.m a 9:00 a.m</option>
-                        <option value="9:00 a.m a 10:00 a.m">9:00 a.m a 10:00 a.m</option>
-                        <option value="10:00 a.m a 10:15 a.m">10:00 a.m a 10:15 a.m</option>
-                        <option value="10:15 a.m a 10:55 a.m">10:15 a.m a 10:55 a.m</option>
-                        <option value="10:55 a.m a 11:10 a.m">10:55 a.m a 11:10 a.m</option>
-                        <option value="11:10 a.m a 11:50 a.m">11:10 a.m a 11:50 a.m</option>
-                        <option value="11:50 a.m a 12:00 p.m">11:50 a.m a 12:00 p.m</option>
-                        <option value="12:00 p.m">12:00 p.m</option>
-                        <option value="12:10 p.m a 1:10 p.m">12:10 p.m a 1:10 p.m</option>
-                        <option value="1:10 p.m a 2:00 p.m">1:10 p.m a 2:00 p.m</option>
-                        <option value="2:00 p.m a 2:10 p.m">2:00 p.m a 2:10 p.m</option>
-                        <option value="2:10 p.m">2:10 p.m</option>
-                        <option value="2:20 p.m">2:20 p.m</option>
-                        <option value="3:00 p.m a 3:45 p.m">3:00 p.m a 3:45 p.m</option>
-                        <option value="3:45 p.m a 4:00 p.m">3:45 p.m a 4:00 p.m</option>
-                        <option value="4:00 p.m a 4:50 p.m">4:00 p.m a 4:50 p.m</option>
-                        <option value="4:50 p.m a 5:00 p.m">4:50 p.m a 5:00 p.m</option>
-                        <option value="5:00 p.m a 5:55 p.m">5:00 p.m a 5:55 p.m</option>
-                        <option value="6:00 p.m a 7:00 p.m">6:00 p.m a 7:00 p.m</option>
-                        <option value="7:00 p.m a 7:15 p.m">7:00 p.m a 7:15 p.m</option>
-                        <option value="7:15 p.m a 8:30 p.m">7:15 p.m a 8:30 p.m</option>
-                        <option value="8:30 p.m">8:30 p.m</option>
-                        <option value="9:00 a 9:40 pm">9:00 a 9:40 pm</option>
-                        <option value="9:40 p.m">9:40 p.m</option>
-                        <option value="10:00 p.m">10:00 p.m</option>
-                    </select>
+                    <label class="block font-semibold mb-2">Rango de horas</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora inicio</label>
+                            <input type="time" id="horario-start-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora fin</label>
+                            <input type="time" id="horario-end-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1.5">
+                        <i class="fa-solid fa-info-circle"></i> Si la hora fin es menor a la inicio, se asume que cruza medianoche.
+                    </p>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModalHorario()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Cancelar</button>
-                    <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl font-medium shadow">Agregar Bloque</button>
+                    <button type="submit" id="horario-submit-btn" class="grad-bg text-white px-5 py-2 rounded-xl font-medium shadow">Agregar Bloque</button>
                 </div>
             </form>
         </div>
@@ -1213,6 +1205,7 @@
         let notifiedPills = {};
         let currentTab = 'inicio';
         let homeTimer = null;
+        let editingHorarioId = null; // null = agregar, id = editar
 
         // TOASTS
         function showToast(message, type = 'info', duration = 3000) {
@@ -1264,6 +1257,54 @@
                 .replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
+        // =========================================
+        // HORAS: FORMATO Y PARSEO
+        // =========================================
+
+        // Convierte "08:45" a "8:45 a.m" (o p.m)
+        function formatTime12h(time24) {
+            if (!time24 || !time24.includes(':')) return '';
+            const [hh, mm] = time24.split(':').map(Number);
+            const ampm = hh >= 12 ? 'p.m' : 'a.m';
+            let h12 = hh % 12;
+            if (h12 === 0) h12 = 12;
+            return `${h12}:${String(mm).padStart(2, '0')} ${ampm}`;
+        }
+
+        // Crea el string "8:45 a.m a 9:00 a.m" o "11:00 p.m a 1:00 a.m"
+        function buildHourLabel(startTime24, endTime24) {
+            const start = formatTime12h(startTime24);
+            const end = formatTime12h(endTime24);
+            if (!start || !end) return '';
+            if (start === end) return start;
+            return `${start} a ${end}`;
+        }
+
+        // Convierte "8:45 a.m" o "8:45 a.m a 9:00 a.m" → "08:45" y "09:00" (para inputs type=time)
+        function parseHourLabelToInputs(label) {
+            if (!label) return { start: '', end: '' };
+            const parts = label.split(' a ');
+            const parsePart = (str) => {
+                if (!str) return '';
+                const match = str.trim().match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
+                if (!match) return '';
+                let h = parseInt(match[1]);
+                const m = parseInt(match[2]);
+                const ap = (match[3] || '').toLowerCase().replace(/\./g, '');
+                if (ap.includes('pm') && h < 12) h += 12;
+                if (ap.includes('am') && h === 12) h = 0;
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            };
+            if (parts.length === 1) {
+                const t = parsePart(parts[0]);
+                return { start: t, end: t };
+            }
+            return {
+                start: parsePart(parts[0]),
+                end: parsePart(parts[1])
+            };
+        }
+
         // ESTADO
         const CUSTOM_HOURS = [
             "6:00 a.m", "6:30 a.m", "7:30 a.m", "8:00 a.m",
@@ -1283,8 +1324,7 @@
         let state = {
             tasks: [], taskFilter: 'all',
             horario: [], migraines: [], devotionals: [],
-            pills: [], stores: {}, chat: [], omniban: [],
-            categoriesCache: {}
+            pills: [], stores: {}, chat: [], omniban: []
         };
 
         function toggleDarkMode() {
@@ -1788,8 +1828,45 @@
         }
 
         // HORARIO
-        function openModalHorario() { document.getElementById('modal-horario').classList.remove('hidden'); }
-        function closeModalHorario() { document.getElementById('modal-horario').classList.add('hidden'); }
+        function openModalHorario() {
+            editingHorarioId = null;
+            document.getElementById('modal-horario-title').innerHTML = '<i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque';
+            document.getElementById('horario-submit-btn').innerText = 'Agregar Bloque';
+            document.getElementById('horario-title').value = '';
+            document.getElementById('horario-start-time').value = '08:00';
+            document.getElementById('horario-end-time').value = '09:00';
+            // Reset días
+            document.querySelectorAll('#modal-days-box .day-chip[data-day]').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.day === '1');
+            });
+            updateAllDaysChipState();
+            document.getElementById('modal-horario').classList.remove('hidden');
+        }
+
+        function openModalHorarioEdit(blockId) {
+            const block = state.horario.find(b => b.id === blockId);
+            if (!block) return;
+            editingHorarioId = blockId;
+            document.getElementById('modal-horario-title').innerHTML = '<i class="fa-solid fa-pen text-brand-purple"></i> Editar Bloque';
+            document.getElementById('horario-submit-btn').innerText = 'Guardar Cambios';
+            document.getElementById('horario-title').value = block.activity || '';
+            
+            const times = parseHourLabelToInputs(block.hour || '');
+            document.getElementById('horario-start-time').value = times.start || '08:00';
+            document.getElementById('horario-end-time').value = times.end || '09:00';
+
+            // Marcar día(s)
+            document.querySelectorAll('#modal-days-box .day-chip[data-day]').forEach(chip => {
+                chip.classList.toggle('active', parseInt(chip.dataset.day) === block.day);
+            });
+            updateAllDaysChipState();
+            document.getElementById('modal-horario').classList.remove('hidden');
+        }
+
+        function closeModalHorario() { 
+            document.getElementById('modal-horario').classList.add('hidden'); 
+            editingHorarioId = null;
+        }
         function toggleModalDayChip(btn) {
             btn.classList.toggle('active');
             updateAllDaysChipState();
@@ -1812,21 +1889,47 @@
             if (dayChips.length === activeChips.length) allChip.classList.add('active');
             else allChip.classList.remove('active');
         }
+
         function handleSaveHorario(e) {
             e.preventDefault();
             const activity = document.getElementById('horario-title').value.trim();
-            const hour = document.getElementById('horario-hour').value;
+            const startTime = document.getElementById('horario-start-time').value;
+            const endTime = document.getElementById('horario-end-time').value;
+
+            if (!activity) return toastAlert('Escribe el título.', 'warning');
+            if (!startTime || !endTime) return toastAlert('Selecciona hora inicio y fin.', 'warning');
+            if (startTime === endTime) return toastAlert('La hora inicio y fin no pueden ser iguales.', 'warning');
+
+            const hourLabel = buildHourLabel(startTime, endTime);
             const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
             if (selectedDayChips.length === 0) return toastAlert('Selecciona al menos un día.', 'warning');
-            selectedDayChips.forEach(chip => {
-                const day = parseInt(chip.getAttribute('data-day'));
-                db.ref(`${userKey}/timeblocks`).push({ activity, day, hour });
-            });
-            document.getElementById('horario-title').value = '';
+
+            if (editingHorarioId) {
+                // EDITAR
+                const day = parseInt(selectedDayChips[0].getAttribute('data-day'));
+                db.ref(`${userKey}/timeblocks/${editingHorarioId}`).update({
+                    activity, hour: hourLabel, day
+                });
+                showToast('Bloque actualizado', 'success');
+            } else {
+                // AGREGAR
+                selectedDayChips.forEach(chip => {
+                    const day = parseInt(chip.getAttribute('data-day'));
+                    db.ref(`${userKey}/timeblocks`).push({ activity, hour: hourLabel, day });
+                });
+                showToast(`Bloque agregado a ${selectedDayChips.length} día(s)`, 'success');
+            }
+
             closeModalHorario();
-            showToast(`Bloque agregado a ${selectedDayChips.length} día(s)`, 'success');
         }
-        function deleteHorarioItem(id) { db.ref(`${userKey}/timeblocks/${id}`).remove(); }
+
+        function deleteHorarioItem(id) { 
+            if (confirm('¿Eliminar este bloque?')) {
+                db.ref(`${userKey}/timeblocks/${id}`).remove();
+                showToast('Bloque eliminado', 'info', 2000);
+            }
+        }
+
         function renderHorario() {
             const container = document.getElementById('horario-grid-body');
             const days = [1, 2, 3, 4, 5, 6, 0];
@@ -1834,12 +1937,21 @@
             CUSTOM_HOURS.forEach(h => {
                 html += `<div class="p-2 font-bold text-slate-500 dark:text-slate-400 text-[10px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-center leading-tight">${escapeHtml(h)}</div>`;
                 days.forEach(d => {
-                    const block = state.horario.find(item => (item.day == d || item.day === undefined) && item.hour == h);
-                    if (block) {
+                    // Buscar bloque: primero por coincidencia exacta de día, luego bloque sin día (global)
+                    const blocksForThisCell = state.horario.filter(item => {
+                        const matchesDay = (item.day == d);
+                        const matchesHour = item.hour == h;
+                        return matchesDay && matchesHour;
+                    });
+
+                    if (blocksForThisCell.length > 0) {
+                        const block = blocksForThisCell[0];
                         html += `
-                            <div class="p-1.5 rounded-lg grad-bg text-white text-[10px] font-semibold shadow-sm flex flex-col justify-between relative">
+                            <div class="horario-block p-1.5 rounded-lg grad-bg text-white text-[10px] font-semibold shadow-sm flex flex-col justify-between relative"
+                                 onclick="openModalHorarioEdit('${escapeAttr(block.id)}')">
+                                <i class="fa-solid fa-pen edit-indicator text-white"></i>
                                 <span class="truncate">${escapeHtml(block.activity)}</span>
-                                <button onclick="deleteHorarioItem('${escapeAttr(block.id)}')" class="text-white/70 hover:text-white text-[9px] text-right mt-1">
+                                <button onclick="event.stopPropagation(); deleteHorarioItem('${escapeAttr(block.id)}')" class="text-white/70 hover:text-white text-[9px] text-right mt-1">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
                             </div>`;
@@ -2373,7 +2485,7 @@
             }).join('');
         }
 
-        // DEVOCIONAL (con categorías y acordeón)
+        // DEVOCIONAL
         function toggleDevForm() {
             const formContainer = document.getElementById('dev-form-container');
             const btn = document.getElementById('dev-toggle-btn');
@@ -2464,7 +2576,6 @@
                 return;
             }
 
-            // Agrupar por categoría
             const grouped = {};
             state.devotionals.forEach(d => {
                 const cat = d.category || 'Sin categoría';
@@ -2472,12 +2583,10 @@
                 grouped[cat].push(d);
             });
 
-            // Ordenar cada grupo por timestamp (más recientes primero)
             Object.keys(grouped).forEach(cat => {
                 grouped[cat].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             });
 
-            // Ordenar categorías alfabéticamente
             const sortedCategories = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
 
             container.innerHTML = sortedCategories.map(cat => {
