@@ -429,23 +429,19 @@
                     <button onclick="clearCurrentStore()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow mb-6">🗑️ Borrar información de esta tienda</button>
 
                     <!-- ========================================== -->
-                    <!-- NUEVO RESUMEN FINANCIERO                   -->
+                    <!-- TABLA DE RESUMEN FINANCIERO (FIJA)         -->
                     <!-- ========================================== -->
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-indigo-200 dark:border-indigo-900 shadow-sm space-y-4">
+                    <div id="financial-summary-section" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-indigo-200 dark:border-indigo-900 shadow-sm space-y-4 mt-6">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                             <i class="fa-solid fa-calculator"></i> Resumen Financiero
                         </h3>
-
-                        <!-- Campo Total Recibido -->
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Total Recibido (Dinero que tienes)</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                                <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="updateFinancialSummary()">
+                                <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="saveReceivedMoney(this.value)">
                             </div>
                         </div>
-
-                        <!-- Resultados -->
                         <div class="grid grid-cols-2 gap-3 pt-2">
                             <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
                                 <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Gasto Total</p>
@@ -456,14 +452,13 @@
                                 <p id="total-balance" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">$0.00</p>
                             </div>
                         </div>
-
-                        <!-- Desglose por tienda -->
                         <div class="pt-3 border-t border-slate-100 dark:border-slate-800">
                             <h4 class="text-[11px] font-bold text-slate-500 uppercase mb-2">Desglose por Tienda</h4>
-                            <div id="store-breakdown" class="space-y-1 text-sm text-slate-600 dark:text-slate-400">
-                                <!-- Se llena desde JS -->
-                            </div>
+                            <div id="store-breakdown" class="space-y-1 text-sm text-slate-600 dark:text-slate-400"></div>
                         </div>
+                        <button onclick="downloadExpensesPDF()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2 mt-4">
+                            <i class="fa-solid fa-file-invoice-dollar"></i> Descargar Reporte de Gastos (PDF)
+                        </button>
                     </div>
 
                 </section>
