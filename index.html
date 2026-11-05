@@ -24,7 +24,6 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://samuelgonzalezM.github.io/diariobook/">
 
-    <!-- 1. Librerías Externas -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -55,10 +54,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     
-    <!-- 2. Estilos Personalizados -->
     <link rel="stylesheet" href="./styles.css">
 
-    <!-- 3. Script de Tema Oscuro (antes de cargar la página) -->
     <script>
         (function() {
             try {
@@ -80,7 +77,7 @@
 
     <div id="toast-container"></div>
 
-    <!-- ================= AUTH OVERLAY ================= -->
+    <!-- AUTH OVERLAY -->
     <div id="authOverlay" class="fixed inset-0 grad-bg z-[2000] flex flex-col justify-center items-center p-4 text-white overflow-y-auto">
         <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 text-slate-800 dark:text-slate-100 shadow-2xl text-center space-y-4">
             <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-20 h-20 rounded-full object-cover border-4 border-amber-400 mx-auto shadow-md" alt="Omniapp Logo">
@@ -94,7 +91,6 @@
                 <button id="tabBtnRegister" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 dark:text-slate-400" onclick="switchAuthTab('register')">Registrarse</button>
             </div>
 
-            <!-- LOGIN -->
             <form id="loginForm" class="space-y-3 text-left" onsubmit="event.preventDefault(); handleLogin();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">N° DE REGISTRO (8 DÍGITOS)</label>
@@ -114,7 +110,6 @@
                 </button>
             </form>
 
-            <!-- REGISTRO -->
             <form id="registerForm" class="space-y-3 text-left hidden" onsubmit="event.preventDefault(); handleRegister();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">NOMBRE(S)</label>
@@ -139,7 +134,7 @@
         </div>
     </div>
 
-    <!-- ================= MAIN LAYOUT ================= -->
+    <!-- MAIN LAYOUT -->
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
         <aside class="sidebar-desktop hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
@@ -189,7 +184,7 @@
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-6 space-y-6" id="app-viewport">
                 
-                <!-- ================= INICIO ================= -->
+                <!-- INICIO -->
                 <section id="tab-inicio" class="tab-content space-y-6">
                     <div class="text-center py-6">
                         <h2 id="home-greeting" class="text-2xl font-black text-slate-800 dark:text-white mb-1">¡Hola!</h2>
@@ -213,7 +208,7 @@
                     </div>
                 </section>
 
-                <!-- ================= AGENDA ================= -->
+                <!-- AGENDA -->
                 <section id="tab-agenda" class="tab-content hidden space-y-6">
                     <div class="flex space-x-2 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl max-w-xs">
                         <button onclick="toggleAgendaView('planner')" id="btn-view-planner" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple"><i class="fa-solid fa-list-check mr-1"></i> Planner</button>
@@ -266,7 +261,7 @@
                     </div>
                 </section>
 
-                <!-- ================= PASTILLERO ================= -->
+                <!-- PASTILLERO -->
                 <section id="tab-pastillero" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2"><i class="fa-solid fa-pills text-indigo-500"></i> Registrar Medicamento</h3>
@@ -286,7 +281,7 @@
                     </div>
                 </section>
 
-                <!-- ================= MIGRAÑA ================= -->
+                <!-- MIGRAÑA -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Estadísticas Mensuales</h3>
@@ -341,7 +336,7 @@
                     </div>
                 </section>
 
-                <!-- ================= OmniChat ================= -->
+                <!-- OmniChat -->
                 <section id="tab-chat" class="tab-content hidden space-y-4">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 220px); min-height: 400px;">
                         <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between"><h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i class="fa-solid fa-comments text-indigo-500"></i> OmniChat</h3><span class="text-[10px] text-slate-400">Tus notas personales</span></div>
@@ -353,7 +348,7 @@
                     </div>
                 </section>
 
-                <!-- ================= OmniBan ================= -->
+                <!-- OmniBan -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
                     <button id="omniban-toggle-btn" onclick="toggleOmniBanForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2"><i class="fa-solid fa-plus"></i> Agregar nueva intención</button>
                     <div id="omniban-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
@@ -375,7 +370,7 @@
                     </div>
                 </section>
 
-                <!-- ================= DEVOCIONAL ================= -->
+                <!-- DEVOCIONAL -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
@@ -405,9 +400,9 @@
                     </div>
                 </section>
 
-                <!-- ================= MI SÚPER (CON NUEVAS TIENDAS) ================= -->
+                <!-- MI SÚPER (CON NUEVAS TIENDAS) -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
-                    <!-- Selector Desktop (Visible en pantallas grandes) -->
+                    <!-- Selector Desktop -->
                     <div class="hidden md:flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
                         <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🛒 Costco</button>
@@ -439,13 +434,13 @@
             <!-- Botón Flotante (Menú General) -->
             <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú principal"><i class="fa-solid fa-bars"></i></button>
 
-            <!-- Botón Flotante (Súper en Móvil) -->
-            <button id="fab-store-menu" onclick="toggleStoreMenu()" class="fixed bottom-[5.5rem] right-6 w-14 h-14 rounded-full bg-amber-500 text-white flex md:hidden items-center justify-center shadow-lg z-40 text-xl border-none active:scale-95 transition-transform">
+            <!-- Botón Flotante (Súper en Móvil) - OCULTO POR DEFECTO -->
+            <button id="fab-store-menu" onclick="toggleStoreMenu()" class="hidden fixed bottom-[5.5rem] right-6 w-14 h-14 rounded-full bg-amber-500 text-white md:hidden items-center justify-center shadow-lg z-40 text-xl border-none active:scale-95 transition-transform">
                 <i class="fa-solid fa-cart-shopping"></i>
             </button>
 
-            <!-- Menú desplegable de tiendas (Móvil) -->
-            <div id="store-menu-dropdown" class="hidden fixed bottom-[9.5rem] right-6 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-40 w-48 flex flex-col">
+            <!-- Menú desplegable de tiendas (Móvil) - OCULTO POR DEFECTO -->
+            <div id="store-menu-dropdown" class="hidden fixed bottom-[9.5rem] right-6 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-40 w-48 flex-col">
                 <div class="p-2 space-y-1">
                     <button onclick="selectStore('mercado')" id="m-store-mercado" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300 transition-colors"><span class="text-lg">🥬</span> Mercado</button>
                     <button onclick="selectStore('costco')" id="m-store-costco" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">🛒</span> Costco</button>
@@ -460,7 +455,7 @@
         </main>
     </div>
 
-    <!-- ================= DRAWER MÓVIL (Menú General) ================= -->
+    <!-- DRAWER MÓVIL (Menú General) -->
     <div id="mobile-drawer-overlay" onclick="closeMobileDrawer()"></div>
     <div id="mobile-drawer">
         <div class="drawer-header">
@@ -490,7 +485,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL HORARIO ================= -->
+    <!-- MODAL HORARIO -->
     <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex justify-between items-center"><h3 id="modal-horario-title" class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque</h3><button onclick="closeModalHorario()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button></div>
@@ -514,15 +509,8 @@
         </div>
     </div>
 
-    <!-- ================= SCRIPTS ================= -->
-    
-    <!-- 1. Configuración de Firebase -->
     <script src="./firebase-config.js"></script>
-    
-    <!-- 2. Utilidades Básicas -->
     <script src="./modules/utils.js"></script>
-    
-    <!-- 3. Módulos de la App -->
     <script src="./modules/auth.js"></script>
     <script src="./modules/agenda.js"></script>
     <script src="./modules/pastillero.js"></script>
@@ -533,9 +521,6 @@
     <script src="./modules/super.js"></script>
     <script src="./modules/inicio.js"></script>
     <script src="./modules/export.js"></script>
-    
-    <!-- 4. Lógica Principal y Navegación (Debe ir al final) -->
     <script src="./app.js"></script>
-
 </body>
 </html>
