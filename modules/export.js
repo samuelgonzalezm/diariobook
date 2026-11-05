@@ -35,7 +35,7 @@ async function exportAllData() {
         const zip = new JSZip();
         const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
         
-        // 1. Usuario (incluye dinero recibido)
+        // 1. Usuario
         folder.file('usuario.csv', '\uFEFF' + arrayToCSV([{
             firstName: currentUserData.firstName || '', lastName: currentUserData.lastName || '',
             reg: currentUserData.reg || '', tieneHash: currentUserData.passHash ? 'Sí' : 'No',
@@ -72,7 +72,7 @@ async function exportAllData() {
             categoria: d.category || '', titulo: d.title || '', texto: d.body || d.text || '', fecha: d.date || ''
         })), ['categoria', 'titulo', 'texto', 'fecha']) : 'categoria,titulo,texto,fecha\n'));
 
-        // 7. Súper (con precios)
+        // 7. Súper
         const superRows = [];
         const storeNames = { 
             mercado: 'Mercado', costco: 'Costco', sams: "Sam's", 
@@ -124,7 +124,6 @@ async function downloadExpensesPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Cargar fuente (si ya se cargó en migrana.js, se usa, si no, usa Helvetica)
         let fontName = 'helvetica';
         if (typeof dmSansRegularBase64 !== 'undefined' && dmSansRegularBase64) {
             doc.addFileToVFS('DMSans-Regular.ttf', dmSansRegularBase64);
@@ -141,7 +140,6 @@ async function downloadExpensesPDF() {
             farmacia: 'Farmacia', thanksgiving: 'Thanksgiving' 
         };
 
-        // Encabezado
         doc.setFillColor(99, 102, 241);
         doc.rect(0, 0, 210, 35, 'F');
         doc.setTextColor(255, 255, 255);
@@ -154,7 +152,6 @@ async function downloadExpensesPDF() {
         doc.setFontSize(9);
         doc.text('Generado: ' + new Date().toLocaleString('es-ES'), 15, 30);
 
-        // Datos
         doc.setTextColor(30, 41, 59);
         doc.setFont(fontName, 'bold');
         doc.setFontSize(11);
@@ -167,7 +164,6 @@ async function downloadExpensesPDF() {
         doc.setFont(fontName, 'normal');
         doc.text(currentUserData.reg || '--', 45, 57);
 
-        // Calcular totales
         let granTotal = 0;
         const storeTotals = {};
         const allItems = [];
@@ -198,7 +194,6 @@ async function downloadExpensesPDF() {
         const balance = receivedMoney - granTotal;
         const isPositive = balance >= 0;
 
-        // Resumen Financiero en PDF
         doc.setFont(fontName, 'bold');
         doc.setFontSize(14);
         doc.setTextColor(99, 102, 241);
@@ -211,16 +206,15 @@ async function downloadExpensesPDF() {
         doc.text(`Gasto Total: $${granTotal.toFixed(2)}`, 15, 92);
         
         if (isPositive) {
-            doc.setTextColor(16, 185, 129); // Verde
+            doc.setTextColor(16, 185, 129);
             doc.setFont(fontName, 'bold');
             doc.text(`Sobrante: $${balance.toFixed(2)}`, 15, 99);
         } else {
-            doc.setTextColor(239, 68, 68); // Rojo
+            doc.setTextColor(239, 68, 68);
             doc.setFont(fontName, 'bold');
             doc.text(`Faltante: $${Math.abs(balance).toFixed(2)}`, 15, 99);
         }
 
-        // Desglose por tienda
         doc.setTextColor(30, 41, 59);
         doc.setFont(fontName, 'bold');
         doc.setFontSize(14);
@@ -239,7 +233,6 @@ async function downloadExpensesPDF() {
             }
         });
 
-        // Tabla de productos
         if (allItems.length > 0) {
             doc.setFont(fontName, 'bold');
             doc.setFontSize(14);
@@ -276,7 +269,6 @@ async function downloadExpensesPDF() {
             doc.text('No hay productos registrados aún.', 15, yPos + 10);
         }
 
-        // Footer
         const pageCount = doc.internal.getNumberOfPages();
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
