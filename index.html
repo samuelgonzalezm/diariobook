@@ -24,12 +24,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://samuelgonzalezM.github.io/diariobook/">
 
+    <!-- 1. Librerías Externas -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -54,376 +55,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     
-    <style>
-        body {
-            font-family: 'DM Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .grad-bg {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
-        }
+    <!-- 2. Estilos Personalizados -->
+    <link rel="stylesheet" href="./styles.css">
 
-        .custom-circle-check {
-            width: 22px; height: 22px; border-radius: 50%;
-            border: 2px solid #cbd5e1; appearance: none; -webkit-appearance: none;
-            outline: none; cursor: pointer; background: #fff;
-            transition: all 0.2s; flex-shrink: 0;
-        }
-        .custom-circle-check:checked {
-            background: #6366f1; border-color: #6366f1; position: relative;
-        }
-        .custom-circle-check:checked::after {
-            content: '✓'; color: #fff; font-size: 12px; font-weight: 900;
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .pill-input {
-            border-radius: 9999px; background-color: #d0d7de;
-            border: none; padding: 8px 14px; font-size: 0.85rem;
-            font-weight: 700; color: #0f172a; outline: none; text-align: center;
-        }
-        .dark .pill-input { background-color: #334155; color: #f8fafc; }
-
-        @media (max-width: 600px) {
-            .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
-            .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
-            .pill-name-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
-            .pill-name-box { flex: 1; width: 100%; }
-            .pill-sub-group { display: flex; gap: 8px; width: 100%; padding-left: 32px; }
-        }
-
-        .pain-btn {
-            flex: 1; padding: 8px 0; border-radius: 8px;
-            border: 1.5px solid #e2e8f0; background: #fafafc;
-            font-weight: 800; font-size: 0.85rem; cursor: pointer;
-            transition: all 0.2s; text-align: center;
-        }
-        .dark .pain-btn { background: #1e293b; border-color: #334155; }
-        .pain-btn.selected { border-color: transparent; transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-
-        .tag-chip {
-            padding: 6px 12px; border-radius: 20px;
-            border: 1px solid #e2e8f0; background: #fafafc;
-            font-size: 0.75rem; font-weight: 700; cursor: pointer;
-            transition: all 0.2s; color: #1e293b;
-        }
-        .dark .tag-chip { background: #1e293b; border-color: #334155; color: #f8fafc; }
-        .tag-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
-
-        .day-chip {
-            padding: 6px 10px; border-radius: 10px;
-            border: 1px solid #e2e8f0; background: #f8fafc;
-            font-size: 0.75rem; font-weight: 700; cursor: pointer;
-            transition: all 0.2s; color: #475569; text-align: center;
-        }
-        .dark .day-chip { background: #1e293b; border-color: #334155; color: #cbd5e1; }
-        .day-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
-
-        .tab-content:not(.hidden) {
-            animation: tabFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes tabFadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stagger-item { animation: staggerFadeIn 0.3s ease-out backwards; }
-        @keyframes staggerFadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #modal-horario:not(.hidden) > div {
-            animation: modalZoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        @keyframes modalZoomIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        button:active { transform: scale(0.97); transition: transform 0.1s; }
-
-        @media (hover: hover) {
-            .hover-card { transition: box-shadow 0.2s, transform 0.2s; }
-            .hover-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        #toast-container {
-            position: fixed; top: 1rem; left: 50%;
-            transform: translateX(-50%); z-index: 9999;
-            display: flex; flex-direction: column; gap: 0.5rem;
-            pointer-events: none; max-width: 90vw; width: 22rem;
-        }
-        .toast {
-            background: #1e293b; color: #f8fafc;
-            padding: 0.75rem 1rem; border-radius: 0.75rem;
-            font-size: 0.85rem; font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-            display: flex; align-items: center; gap: 0.6rem;
-            opacity: 0; transform: translateY(-12px);
-            animation: toast-in 0.3s forwards;
-            pointer-events: auto;
-        }
-        .toast.toast-out { animation: toast-out 0.3s forwards; }
-        .toast-success { border-left: 4px solid #10b981; }
-        .toast-error   { border-left: 4px solid #ef4444; }
-        .toast-info    { border-left: 4px solid #6366f1; }
-        .toast-warning { border-left: 4px solid #f59e0b; }
-
-        @keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
-        @keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
-
-        #chat-messages { display: flex; flex-direction: column; gap: 0.5rem; }
-        .chat-bubble {
-            max-width: 80%; padding: 0.6rem 0.9rem;
-            border-radius: 1rem; font-size: 0.875rem;
-            line-height: 1.4; word-wrap: break-word;
-            position: relative; animation: staggerFadeIn 0.25s ease-out;
-        }
-        .chat-bubble.mine {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-            color: white; border-bottom-right-radius: 4px;
-        }
-        .chat-bubble-time { font-size: 0.6rem; opacity: 0.7; margin-top: 0.25rem; text-align: right; }
-        .chat-empty { text-align: center; padding: 3rem 1rem; color: #94a3b8; font-size: 0.85rem; }
-
-        .omniban-card { position: relative; overflow: hidden; }
-        .omniban-card::before {
-            content: ''; position: absolute;
-            left: 0; top: 0; bottom: 0; width: 4px;
-            background: #6366f1;
-        }
-        .omniban-card.completed::before { background: #10b981; }
-        .omniban-card.completed { opacity: 0.7; }
-
-        @media (max-width: 767px) {
-            aside.sidebar-desktop {
-                display: none !important;
-                visibility: hidden !important;
-                pointer-events: none !important;
-                position: absolute !important;
-                left: -9999px !important;
-            }
-            main { width: 100% !important; }
-        }
-
-        #fab-menu {
-            display: none;
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-            color: white;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-            z-index: 40;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-size: 1.25rem;
-        }
-        #fab-menu:active { transform: scale(0.95); }
-        #fab-menu.rotated i { transform: rotate(45deg); }
-        #fab-menu i { transition: transform 0.3s; }
-
-        @media (max-width: 767px) {
-            #fab-menu { display: flex; }
-        }
-
-        #mobile-drawer-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(2px);
-            z-index: 50;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        #mobile-drawer-overlay.open {
-            display: block;
-            opacity: 1;
-        }
-
-        #mobile-drawer {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 82vw;
-            max-width: 320px;
-            background: #ffffff;
-            z-index: 51;
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-            padding: 1.25rem;
-            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
-        }
-        .dark #mobile-drawer { background: #0f172a; }
-        #mobile-drawer.open { transform: translateX(0); }
-
-        #mobile-drawer .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .dark #mobile-drawer .drawer-header { border-color: #1e293b; }
-
-        .drawer-nav-btn {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #334155;
-            transition: all 0.2s;
-            text-align: left;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
-        .dark .drawer-nav-btn { color: #cbd5e1; }
-        .drawer-nav-btn:hover { background: #f1f5f9; }
-        .dark .drawer-nav-btn:hover { background: #1e293b; }
-        .drawer-nav-btn.active {
-            background: #eef2ff;
-            color: #6366f1;
-            font-weight: 700;
-        }
-        .dark .drawer-nav-btn.active { background: #1e1b4b; color: #a5b4fc; }
-
-        .drawer-section-title {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #94a3b8;
-            padding: 0.75rem 1rem 0.25rem;
-        }
-
-        .home-card {
-            border-radius: 1.25rem;
-            padding: 1.25rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
-        .home-card:hover {
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-
-        .home-hour {
-            font-size: 4rem;
-            font-weight: 900;
-            line-height: 1;
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @media (max-width: 767px) {
-            #app-viewport { padding-bottom: 6rem !important; }
-        }
-
-        .category-group {
-            background: white;
-            border-radius: 1rem;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
-        .dark .category-group { background: #0f172a; border-color: #1e293b; }
-        .category-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.85rem 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            user-select: none;
-        }
-        .category-header:hover { background: #f8fafc; }
-        .dark .category-header:hover { background: #1e293b; }
-        .category-header .chevron { transition: transform 0.2s; }
-        .category-header.open .chevron { transform: rotate(180deg); }
-        .category-items {
-            display: none;
-            border-top: 1px solid #f1f5f9;
-            padding: 0.5rem;
-        }
-        .dark .category-items { border-color: #1e293b; }
-        .category-items.open { display: block; }
-        
-        .devotional-item {
-            border-radius: 0.75rem;
-            overflow: hidden;
-            margin-bottom: 0.25rem;
-        }
-        .devotional-item-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.6rem 0.85rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            user-select: none;
-        }
-        .devotional-item-header:hover { background: #f8fafc; }
-        .dark .devotional-item-header:hover { background: #1e293b; }
-        .devotional-item-header .chevron-small { transition: transform 0.2s; }
-        .devotional-item-header.open .chevron-small { transform: rotate(180deg); }
-        .devotional-item-body {
-            display: none;
-            padding: 0.75rem 0.85rem;
-            border-top: 1px solid #f1f5f9;
-            background: #f8fafc;
-        }
-        .dark .devotional-item-body { border-color: #1e293b; background: #1e293b; }
-        .devotional-item-body.open { display: block; }
-
-        /* Bloques del horario con botón editar */
-        .horario-block {
-            position: relative;
-            cursor: pointer;
-        }
-        .horario-block .edit-indicator {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            font-size: 8px;
-        }
-        .horario-block:hover .edit-indicator { opacity: 0.7; }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
-    </style>
-
+    <!-- 3. Script de Tema Oscuro (antes de cargar la página) -->
     <script>
         (function() {
             try {
@@ -445,7 +80,7 @@
 
     <div id="toast-container"></div>
 
-    <!-- AUTH OVERLAY -->
+    <!-- ================= AUTH OVERLAY ================= -->
     <div id="authOverlay" class="fixed inset-0 grad-bg z-[2000] flex flex-col justify-center items-center p-4 text-white overflow-y-auto">
         <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 text-slate-800 dark:text-slate-100 shadow-2xl text-center space-y-4">
             <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-20 h-20 rounded-full object-cover border-4 border-amber-400 mx-auto shadow-md" alt="Omniapp Logo">
@@ -459,6 +94,7 @@
                 <button id="tabBtnRegister" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 dark:text-slate-400" onclick="switchAuthTab('register')">Registrarse</button>
             </div>
 
+            <!-- LOGIN -->
             <form id="loginForm" class="space-y-3 text-left" onsubmit="event.preventDefault(); handleLogin();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">N° DE REGISTRO (8 DÍGITOS)</label>
@@ -478,6 +114,7 @@
                 </button>
             </form>
 
+            <!-- REGISTRO -->
             <form id="registerForm" class="space-y-3 text-left hidden" onsubmit="event.preventDefault(); handleRegister();">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">NOMBRE(S)</label>
@@ -502,7 +139,7 @@
         </div>
     </div>
 
-    <!-- MAIN LAYOUT -->
+    <!-- ================= MAIN LAYOUT ================= -->
     <div id="appLayout" class="w-full h-full flex flex-col md:flex-row hidden">
 
         <aside class="sidebar-desktop hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 z-20 shadow-lg justify-between shrink-0">
@@ -514,74 +151,26 @@
                         <p class="text-xs text-slate-500 dark:text-slate-400" id="sidebarUserReg">Reg: --------</p>
                     </div>
                 </div>
-
                 <nav class="space-y-1.5" id="desktop-nav">
-                    <button onclick="switchTab('inicio')" id="d-nav-inicio" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-house text-lg w-6"></i>
-                        <span>Inicio</span>
-                    </button>
-                    <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-calendar-check text-lg w-6"></i>
-                        <span>Agenda & Horario</span>
-                    </button>
-                    <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-pills text-lg w-6"></i>
-                        <span>Pastillero</span>
-                    </button>
-                    <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-brain text-lg w-6"></i>
-                        <span>Control Migraña</span>
-                    </button>
-                    <button onclick="switchTab('chat')" id="d-nav-chat" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-comments text-lg w-6"></i>
-                        <span>OmniChat</span>
-                    </button>
-                    <button onclick="switchTab('omniban')" id="d-nav-omniban" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-hands-praying text-lg w-6"></i>
-                        <span>OmniBan</span>
-                    </button>
-                    <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-book-bible text-lg w-6"></i>
-                        <span>Devocional</span>
-                    </button>
-                    <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200">
-                        <i class="fa-solid fa-cart-shopping text-lg w-6"></i>
-                        <span>Mi Súper</span>
-                    </button>
+                    <button onclick="switchTab('inicio')" id="d-nav-inicio" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-house text-lg w-6"></i><span>Inicio</span></button>
+                    <button onclick="switchTab('agenda')" id="d-nav-agenda" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-calendar-check text-lg w-6"></i><span>Agenda & Horario</span></button>
+                    <button onclick="switchTab('pastillero')" id="d-nav-pastillero" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-pills text-lg w-6"></i><span>Pastillero</span></button>
+                    <button onclick="switchTab('migrana')" id="d-nav-migrana" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-brain text-lg w-6"></i><span>Control Migraña</span></button>
+                    <button onclick="switchTab('chat')" id="d-nav-chat" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-comments text-lg w-6"></i><span>OmniChat</span></button>
+                    <button onclick="switchTab('omniban')" id="d-nav-omniban" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-hands-praying text-lg w-6"></i><span>OmniBan</span></button>
+                    <button onclick="switchTab('devocional')" id="d-nav-devocional" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-book-bible text-lg w-6"></i><span>Devocional</span></button>
+                    <button onclick="switchTab('super')" id="d-nav-super" class="nav-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"><i class="fa-solid fa-cart-shopping text-lg w-6"></i><span>Mi Súper</span></button>
                 </nav>
             </div>
-
             <div class="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-                <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition">
-                    <span class="flex items-center space-x-2">
-                        <i class="fa-solid fa-bell"></i>
-                        <span>Activar Alarmas</span>
-                    </span>
-                    <i class="fa-solid fa-shield-halved"></i>
-                </button>
-                <button onclick="exportAllData()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 transition">
-                    <span class="flex items-center space-x-2">
-                        <i class="fa-solid fa-download"></i>
-                        <span>Exportar datos</span>
-                    </span>
-                    <i class="fa-solid fa-file-zipper"></i>
-                </button>
-                <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-                    <span class="flex items-center space-x-2">
-                        <i class="fa-solid fa-moon text-brand-purple"></i>
-                        <span>Modo Oscuro</span>
-                    </span>
-                    <i class="fa-solid fa-toggle-off dark:fa-toggle-on text-xl text-brand-purple"></i>
-                </button>
-                <button onclick="confirmLogout()" class="w-full flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>Cerrar sesión</span>
-                </button>
+                <button onclick="requestNotificationPermission()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition"><span class="flex items-center space-x-2"><i class="fa-solid fa-bell"></i><span>Activar Alarmas</span></span><i class="fa-solid fa-shield-halved"></i></button>
+                <button onclick="exportAllData()" class="w-full flex items-center justify-between px-4 py-2 rounded-xl text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 transition"><span class="flex items-center space-x-2"><i class="fa-solid fa-download"></i><span>Exportar datos</span></span><i class="fa-solid fa-file-zipper"></i></button>
+                <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"><span class="flex items-center space-x-2"><i class="fa-solid fa-moon text-brand-purple"></i><span>Modo Oscuro</span></span><i class="fa-solid fa-toggle-off dark:fa-toggle-on text-xl text-brand-purple"></i></button>
+                <button onclick="confirmLogout()" class="w-full flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"><i class="fa-solid fa-lock"></i><span>Cerrar sesión</span></button>
             </div>
         </aside>
 
         <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-            
             <header class="grad-bg text-white px-4 py-3 sm:px-6 flex justify-between items-center shadow-md z-10 shrink-0">
                 <div class="flex items-center space-x-3">
                     <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-8 h-8 rounded-full border border-amber-400 md:hidden" alt="Logo">
@@ -590,110 +179,63 @@
                         <p id="current-date-display" class="text-xs text-white/80 hidden sm:block">Cargando fecha...</p>
                     </div>
                 </div>
-
                 <div class="flex items-center space-x-2">
-                    <button onclick="exportAllData()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Exportar datos">
-                        <i class="fa-solid fa-download"></i>
-                    </button>
-                    <button onclick="requestNotificationPermission()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Activar notificaciones">
-                        <i class="fa-solid fa-bell"></i>
-                    </button>
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cambiar tema">
-                        <i class="fa-solid fa-circle-half-stroke"></i>
-                    </button>
-                    <button onclick="confirmLogout()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden" title="Cerrar sesión">
-                        <i class="fa-solid fa-power-off"></i>
-                    </button>
+                    <button onclick="exportAllData()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden"><i class="fa-solid fa-download"></i></button>
+                    <button onclick="requestNotificationPermission()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden"><i class="fa-solid fa-bell"></i></button>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                    <button onclick="confirmLogout()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition text-white md:hidden"><i class="fa-solid fa-power-off"></i></button>
                 </div>
             </header>
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-6 space-y-6" id="app-viewport">
                 
-                <!-- INICIO -->
+                <!-- ================= INICIO ================= -->
                 <section id="tab-inicio" class="tab-content space-y-6">
                     <div class="text-center py-6">
                         <h2 id="home-greeting" class="text-2xl font-black text-slate-800 dark:text-white mb-1">¡Hola!</h2>
                         <p id="home-date" class="text-xs text-slate-500 dark:text-slate-400 mb-6">Cargando...</p>
-                        
                         <div class="flex justify-center items-baseline gap-2">
                             <div id="home-hour" class="home-hour">--:--</div>
                             <div id="home-ampm" class="text-lg font-bold text-slate-400">--</div>
                         </div>
                     </div>
-
                     <div id="home-now-card" class="home-card grad-bg text-white">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-black uppercase tracking-wider opacity-90">📍 Ahora</span>
-                            <i class="fa-solid fa-circle-play text-lg opacity-80"></i>
-                        </div>
-                        <div id="home-now-content">
-                            <p class="text-sm opacity-80">Sin actividad programada</p>
-                        </div>
+                        <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-black uppercase tracking-wider opacity-90">📍 Ahora</span><i class="fa-solid fa-circle-play text-lg opacity-80"></i></div>
+                        <div id="home-now-content"><p class="text-sm opacity-80">Sin actividad programada</p></div>
                     </div>
-
                     <div id="home-next-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-black uppercase tracking-wider text-indigo-500">⏭️ Siguiente</span>
-                            <i class="fa-solid fa-forward text-indigo-500 text-lg"></i>
-                        </div>
-                        <div id="home-next-content">
-                            <p class="text-sm text-slate-400">Sin próxima actividad</p>
-                        </div>
+                        <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-black uppercase tracking-wider text-indigo-500">⏭️ Siguiente</span><i class="fa-solid fa-forward text-indigo-500 text-lg"></i></div>
+                        <div id="home-next-content"><p class="text-sm text-slate-400">Sin próxima actividad</p></div>
                     </div>
-
                     <div id="home-pill-card" class="home-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-black uppercase tracking-wider text-red-500">💊 Próxima pastilla</span>
-                            <i class="fa-solid fa-pills text-red-500 text-lg"></i>
-                        </div>
-                        <div id="home-pill-content">
-                            <p class="text-sm text-slate-400">Sin medicamentos programados</p>
-                        </div>
+                        <div class="flex items-center justify-between mb-2"><span class="text-[10px] font-black uppercase tracking-wider text-red-500">💊 Próxima pastilla</span><i class="fa-solid fa-pills text-red-500 text-lg"></i></div>
+                        <div id="home-pill-content"><p class="text-sm text-slate-400">Sin medicamentos programados</p></div>
                     </div>
                 </section>
 
-                <!-- AGENDA -->
+                <!-- ================= AGENDA ================= -->
                 <section id="tab-agenda" class="tab-content hidden space-y-6">
                     <div class="flex space-x-2 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl max-w-xs">
-                        <button onclick="toggleAgendaView('planner')" id="btn-view-planner" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple">
-                            <i class="fa-solid fa-list-check mr-1"></i> Planner
-                        </button>
-                        <button onclick="toggleAgendaView('horario')" id="btn-view-horario" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400">
-                            <i class="fa-solid fa-calendar-grid mr-1"></i> Horario
-                        </button>
+                        <button onclick="toggleAgendaView('planner')" id="btn-view-planner" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple"><i class="fa-solid fa-list-check mr-1"></i> Planner</button>
+                        <button onclick="toggleAgendaView('horario')" id="btn-view-horario" class="flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400"><i class="fa-solid fa-calendar-grid mr-1"></i> Horario</button>
                     </div>
-
                     <div id="subview-planner" class="space-y-6">
                         <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
                             <form id="form-add-task" onsubmit="handleAddTask(event)" class="space-y-3">
                                 <div class="flex flex-col sm:flex-row gap-2">
                                     <input type="text" id="task-title" placeholder="¿Qué tienes pendiente hoy?" required class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                                    <button type="submit" class="grad-bg text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:opacity-95 transition shadow-sm flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-plus"></i> Agregar
-                                    </button>
+                                    <button type="submit" class="grad-bg text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:opacity-95 transition shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-plus"></i> Agregar</button>
                                 </div>
                                 <div class="flex flex-wrap gap-2 text-xs">
-                                    <select id="task-priority" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300">
-                                        <option value="baja">Prioridad Baja</option>
-                                        <option value="media" selected>Prioridad Media</option>
-                                        <option value="alta">Prioridad Alta</option>
-                                    </select>
-                                    <select id="task-category" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300">
-                                        <option value="Personal">Personal</option>
-                                        <option value="Trabajo">Trabajo</option>
-                                        <option value="Estudios">Estudios</option>
-                                        <option value="Hogar">Hogar</option>
-                                    </select>
+                                    <select id="task-priority" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300"><option value="baja">Prioridad Baja</option><option value="media" selected>Prioridad Media</option><option value="alta">Prioridad Alta</option></select>
+                                    <select id="task-category" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300"><option value="Personal">Personal</option><option value="Trabajo">Trabajo</option><option value="Estudios">Estudios</option><option value="Hogar">Hogar</option></select>
                                     <input type="date" id="task-date" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-600 dark:text-slate-300">
                                 </div>
                             </form>
                         </div>
-
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                                    <i class="fa-solid fa-tasks text-brand-purple"></i> Mis Tareas
-                                </h3>
+                                <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-tasks text-brand-purple"></i> Mis Tareas</h3>
                                 <div class="flex gap-1 text-xs">
                                     <button onclick="filterTasks('all')" class="px-2.5 py-1 rounded-lg bg-brand-500 text-white font-medium filter-task-btn" id="ftask-all">Todas</button>
                                     <button onclick="filterTasks('pending')" class="px-2.5 py-1 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium filter-task-btn" id="ftask-pending">Pendientes</button>
@@ -703,13 +245,10 @@
                             <div id="tasks-container" class="space-y-2"></div>
                         </div>
                     </div>
-
                     <div id="subview-horario" class="hidden space-y-4">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-slate-500 dark:text-slate-400">Organiza tus clases o rutina semanal.</p>
-                            <button onclick="openModalHorario()" class="grad-bg text-white text-xs px-3 py-2 rounded-xl font-medium shadow flex items-center gap-1">
-                                <i class="fa-solid fa-plus"></i> Bloque
-                            </button>
+                            <button onclick="openModalHorario()" class="grad-bg text-white text-xs px-3 py-2 rounded-xl font-medium shadow flex items-center gap-1"><i class="fa-solid fa-plus"></i> Bloque</button>
                         </div>
                         <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-800 overflow-x-auto">
                             <div class="min-w-[750px] grid grid-cols-8 gap-1.5 text-center text-xs">
@@ -721,116 +260,55 @@
                                 <div class="p-2 font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 rounded-lg">Vie</div>
                                 <div class="p-2 font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-300 rounded-lg">Sáb</div>
                                 <div class="p-2 font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 rounded-lg">Dom</div>
-
                                 <div id="horario-grid-body" class="col-span-8 grid grid-cols-8 gap-1.5 mt-1"></div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- PASTILLERO -->
+                <!-- ================= PASTILLERO ================= -->
                 <section id="tab-pastillero" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-pills text-indigo-500"></i> Registrar Medicamento
-                        </h3>
-
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2"><i class="fa-solid fa-pills text-indigo-500"></i> Registrar Medicamento</h3>
                         <form onsubmit="handleSavePill(event)" class="space-y-3 text-xs sm:text-sm">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre del medicamento</label>
-                                <input type="text" id="pillName" placeholder="Ej: Paracetamol, Ibuprofeno" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre del medicamento</label><input type="text" id="pillName" placeholder="Ej: Paracetamol" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dosis</label>
-                                    <input type="text" id="pillDose" placeholder="Ej: 500 mg" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Cada cuántas horas</label>
-                                    <select id="pillInterval" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                        <option value="4">Cada 4 horas</option>
-                                        <option value="6">Cada 6 horas</option>
-                                        <option value="8" selected>Cada 8 horas</option>
-                                        <option value="12">Cada 12 horas</option>
-                                        <option value="24">Cada 24 horas</option>
-                                    </select>
-                                </div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dosis</label><input type="text" id="pillDose" placeholder="Ej: 500 mg" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Cada cuántas horas</label><select id="pillInterval" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"><option value="4">Cada 4 horas</option><option value="6">Cada 6 horas</option><option value="8" selected>Cada 8 horas</option><option value="12">Cada 12 horas</option><option value="24">Cada 24 horas</option></select></div>
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora de inicio / Primera toma</label>
-                                <input type="time" id="pillStartTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                            </div>
-                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
-                                Guardar Medicamento
-                            </button>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora de inicio</label><input type="time" id="pillStartTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">Guardar Medicamento</button>
                         </form>
                     </div>
-
                     <div class="space-y-3">
-                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-clock text-indigo-500"></i> Mis Medicamentos Programados
-                        </h3>
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-clock text-indigo-500"></i> Mis Medicamentos Programados</h3>
                         <div id="pills-container" class="space-y-3"></div>
                     </div>
                 </section>
 
-                <!-- MIGRAÑA -->
+                <!-- ================= MIGRAÑA ================= -->
                 <section id="tab-migrana" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line"></i> Estadísticas Mensuales & Análisis
-                        </h3>
-                        
+                        <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Estadísticas Mensuales</h3>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div id="stat-total-migraines" class="text-xl font-extrabold text-red-500">0</div>
-                                <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Episodios</div>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div id="stat-avg-pain" class="text-xl font-extrabold text-red-500">0.0</div>
-                                <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Promedio Dolor</div>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div id="stat-avg-hours" class="text-xl font-extrabold text-red-500">0h</div>
-                                <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Duración Prom.</div>
-                            </div>
-                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div id="stat-top-trigger" class="text-sm font-extrabold text-red-500 truncate mt-1">N/A</div>
-                                <div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Detonante Top</div>
-                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><div id="stat-total-migraines" class="text-xl font-extrabold text-red-500">0</div><div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Episodios</div></div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><div id="stat-avg-pain" class="text-xl font-extrabold text-red-500">0.0</div><div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Promedio Dolor</div></div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><div id="stat-avg-hours" class="text-xl font-extrabold text-red-500">0h</div><div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Duración Prom.</div></div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><div id="stat-top-trigger" class="text-sm font-extrabold text-red-500 truncate mt-1">N/A</div><div class="text-[10px] font-bold text-slate-400 uppercase mt-1">Detonante Top</div></div>
                         </div>
-
-                        <p id="migPatternInsight" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-indigo-50 dark:bg-indigo-950/30 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
-                            Cargando análisis de patrones...
-                        </p>
-
-                        <button onclick="downloadMigrainePDF()" class="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> Descargar Informe Médico en PDF
-                        </button>
+                        <p id="migPatternInsight" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-indigo-50 dark:bg-indigo-950/30 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/50">Cargando análisis...</p>
+                        <button onclick="downloadMigrainePDF()" class="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2"><i class="fa-solid fa-file-pdf"></i> Descargar Informe Médico en PDF</button>
                     </div>
-
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-bolt text-red-500"></i> Registro de Episodio e Intensidad
-                        </h3>
-
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2"><i class="fa-solid fa-bolt text-red-500"></i> Registro de Episodio</h3>
                         <form onsubmit="handleSaveMigraineDirect(event)" class="space-y-4 text-xs sm:text-sm">
                             <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha</label>
-                                    <input type="date" id="migDate" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora</label>
-                                    <input type="time" id="migTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                </div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha</label><input type="date" id="migDate" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora</label><input type="time" id="migTime" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
                             </div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duración (Horas)</label><input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duración estimada (Horas)</label>
-                                <input type="number" id="migDuration" min="0.5" step="0.5" placeholder="Ej: 4" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad del dolor (1 a 10)</label>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Intensidad (1 a 10)</label>
                                 <div class="flex justify-between gap-1 mt-1" id="painScaleBox">
                                     <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(1, this)">1</button>
                                     <button type="button" class="pain-btn text-white" style="background:#34C759;" onclick="selectPainLevel(2, this)">2</button>
@@ -845,1952 +323,219 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Síntomas experimentados</label>
-                                <div class="flex flex-wrap gap-1.5 mt-1" id="symptomsChipsBox">
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Náuseas</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Sensible a la luz</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Sensible al ruido</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Aura visual</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Mareos</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Visión borrosa</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Pulsación</span>
-                                </div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Síntomas</label>
+                                <div class="flex flex-wrap gap-1.5 mt-1" id="symptomsChipsBox"><span class="tag-chip" onclick="this.classList.toggle('active')">Náuseas</span><span class="tag-chip" onclick="this.classList.toggle('active')">Sensible a la luz</span><span class="tag-chip" onclick="this.classList.toggle('active')">Sensible al ruido</span><span class="tag-chip" onclick="this.classList.toggle('active')">Aura visual</span><span class="tag-chip" onclick="this.classList.toggle('active')">Mareos</span><span class="tag-chip" onclick="this.classList.toggle('active')">Visión borrosa</span><span class="tag-chip" onclick="this.classList.toggle('active')">Pulsación</span></div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desencadenantes probables</label>
-                                <div class="flex flex-wrap gap-1.5 mt-1" id="triggersChipsBox">
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Estrés</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Falta de sueño</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cambio de clima</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cafeína</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Ayuno prolongado</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Brillo de pantallas</span>
-                                    <span class="tag-chip" onclick="this.classList.toggle('active')">Cambio hormonal</span>
-                                </div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desencadenantes</label>
+                                <div class="flex flex-wrap gap-1.5 mt-1" id="triggersChipsBox"><span class="tag-chip" onclick="this.classList.toggle('active')">Estrés</span><span class="tag-chip" onclick="this.classList.toggle('active')">Falta de sueño</span><span class="tag-chip" onclick="this.classList.toggle('active')">Cambio de clima</span><span class="tag-chip" onclick="this.classList.toggle('active')">Cafeína</span><span class="tag-chip" onclick="this.classList.toggle('active')">Ayuno prolongado</span><span class="tag-chip" onclick="this.classList.toggle('active')">Brillo de pantallas</span><span class="tag-chip" onclick="this.classList.toggle('active')">Cambio hormonal</span></div>
                                 <input type="text" id="migCustomTrigger" placeholder="Otro desencadenante..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 mt-2 font-medium">
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Medicamento consumido y dosis</label>
-                                <input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium">
-                            </div>
-                            <button type="submit" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
-                                Guardar Episodio
-                            </button>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Medicamento y dosis</label><input type="text" id="migMeds" placeholder="Ej: Ibuprofeno 600mg" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium"></div>
+                            <button type="submit" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">Guardar Episodio</button>
                         </form>
                     </div>
-
                     <div class="space-y-3">
-                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-clock-rotate-left text-brand-purple"></i> Historial de Crisis
-                        </h3>
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-brand-purple"></i> Historial</h3>
                         <div id="migraine-history-container" class="space-y-3"></div>
                     </div>
                 </section>
 
-                <!-- OmniChat -->
+                <!-- ================= OmniChat ================= -->
                 <section id="tab-chat" class="tab-content hidden space-y-4">
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col" style="height: calc(100vh - 220px); min-height: 400px;">
-                        <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                            <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                                <i class="fa-solid fa-comments text-indigo-500"></i> OmniChat
-                            </h3>
-                            <span class="text-[10px] text-slate-400">Tus notas personales</span>
-                        </div>
+                        <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between"><h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i class="fa-solid fa-comments text-indigo-500"></i> OmniChat</h3><span class="text-[10px] text-slate-400">Tus notas personales</span></div>
                         <div id="chat-messages" class="flex-1 overflow-y-auto p-4"></div>
                         <form onsubmit="handleSendChatMessage(event)" class="p-3 border-t border-slate-200 dark:border-slate-800 flex gap-2 items-end">
                             <textarea id="chat-input" rows="1" placeholder="Escribe una nota rápida..." class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" style="max-height:100px;" onkeydown="handleChatKeydown(event)"></textarea>
-                            <button type="submit" class="grad-bg text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-95 transition shadow-sm shrink-0">
-                                <i class="fa-solid fa-paper-plane text-sm"></i>
-                            </button>
+                            <button type="submit" class="grad-bg text-white w-10 h-10 rounded-xl flex items-center justify-center hover:opacity-95 transition shadow-sm shrink-0"><i class="fa-solid fa-paper-plane text-sm"></i></button>
                         </form>
                     </div>
                 </section>
 
-                <!-- OmniBan -->
+                <!-- ================= OmniBan ================= -->
                 <section id="tab-omniban" class="tab-content hidden space-y-6">
-                    <button id="omniban-toggle-btn" onclick="toggleOmniBanForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Agregar nueva intención
-                    </button>
-
+                    <button id="omniban-toggle-btn" onclick="toggleOmniBanForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2"><i class="fa-solid fa-plus"></i> Agregar nueva intención</button>
                     <div id="omniban-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2">
-                                <i class="fa-solid fa-hands-praying text-indigo-500"></i> Nueva Petición de Oración
-                            </h3>
-                            <button onclick="toggleOmniBanForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                                <i class="fa-solid fa-xmark text-xl"></i>
-                            </button>
-                        </div>
-
+                        <div class="flex justify-between items-center"><h3 class="font-bold text-slate-800 dark:text-slate-100 text-base flex items-center gap-2"><i class="fa-solid fa-hands-praying text-indigo-500"></i> Nueva Petición</h3><button onclick="toggleOmniBanForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button></div>
                         <form onsubmit="handleAddOmniBan(event)" class="space-y-3 text-xs sm:text-sm">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre / Intención</label>
-                                <input type="text" id="omniban-name" placeholder="Ej: Juan Pérez, Mi familia..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Motivo / Detalle (opcional)</label>
-                                <textarea id="omniban-reason" rows="2" placeholder="Detalles de la petición..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium resize-none"></textarea>
-                            </div>
-                            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <input type="checkbox" id="omniban-alldays" class="accent-indigo-600 w-4 h-4" onchange="toggleOmniBanAllDays()">
-                                <label for="omniban-alldays" class="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">
-                                    Orar todos los días (sin fecha de fin)
-                                </label>
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nombre / Intención</label><input type="text" id="omniban-name" placeholder="Ej: Juan Pérez..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Motivo (opcional)</label><textarea id="omniban-reason" rows="2" placeholder="Detalles..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-medium resize-none"></textarea></div>
+                            <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><input type="checkbox" id="omniban-alldays" class="accent-indigo-600 w-4 h-4" onchange="toggleOmniBanAllDays()"><label for="omniban-alldays" class="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">Orar todos los días (sin fecha de fin)</label></div>
                             <div id="omniban-dates-box" class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desde</label>
-                                    <input type="date" id="omniban-start" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hasta</label>
-                                    <input type="date" id="omniban-end" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                                </div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Desde</label><input type="date" id="omniban-start" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hasta</label><input type="date" id="omniban-end" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
                             </div>
-                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">
-                                Guardar Petición
-                            </button>
+                            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow uppercase text-xs tracking-wider transition">Guardar Petición</button>
                         </form>
                     </div>
-
                     <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                                <i class="fa-solid fa-book-open text-indigo-500"></i> Mis Peticiones
-                            </h3>
-                            <span id="omniban-active-count" class="text-[10px] font-bold text-slate-400"></span>
-                        </div>
+                        <div class="flex justify-between items-center"><h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-book-open text-indigo-500"></i> Mis Peticiones</h3><span id="omniban-active-count" class="text-[10px] font-bold text-slate-400"></span></div>
                         <div id="omniban-container" class="space-y-3"></div>
                     </div>
                 </section>
 
-                <!-- DEVOCIONAL -->
+                <!-- ================= DEVOCIONAL ================= -->
                 <section id="tab-devocional" class="tab-content hidden space-y-6">
                     <div class="grad-bg text-white p-6 rounded-3xl shadow-lg space-y-3 relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
-                        <div class="flex items-center justify-between text-xs font-semibold text-white/80">
-                            <span>DEVOCIONAL DIARIO</span>
-                            <span id="dev-today-date">--/--/----</span>
-                        </div>
-                        <blockquote class="text-base sm:text-lg font-medium italic leading-relaxed" id="dev-daily-verse">
-                            "Todo lo puedo en Cristo que me fortalece."
-                        </blockquote>
+                        <div class="flex items-center justify-between text-xs font-semibold text-white/80"><span>DEVOCIONAL DIARIO</span><span id="dev-today-date">--/--/----</span></div>
+                        <blockquote class="text-base sm:text-lg font-medium italic leading-relaxed" id="dev-daily-verse">"Todo lo puedo en Cristo que me fortalece."</blockquote>
                         <p class="text-xs text-white/90 text-right font-bold" id="dev-daily-ref">— Filipenses 4:13</p>
                     </div>
-
-                    <button id="dev-toggle-btn" onclick="toggleDevForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración
-                    </button>
-
+                    <button id="dev-toggle-btn" onclick="toggleDevForm()" class="w-full py-3 grad-bg text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2"><i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración</button>
                     <div id="dev-form-container" class="hidden bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Nueva Entrada</h4>
-                            <button onclick="toggleDevForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                                <i class="fa-solid fa-xmark text-xl"></i>
-                            </button>
-                        </div>
-
+                        <div class="flex justify-between items-center mb-2"><h4 class="text-sm font-bold text-slate-700 dark:text-slate-200">Nueva Entrada</h4><button onclick="toggleDevForm()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button></div>
                         <form onsubmit="handleAddDevotional(event)" class="space-y-3">
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Categoría</label>
                                 <select id="dev-category" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm font-semibold" onchange="handleDevCategoryChange()">
-                                    <option value="">-- Selecciona o crea --</option>
-                                    <option value="Oración">🙏 Oración</option>
-                                    <option value="Reflexión">📖 Reflexión</option>
-                                    <option value="Agradecimiento">🙌 Agradecimiento</option>
-                                    <option value="Pensamiento">💭 Pensamiento</option>
-                                    <option value="Otro">✨ Otro</option>
-                                    <option value="__new__">➕ Nueva categoría...</option>
+                                    <option value="">-- Selecciona o crea --</option><option value="Oración">🙏 Oración</option><option value="Reflexión">📖 Reflexión</option><option value="Agradecimiento">🙌 Agradecimiento</option><option value="Pensamiento">💭 Pensamiento</option><option value="Otro">✨ Otro</option><option value="__new__">➕ Nueva categoría...</option>
                                 </select>
                                 <input type="text" id="dev-new-category" placeholder="Escribe la nueva categoría..." class="hidden w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm font-semibold mt-2">
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
-                                <input type="text" id="dev-title" placeholder="Ej: Por mi familia" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Reflexión u oración</label>
-                                <textarea id="dev-text" rows="3" placeholder="Escribe tus pensamientos o reflexión..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl text-xs font-semibold shadow hover:opacity-90">
-                                    Guardar
-                                </button>
-                            </div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label><input type="text" id="dev-title" placeholder="Ej: Por mi familia" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Reflexión</label><textarea id="dev-text" rows="3" placeholder="Escribe tus pensamientos..." required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea></div>
+                            <div class="flex justify-end"><button type="submit" class="grad-bg text-white px-5 py-2 rounded-xl text-xs font-semibold shadow hover:opacity-90">Guardar</button></div>
                         </form>
                     </div>
-
                     <div class="space-y-3">
-                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-book-bible text-brand-purple"></i> Mis Entradas
-                        </h3>
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-book-bible text-brand-purple"></i> Mis Entradas</h3>
                         <div id="devotional-entries-container" class="space-y-3"></div>
                     </div>
                 </section>
 
-                <!-- MI SÚPER -->
+                <!-- ================= MI SÚPER (CON NUEVAS TIENDAS) ================= -->
                 <section id="tab-super" class="tab-content hidden space-y-6">
-                    <div class="flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
+                    <!-- Selector Desktop (Visible en pantallas grandes) -->
+                    <div class="hidden md:flex gap-2 overflow-x-auto pb-2" id="store-selector-bar">
                         <button onclick="selectStore('mercado')" id="btn-store-mercado" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0">🥬 Mercado</button>
                         <button onclick="selectStore('costco')" id="btn-store-costco" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🛒 Costco</button>
                         <button onclick="selectStore('sams')" id="btn-store-sams" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">📦 Sam's</button>
                         <button onclick="selectStore('zorro')" id="btn-store-zorro" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🦊 El Zorro</button>
                         <button onclick="selectStore('monarca')" id="btn-store-monarca" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">👑 Monarca</button>
                         <button onclick="selectStore('extras')" id="btn-store-extras" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">⭐ Extras</button>
+                        <button onclick="selectStore('farmacia')" id="btn-store-farmacia" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">💊 Farmacia</button>
+                        <button onclick="selectStore('thanksgiving')" id="btn-store-thanksgiving" class="store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0">🦃 Thanksgiving</button>
+                    </div>
+
+                    <!-- Etiqueta de tienda actual para móvil -->
+                    <div class="md:hidden text-center text-sm font-bold text-slate-500 mb-2">
+                        Tienda seleccionada: <span id="current-store-label" class="text-indigo-600 dark:text-indigo-400">Mercado</span>
                     </div>
 
                     <form onsubmit="handleAddSuperItem(event)" class="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-1.5 sm:gap-2 overflow-hidden">
                         <input type="text" id="super-item-name" placeholder="Agregar nuevo producto..." required class="flex-1 min-w-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <button type="submit" class="grad-bg text-white px-3 sm:px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0 whitespace-nowrap">
-                            + AGREGAR
-                        </button>
+                        <button type="submit" class="grad-bg text-white px-3 sm:px-5 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 shrink-0 whitespace-nowrap">+ AGREGAR</button>
                     </form>
 
                     <div id="super-items-container" class="space-y-3"></div>
 
-                    <button onclick="clearCurrentStore()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow">
-                        🗑️ Borrar información de esta tienda
-                    </button>
+                    <button onclick="clearCurrentStore()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow">🗑️ Borrar información de esta tienda</button>
                 </section>
 
             </div>
 
-            <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú">
-                <i class="fa-solid fa-bars"></i>
+            <!-- Botón Flotante (Menú General) -->
+            <button id="fab-menu" onclick="toggleMobileDrawer()" title="Menú principal"><i class="fa-solid fa-bars"></i></button>
+
+            <!-- Botón Flotante (Súper en Móvil) -->
+            <button id="fab-store-menu" onclick="toggleStoreMenu()" class="fixed bottom-[5.5rem] right-6 w-14 h-14 rounded-full bg-amber-500 text-white flex md:hidden items-center justify-center shadow-lg z-40 text-xl border-none active:scale-95 transition-transform">
+                <i class="fa-solid fa-cart-shopping"></i>
             </button>
+
+            <!-- Menú desplegable de tiendas (Móvil) -->
+            <div id="store-menu-dropdown" class="hidden fixed bottom-[9.5rem] right-6 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-40 w-48 flex flex-col">
+                <div class="p-2 space-y-1">
+                    <button onclick="selectStore('mercado')" id="m-store-mercado" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-300 transition-colors"><span class="text-lg">🥬</span> Mercado</button>
+                    <button onclick="selectStore('costco')" id="m-store-costco" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">🛒</span> Costco</button>
+                    <button onclick="selectStore('sams')" id="m-store-sams" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">📦</span> Sam's</button>
+                    <button onclick="selectStore('zorro')" id="m-store-zorro" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">🦊</span> El Zorro</button>
+                    <button onclick="selectStore('monarca')" id="m-store-monarca" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">👑</span> Monarca</button>
+                    <button onclick="selectStore('extras')" id="m-store-extras" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">⭐</span> Extras</button>
+                    <button onclick="selectStore('farmacia')" id="m-store-farmacia" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">💊</span> Farmacia</button>
+                    <button onclick="selectStore('thanksgiving')" id="m-store-thanksgiving" class="mobile-store-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-slate-700 dark:text-slate-300"><span class="text-lg">🦃</span> Thanksgiving</button>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- DRAWER MÓVIL -->
+    <!-- ================= DRAWER MÓVIL (Menú General) ================= -->
     <div id="mobile-drawer-overlay" onclick="closeMobileDrawer()"></div>
     <div id="mobile-drawer">
         <div class="drawer-header">
             <div class="flex items-center gap-2">
                 <img src="https://lh3.googleusercontent.com/d/1TAb2dgxsn1-tXTFjSRWCVIDWG7jAwEUp" class="w-8 h-8 rounded-full border-2 border-amber-400">
-                <div>
-                    <p class="text-xs font-black text-slate-800 dark:text-white">omniapp</p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400" id="drawer-user-reg">Reg: --------</p>
-                </div>
+                <div><p class="text-xs font-black text-slate-800 dark:text-white">omniapp</p><p class="text-[10px] text-slate-500 dark:text-slate-400" id="drawer-user-reg">Reg: --------</p></div>
             </div>
-            <button onclick="closeMobileDrawer()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+            <button onclick="closeMobileDrawer()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
-
         <p class="drawer-section-title">Navegación</p>
         <div class="space-y-1">
-            <button onclick="switchTabAndClose('inicio')" class="drawer-nav-btn" data-tab="inicio">
-                <i class="fa-solid fa-house w-5"></i><span>Inicio</span>
-            </button>
-            <button onclick="switchTabAndClose('agenda')" class="drawer-nav-btn" data-tab="agenda">
-                <i class="fa-solid fa-calendar-check w-5"></i><span>Agenda & Horario</span>
-            </button>
-            <button onclick="switchTabAndClose('pastillero')" class="drawer-nav-btn" data-tab="pastillero">
-                <i class="fa-solid fa-pills w-5"></i><span>Pastillero</span>
-            </button>
-            <button onclick="switchTabAndClose('migrana')" class="drawer-nav-btn" data-tab="migrana">
-                <i class="fa-solid fa-brain w-5"></i><span>Control Migraña</span>
-            </button>
-            <button onclick="switchTabAndClose('chat')" class="drawer-nav-btn" data-tab="chat">
-                <i class="fa-solid fa-comments w-5"></i><span>OmniChat</span>
-            </button>
-            <button onclick="switchTabAndClose('omniban')" class="drawer-nav-btn" data-tab="omniban">
-                <i class="fa-solid fa-hands-praying w-5"></i><span>OmniBan</span>
-            </button>
-            <button onclick="switchTabAndClose('devocional')" class="drawer-nav-btn" data-tab="devocional">
-                <i class="fa-solid fa-book-bible w-5"></i><span>Devocional</span>
-            </button>
-            <button onclick="switchTabAndClose('super')" class="drawer-nav-btn" data-tab="super">
-                <i class="fa-solid fa-cart-shopping w-5"></i><span>Mi Súper</span>
-            </button>
+            <button onclick="switchTabAndClose('inicio')" class="drawer-nav-btn" data-tab="inicio"><i class="fa-solid fa-house w-5"></i><span>Inicio</span></button>
+            <button onclick="switchTabAndClose('agenda')" class="drawer-nav-btn" data-tab="agenda"><i class="fa-solid fa-calendar-check w-5"></i><span>Agenda & Horario</span></button>
+            <button onclick="switchTabAndClose('pastillero')" class="drawer-nav-btn" data-tab="pastillero"><i class="fa-solid fa-pills w-5"></i><span>Pastillero</span></button>
+            <button onclick="switchTabAndClose('migrana')" class="drawer-nav-btn" data-tab="migrana"><i class="fa-solid fa-brain w-5"></i><span>Control Migraña</span></button>
+            <button onclick="switchTabAndClose('chat')" class="drawer-nav-btn" data-tab="chat"><i class="fa-solid fa-comments w-5"></i><span>OmniChat</span></button>
+            <button onclick="switchTabAndClose('omniban')" class="drawer-nav-btn" data-tab="omniban"><i class="fa-solid fa-hands-praying w-5"></i><span>OmniBan</span></button>
+            <button onclick="switchTabAndClose('devocional')" class="drawer-nav-btn" data-tab="devocional"><i class="fa-solid fa-book-bible w-5"></i><span>Devocional</span></button>
+            <button onclick="switchTabAndClose('super')" class="drawer-nav-btn" data-tab="super"><i class="fa-solid fa-cart-shopping w-5"></i><span>Mi Súper</span></button>
         </div>
-
         <p class="drawer-section-title">Acciones</p>
         <div class="space-y-1">
-            <button onclick="requestNotificationPermission(); closeMobileDrawer();" class="drawer-nav-btn">
-                <i class="fa-solid fa-bell text-amber-500 w-5"></i><span>Activar Alarmas</span>
-            </button>
-            <button onclick="exportAllData(); closeMobileDrawer();" class="drawer-nav-btn">
-                <i class="fa-solid fa-download text-emerald-500 w-5"></i><span>Exportar datos</span>
-            </button>
-            <button onclick="toggleDarkMode()" class="drawer-nav-btn">
-                <i class="fa-solid fa-circle-half-stroke text-purple-500 w-5"></i><span>Modo Oscuro</span>
-            </button>
-            <button onclick="closeMobileDrawer(); confirmLogout();" class="drawer-nav-btn text-red-500">
-                <i class="fa-solid fa-lock w-5"></i><span>Cerrar sesión</span>
-            </button>
+            <button onclick="requestNotificationPermission(); closeMobileDrawer();" class="drawer-nav-btn"><i class="fa-solid fa-bell text-amber-500 w-5"></i><span>Activar Alarmas</span></button>
+            <button onclick="exportAllData(); closeMobileDrawer();" class="drawer-nav-btn"><i class="fa-solid fa-download text-emerald-500 w-5"></i><span>Exportar datos</span></button>
+            <button onclick="toggleDarkMode()" class="drawer-nav-btn"><i class="fa-solid fa-circle-half-stroke text-purple-500 w-5"></i><span>Modo Oscuro</span></button>
+            <button onclick="closeMobileDrawer(); confirmLogout();" class="drawer-nav-btn text-red-500"><i class="fa-solid fa-lock w-5"></i><span>Cerrar sesión</span></button>
         </div>
     </div>
 
-    <!-- MODAL HORARIO (con edición) -->
+    <!-- ================= MODAL HORARIO ================= -->
     <div id="modal-horario" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 id="modal-horario-title" class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque
-                </h3>
-                <button onclick="closeModalHorario()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-
+            <div class="flex justify-between items-center"><h3 id="modal-horario-title" class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2"><i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque</h3><button onclick="closeModalHorario()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button></div>
             <form onsubmit="handleSaveHorario(event)" class="space-y-4 text-xs sm:text-sm">
+                <div><label class="block font-semibold mb-1">Título de la actividad</label><input type="text" id="horario-title" placeholder="Ej. Levanto, Trabajo, Ejercicio" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5"></div>
                 <div>
-                    <label class="block font-semibold mb-1">Título de la actividad</label>
-                    <input type="text" id="horario-title" placeholder="Ej. Levanto, Trabajo, Ejercicio" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5">
-                </div>
-
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block font-semibold">Seleccionar Día(s)</label>
-                        <button type="button" onclick="toggleAllDaysModal()" id="btn-toggle-all-days" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
-                            Todos los días
-                        </button>
-                    </div>
+                    <div class="flex justify-between items-center mb-1"><label class="block font-semibold">Seleccionar Día(s)</label><button type="button" onclick="toggleAllDaysModal()" id="btn-toggle-all-days" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Todos los días</button></div>
                     <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5" id="modal-days-box">
-                        <button type="button" class="day-chip active" data-day="1" onclick="toggleModalDayChip(this)">Lun</button>
-                        <button type="button" class="day-chip" data-day="2" onclick="toggleModalDayChip(this)">Mar</button>
-                        <button type="button" class="day-chip" data-day="3" onclick="toggleModalDayChip(this)">Mié</button>
-                        <button type="button" class="day-chip" data-day="4" onclick="toggleModalDayChip(this)">Jue</button>
-                        <button type="button" class="day-chip" data-day="5" onclick="toggleModalDayChip(this)">Vie</button>
-                        <button type="button" class="day-chip" data-day="6" onclick="toggleModalDayChip(this)">Sáb</button>
-                        <button type="button" class="day-chip" data-day="0" onclick="toggleModalDayChip(this)">Dom</button>
-                        <button type="button" class="day-chip bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/40 font-bold" id="chip-all-days" onclick="toggleAllDaysModal()">Todos</button>
+                        <button type="button" class="day-chip active" data-day="1" onclick="toggleModalDayChip(this)">Lun</button><button type="button" class="day-chip" data-day="2" onclick="toggleModalDayChip(this)">Mar</button><button type="button" class="day-chip" data-day="3" onclick="toggleModalDayChip(this)">Mié</button><button type="button" class="day-chip" data-day="4" onclick="toggleModalDayChip(this)">Jue</button><button type="button" class="day-chip" data-day="5" onclick="toggleModalDayChip(this)">Vie</button><button type="button" class="day-chip" data-day="6" onclick="toggleModalDayChip(this)">Sáb</button><button type="button" class="day-chip" data-day="0" onclick="toggleModalDayChip(this)">Dom</button><button type="button" class="day-chip bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-950/40 font-bold" id="chip-all-days" onclick="toggleAllDaysModal()">Todos</button>
                     </div>
                 </div>
-
                 <div>
                     <label class="block font-semibold mb-2">Rango de horas</label>
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora inicio</label>
-                            <input type="time" id="horario-start-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora fin</label>
-                            <input type="time" id="horario-end-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold">
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora inicio</label><input type="time" id="horario-start-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
+                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Hora fin</label><input type="time" id="horario-end-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 font-semibold"></div>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1.5">
-                        <i class="fa-solid fa-info-circle"></i> Si la hora fin es menor a la inicio, se asume que cruza medianoche.
-                    </p>
                 </div>
-
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModalHorario()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Cancelar</button>
-                    <button type="submit" id="horario-submit-btn" class="grad-bg text-white px-5 py-2 rounded-xl font-medium shadow">Agregar Bloque</button>
-                </div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModalHorario()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Cancelar</button><button type="submit" id="horario-submit-btn" class="grad-bg text-white px-5 py-2 rounded-xl font-medium shadow">Agregar Bloque</button></div>
             </form>
         </div>
     </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyqGCGO0hKrrFv091SkfOYZmG2UGDgXJ0",
-            authDomain: "condoapp-d1729.firebaseapp.com",
-            databaseURL: "https://condoapp-d1729-default-rtdb.firebaseio.com",
-            projectId: "condoapp-d1729",
-            storageBucket: "condoapp-d1729.firebasestorage.app",
-            messagingSenderId: "834784357986",
-            appId: "1:834784357986:web:90855a08e0c5399d8aeb3b"
-        };
+    <!-- ================= SCRIPTS ================= -->
+    
+    <!-- 1. Configuración de Firebase -->
+    <script src="./firebase-config.js"></script>
+    
+    <!-- 2. Utilidades Básicas -->
+    <script src="./modules/utils.js"></script>
+    
+    <!-- 3. Módulos de la App -->
+    <script src="./modules/auth.js"></script>
+    <script src="./modules/agenda.js"></script>
+    <script src="./modules/pastillero.js"></script>
+    <script src="./modules/migrana.js"></script>
+    <script src="./modules/omnichat.js"></script>
+    <script src="./modules/omniban.js"></script>
+    <script src="./modules/devocional.js"></script>
+    <script src="./modules/super.js"></script>
+    <script src="./modules/inicio.js"></script>
+    <script src="./modules/export.js"></script>
+    
+    <!-- 4. Lógica Principal y Navegación (Debe ir al final) -->
+    <script src="./app.js"></script>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        let userKey = "";
-        let currentUserData = {};
-        let currentStoreKey = "mercado";
-        let selectedPainLevel = 5;
-        let notifiedPills = {};
-        let currentTab = 'inicio';
-        let homeTimer = null;
-        let editingHorarioId = null; // null = agregar, id = editar
-
-        // TOASTS
-        function showToast(message, type = 'info', duration = 3000) {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
-            toast.innerHTML = `
-                <span style="font-size:1.1rem; flex-shrink:0;">${icons[type] || icons.info}</span>
-                <span style="flex:1;">${escapeHtml(message)}</span>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('toast-out');
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-        function toastAlert(message, type = 'info') { showToast(message, type, 3500); }
-
-        // SEGURIDAD
-        const FIREBASE_FORBIDDEN_CHARS = /[.#$\[\]\/\u0000-\u001F\u007F]/g;
-        function sanitizeForKey(str) {
-            if (str == null) return '';
-            return String(str).replace(FIREBASE_FORBIDDEN_CHARS, '_');
-        }
-        function isValidPassKey(pass) { return /^[a-z0-9]{4,}$/.test(pass); }
-        function isValidRegNumber(reg) { return /^\d{8}$/.test(reg); }
-        function buildUserKeyFromHash(reg, passHash) {
-            const safeReg = sanitizeForKey(reg);
-            const safeHash = sanitizeForKey(passHash);
-            return `user_${safeReg}_${safeHash.substring(0, 24)}`;
-        }
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        function escapeHtml(str) {
-            if (str == null) return '';
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-        }
-        function escapeAttr(str) {
-            if (str == null) return '';
-            return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        // =========================================
-        // HORAS: FORMATO Y PARSEO
-        // =========================================
-
-        // Convierte "08:45" a "8:45 a.m" (o p.m)
-        function formatTime12h(time24) {
-            if (!time24 || !time24.includes(':')) return '';
-            const [hh, mm] = time24.split(':').map(Number);
-            const ampm = hh >= 12 ? 'p.m' : 'a.m';
-            let h12 = hh % 12;
-            if (h12 === 0) h12 = 12;
-            return `${h12}:${String(mm).padStart(2, '0')} ${ampm}`;
-        }
-
-        // Crea el string "8:45 a.m a 9:00 a.m" o "11:00 p.m a 1:00 a.m"
-        function buildHourLabel(startTime24, endTime24) {
-            const start = formatTime12h(startTime24);
-            const end = formatTime12h(endTime24);
-            if (!start || !end) return '';
-            if (start === end) return start;
-            return `${start} a ${end}`;
-        }
-
-        // Convierte "8:45 a.m" o "8:45 a.m a 9:00 a.m" → "08:45" y "09:00" (para inputs type=time)
-        function parseHourLabelToInputs(label) {
-            if (!label) return { start: '', end: '' };
-            const parts = label.split(' a ');
-            const parsePart = (str) => {
-                if (!str) return '';
-                const match = str.trim().match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
-                if (!match) return '';
-                let h = parseInt(match[1]);
-                const m = parseInt(match[2]);
-                const ap = (match[3] || '').toLowerCase().replace(/\./g, '');
-                if (ap.includes('pm') && h < 12) h += 12;
-                if (ap.includes('am') && h === 12) h = 0;
-                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            };
-            if (parts.length === 1) {
-                const t = parsePart(parts[0]);
-                return { start: t, end: t };
-            }
-            return {
-                start: parsePart(parts[0]),
-                end: parsePart(parts[1])
-            };
-        }
-
-        // ESTADO
-        const CUSTOM_HOURS = [
-            "6:00 a.m", "6:30 a.m", "7:30 a.m", "8:00 a.m",
-            "8:30 a.m a 9:00 a.m", "9:00 a.m a 10:00 a.m",
-            "10:00 a.m a 10:15 a.m", "10:15 a.m a 10:55 a.m",
-            "10:55 a.m a 11:10 a.m", "11:10 a.m a 11:50 a.m",
-            "11:50 a.m a 12:00 p.m", "12:00 p.m",
-            "12:10 p.m a 1:10 p.m", "1:10 p.m a 2:00 p.m",
-            "2:00 p.m a 2:10 p.m", "2:10 p.m", "2:20 p.m",
-            "3:00 p.m a 3:45 p.m", "3:45 p.m a 4:00 p.m",
-            "4:00 p.m a 4:50 p.m", "4:50 p.m a 5:00 p.m",
-            "5:00 p.m a 5:55 p.m", "6:00 p.m a 7:00 p.m",
-            "7:00 p.m a 7:15 p.m", "7:15 p.m a 8:30 p.m",
-            "8:30 p.m", "9:00 a 9:40 pm", "9:40 p.m", "10:00 p.m"
-        ];
-
-        let state = {
-            tasks: [], taskFilter: 'all',
-            horario: [], migraines: [], devotionals: [],
-            pills: [], stores: {}, chat: [], omniban: []
-        };
-
-        function toggleDarkMode() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('omniapp_theme', isDark ? 'dark' : 'light');
-        }
-
-        // DRAWER MÓVIL
-        function toggleMobileDrawer() {
-            const drawer = document.getElementById('mobile-drawer');
-            const overlay = document.getElementById('mobile-drawer-overlay');
-            const fab = document.getElementById('fab-menu');
-            if (drawer.classList.contains('open')) {
-                closeMobileDrawer();
-            } else {
-                drawer.classList.add('open');
-                overlay.classList.add('open');
-                fab.classList.add('rotated');
-                fab.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                updateDrawerActive();
-            }
-        }
-        function closeMobileDrawer() {
-            const drawer = document.getElementById('mobile-drawer');
-            const overlay = document.getElementById('mobile-drawer-overlay');
-            const fab = document.getElementById('fab-menu');
-            drawer.classList.remove('open');
-            overlay.classList.remove('open');
-            fab.classList.remove('rotated');
-            fab.innerHTML = '<i class="fa-solid fa-bars"></i>';
-        }
-        function switchTabAndClose(tabName) {
-            switchTab(tabName);
-            closeMobileDrawer();
-        }
-        function updateDrawerActive() {
-            document.querySelectorAll('.drawer-nav-btn[data-tab]').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === currentTab);
-            });
-        }
-
-        // NOTIFICACIONES
-        function requestNotificationPermission() {
-            if (!("Notification" in window)) return toastAlert("Este navegador no soporta notificaciones.", 'warning');
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    toastAlert("¡Notificaciones activadas!", 'success');
-                    sendSystemNotification("Omniapp", "Notificaciones activadas.");
-                } else toastAlert("Habilita los permisos en tu navegador.", 'warning');
-            });
-        }
-        function sendSystemNotification(title, body) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.ready.then(registration => {
-                        registration.showNotification(title, {
-                            body: body,
-                            icon: './icons/web-app-manifest-192x192.png',
-                            badge: './icons/web-app-manifest-192x192.png',
-                            vibrate: [200, 100, 200]
-                        });
-                    });
-                } else {
-                    new Notification(title, {
-                        body: body, icon: './icons/web-app-manifest-192x192.png'
-                    });
-                }
-            }
-        }
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW:', err));
-        }
-
-        // PASTILLERO
-        function getNextPillTime(startTime, intervalHours) {
-            const now = new Date();
-            const [startH, startM] = startTime.split(':').map(Number);
-            const interval = parseInt(intervalHours) || 8;
-            let pillDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startH, startM, 0, 0);
-            while (pillDate <= now) pillDate.setHours(pillDate.getHours() + interval);
-            const formattedTime = pillDate.toTimeString().substring(0,5);
-            const isTomorrow = pillDate.getDate() !== now.getDate();
-            return {
-                nextDateObj: pillDate, formattedTime,
-                displayLabel: isTomorrow ? `${formattedTime} hrs (Mañana)` : `${formattedTime} hrs`
-            };
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            state.pills.forEach(pill => {
-                const nextPill = getNextPillTime(pill.startTime, pill.interval);
-                const timeDiff = Math.abs(now - nextPill.nextDateObj);
-                const pillKey = `${pill.id}_${nextPill.formattedTime}_${now.toDateString()}`;
-                if (timeDiff <= 60000 && !notifiedPills[pillKey]) {
-                    notifiedPills[pillKey] = true;
-                    sendSystemNotification("Hora de tomar medicamento", `Te toca tomar: ${pill.name} (${pill.dose})`);
-                }
-            });
-            if (currentTab === 'pastillero') updatePillLabels();
-        }, 30000);
-
-        // AUTENTICACIÓN
-        function switchAuthTab(tab) {
-            if(tab === 'login') {
-                document.getElementById('tabBtnLogin').classList.replace('text-slate-500', 'text-indigo-600');
-                document.getElementById('tabBtnLogin').classList.add('bg-white', 'shadow');
-                document.getElementById('tabBtnRegister').classList.remove('bg-white', 'shadow');
-                document.getElementById('tabBtnRegister').classList.replace('text-indigo-600', 'text-slate-500');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            } else {
-                document.getElementById('tabBtnRegister').classList.replace('text-slate-500', 'text-indigo-600');
-                document.getElementById('tabBtnRegister').classList.add('bg-white', 'shadow');
-                document.getElementById('tabBtnLogin').classList.remove('bg-white', 'shadow');
-                document.getElementById('tabBtnLogin').classList.replace('text-indigo-600', 'text-slate-500');
-                document.getElementById('registerForm').classList.remove('hidden');
-                document.getElementById('loginForm').classList.add('hidden');
-            }
-        }
-
-        async function handleLogin() {
-            const reg = document.getElementById('loginRegNumber').value.trim();
-            const pass = document.getElementById('loginPassKey').value.trim();
-            const remember = document.getElementById('rememberMe').checked;
-            if (!isValidRegNumber(reg)) return toastAlert('El N° de registro debe tener 8 dígitos.', 'error');
-            if (!isValidPassKey(pass)) return toastAlert('La clave debe tener mínimo 4 caracteres.', 'error');
-
-            const passHash = await hashPassword(pass);
-            db.ref(`users/${reg}`).once('value', async snapshot => {
-                const val = snapshot.val();
-                if (!val) return toastAlert('N° de registro o clave incorrecta.', 'error');
-                if (val.pass && !val.passHash) {
-                    if (val.pass === pass) {
-                        await db.ref(`users/${reg}`).update({ passHash, pass: null });
-                        delete val.pass; val.passHash = passHash;
-                    } else return toastAlert('N° de registro o clave incorrecta.', 'error');
-                } else if (val.passHash) {
-                    if (val.passHash !== passHash) return toastAlert('N° de registro o clave incorrecta.', 'error');
-                } else return toastAlert('N° de registro o clave incorrecta.', 'error');
-
-                userKey = buildUserKeyFromHash(reg, passHash);
-                currentUserData = val;
-                if (remember) {
-                    localStorage.setItem('omniapp_saved_reg', reg);
-                    localStorage.setItem('omniapp_saved_pass', pass);
-                } else {
-                    localStorage.removeItem('omniapp_saved_reg');
-                    localStorage.removeItem('omniapp_saved_pass');
-                }
-                localStorage.setItem('omniapp_active_userKey', userKey);
-                localStorage.setItem('omniapp_active_userReg', reg);
-                unlockApp();
-                showToast(`¡Bienvenido, ${val.firstName}!`, 'success');
-            });
-        }
-
-        async function handleRegister() {
-            const firstName = document.getElementById('regFirstName').value.trim();
-            const lastName = document.getElementById('regLastName').value.trim();
-            const reg = document.getElementById('regRegNumber').value.trim();
-            const pass = document.getElementById('regPassKey').value.trim();
-            if (!firstName || !lastName || !reg || !pass) return toastAlert('Completa todos los campos.', 'error');
-            if (!isValidRegNumber(reg)) return toastAlert('El N° de registro debe tener 8 dígitos.', 'error');
-            if (!isValidPassKey(pass)) return toastAlert('La clave debe tener mínimo 4 caracteres.', 'error');
-
-            const passHash = await hashPassword(pass);
-            db.ref(`users/${reg}`).once('value', snapshot => {
-                if(snapshot.exists()) return toastAlert('Este N° de registro ya existe.', 'error');
-                const newUser = { firstName, lastName, reg, passHash };
-                db.ref(`users/${reg}`).set(newUser, (err) => {
-                    if(!err) {
-                        toastAlert('¡Registro exitoso!', 'success');
-                        switchAuthTab('login');
-                    } else toastAlert('Error al registrar.', 'error');
-                });
-            });
-        }
-
-        function checkActiveSession() {
-            const savedReg = localStorage.getItem('omniapp_saved_reg');
-            const savedPass = localStorage.getItem('omniapp_saved_pass');
-            if(savedReg && savedPass) {
-                document.getElementById('loginRegNumber').value = savedReg;
-                document.getElementById('loginPassKey').value = savedPass;
-                document.getElementById('rememberMe').checked = true;
-            }
-            const activeKey = localStorage.getItem('omniapp_active_userKey');
-            const activeReg = localStorage.getItem('omniapp_active_userReg');
-            if (activeKey && activeReg) {
-                userKey = activeKey;
-                db.ref(`users/${activeReg}`).once('value', snapshot => {
-                    currentUserData = snapshot.val() || {};
-                    unlockApp();
-                });
-            }
-        }
-
-        function unlockApp() {
-            document.getElementById('authOverlay').classList.add('hidden');
-            document.getElementById('appLayout').classList.remove('hidden');
-            initDates();
-            updateProfileUI();
-            listenToDatabase();
-            switchTab('inicio');
-            startHomeTimer();
-        }
-
-        function confirmLogout() {
-            if (confirm('¿Seguro que quieres cerrar sesión?')) logout();
-        }
-        function logout() {
-            localStorage.removeItem('omniapp_active_userKey');
-            localStorage.removeItem('omniapp_active_userReg');
-            location.reload();
-        }
-
-        function updateProfileUI() {
-            const firstName = currentUserData.firstName || 'Usuario';
-            document.getElementById('userGreeting').innerText = `¡Hola, ${firstName}!`;
-            document.getElementById('sidebarUserReg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
-            document.getElementById('drawer-user-reg').innerText = `Reg: ${currentUserData.reg || '--------'}`;
-        }
-
-        function initDates() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const todayStr = new Date().toLocaleDateString('es-ES', options);
-            document.getElementById('current-date-display').innerText = todayStr.charAt(0).toUpperCase() + todayStr.slice(1);
-            document.getElementById('dev-today-date').innerText = new Date().toLocaleDateString('es-ES');
-            const todayInput = new Date().toISOString().split('T')[0];
-            document.getElementById('task-date').value = todayInput;
-            document.getElementById('migDate').value = todayInput;
-            document.getElementById('migTime').value = new Date().toTimeString().substring(0,5);
-            document.getElementById('pillStartTime').value = new Date().toTimeString().substring(0,5);
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 7);
-            document.getElementById('omniban-start').value = todayInput;
-            document.getElementById('omniban-end').value = tomorrow.toISOString().split('T')[0];
-        }
-
-        // LISTENERS
-        function listenToDatabase() {
-            db.ref(`${userKey}/tasks`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.tasks = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-                renderTasks(); renderHome();
-            });
-            db.ref(`${userKey}/timeblocks`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.horario = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-                renderHorario(); renderHome();
-            });
-            db.ref(`${userKey}/pills`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.pills = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-                renderPills(); renderHome();
-            });
-            db.ref(`${userKey}/migraines`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.migraines = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-                renderMigraines();
-            });
-            db.ref(`${userKey}/notes`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.devotionals = Object.keys(data).map(k => ({ id: k, ...data[k] }));
-                renderDevotionals();
-            });
-            db.ref(`${userKey}/stores`).on('value', snapshot => {
-                state.stores = snapshot.val() || {};
-                renderSuper();
-            });
-            db.ref(`${userKey}/chat`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.chat = Object.keys(data).map(k => ({ id: k, ...data[k] }))
-                    .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-                renderChat();
-            });
-            db.ref(`${userKey}/omniban`).on('value', snapshot => {
-                const data = snapshot.val() || {};
-                state.omniban = Object.keys(data).map(k => ({ id: k, ...data[k] }))
-                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                renderOmniBan();
-            });
-        }
-
-        // NAVEGACIÓN
-        function switchTab(tabName) {
-            currentTab = tabName;
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            const target = document.getElementById('tab-' + tabName);
-            if (target) target.classList.remove('hidden');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
-            });
-            const dBtn = document.getElementById('d-nav-' + tabName);
-            if (dBtn) dBtn.classList.add('text-brand-purple', 'bg-brand-50', 'dark:bg-slate-800', 'font-bold');
-
-            const viewport = document.getElementById('app-viewport');
-            if (viewport) viewport.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if (tabName === 'chat') {
-                setTimeout(() => {
-                    const chatBox = document.getElementById('chat-messages');
-                    if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
-                }, 100);
-            }
-            if (tabName === 'inicio') renderHome();
-        }
-
-        function toggleAgendaView(view) {
-            const pBtn = document.getElementById('btn-view-planner');
-            const hBtn = document.getElementById('btn-view-horario');
-            if (view === 'planner') {
-                document.getElementById('subview-planner').classList.remove('hidden');
-                document.getElementById('subview-horario').classList.add('hidden');
-                pBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple";
-                hBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400";
-            } else {
-                document.getElementById('subview-planner').classList.add('hidden');
-                document.getElementById('subview-horario').classList.remove('hidden');
-                hBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition shadow bg-white dark:bg-slate-700 text-brand-purple";
-                pBtn.className = "flex-1 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 dark:text-slate-400";
-            }
-        }
-
-        // HOME
-        function getGreeting() {
-            const h = new Date().getHours();
-            if (h < 12) return 'Buenos días';
-            if (h < 19) return 'Buenas tardes';
-            return 'Buenas noches';
-        }
-        function parseHourLabel(label) {
-            if (!label) return null;
-            const part = label.split(' a ')[0].trim();
-            const match = part.match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
-            if (!match) return null;
-            let h = parseInt(match[1]);
-            const m = parseInt(match[2]);
-            const ap = (match[3] || '').toLowerCase();
-            if (ap.includes('p') && h < 12) h += 12;
-            if (ap.includes('a') && h === 12) h = 0;
-            return h * 60 + m;
-        }
-        function parseHourEndLabel(label) {
-            if (!label) return null;
-            const parts = label.split(' a ');
-            if (parts.length < 2) return null;
-            const part = parts[1].trim();
-            const match = part.match(/^(\d{1,2}):(\d{2})\s*(a\.m|p\.m|am|pm)?/i);
-            if (!match) return null;
-            let h = parseInt(match[1]);
-            const m = parseInt(match[2]);
-            const ap = (match[3] || '').toLowerCase();
-            if (ap.includes('p') && h < 12) h += 12;
-            if (ap.includes('a') && h === 12) h = 0;
-            return h * 60 + m;
-        }
-        function renderHome() {
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-
-            document.getElementById('home-hour').innerText = `${hh}:${mm}`;
-            document.getElementById('home-ampm').innerText = ampm;
-            document.getElementById('home-greeting').innerText = `${getGreeting()}, ${currentUserData.firstName || 'Usuario'}!`;
-            document.getElementById('home-date').innerText = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-
-            const today = now.getDay();
-            const nowMinutes = now.getHours() * 60 + now.getMinutes();
-            const todayBlocks = state.horario.filter(b => b.day == today);
-            const withTime = todayBlocks.map(b => ({
-                ...b,
-                startMin: parseHourLabel(b.hour),
-                endMin: parseHourEndLabel(b.hour) || (parseHourLabel(b.hour) + 60)
-            })).filter(b => b.startMin !== null).sort((a,b) => a.startMin - b.startMin);
-
-            const currentBlock = withTime.find(b => nowMinutes >= b.startMin && nowMinutes < b.endMin);
-            const nextBlock = withTime.find(b => b.startMin > nowMinutes);
-
-            const nowCard = document.getElementById('home-now-content');
-            if (currentBlock) {
-                nowCard.innerHTML = `
-                    <p class="text-lg font-black leading-tight">${escapeHtml(currentBlock.activity)}</p>
-                    <p class="text-xs opacity-90 mt-1">${escapeHtml(currentBlock.hour)}</p>
-                `;
-            } else {
-                nowCard.innerHTML = `
-                    <p class="text-sm opacity-80">Sin actividad programada</p>
-                    <p class="text-[10px] opacity-70 mt-1">Añade bloques en Agenda → Horario</p>
-                `;
-            }
-
-            const nextCard = document.getElementById('home-next-content');
-            if (nextBlock) {
-                const diffMin = nextBlock.startMin - nowMinutes;
-                const diffText = diffMin < 60 ? `En ${diffMin} min` : `En ${Math.floor(diffMin/60)}h ${diffMin%60}min`;
-                nextCard.innerHTML = `
-                    <p class="text-base font-bold text-slate-800 dark:text-white leading-tight">${escapeHtml(nextBlock.activity)}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(nextBlock.hour)} • <span class="text-indigo-500 font-bold">${diffText}</span></p>
-                `;
-            } else {
-                nextCard.innerHTML = `<p class="text-sm text-slate-400">No hay más actividades hoy</p>`;
-            }
-
-            const pillCard = document.getElementById('home-pill-content');
-            if (state.pills.length === 0) {
-                pillCard.innerHTML = `<p class="text-sm text-slate-400">Sin medicamentos programados</p>`;
-            } else {
-                let closest = null;
-                state.pills.forEach(p => {
-                    const n = getNextPillTime(p.startTime, p.interval);
-                    if (!closest || n.nextDateObj < closest.nextPill.nextDateObj) {
-                        closest = { pill: p, nextPill: n };
-                    }
-                });
-                if (closest) {
-                    const diffMs = closest.nextPill.nextDateObj - now;
-                    const diffMin = Math.round(diffMs / 60000);
-                    const diffText = diffMin < 60 ? `En ${diffMin} min` : `En ${Math.floor(diffMin/60)}h ${diffMin%60}min`;
-                    pillCard.innerHTML = `
-                        <p class="text-base font-bold text-slate-800 dark:text-white leading-tight">${escapeHtml(closest.pill.name)}</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(closest.pill.dose)}</p>
-                        <p class="text-xs text-red-500 font-bold mt-1">${diffText} • ${escapeHtml(closest.nextPill.formattedTime)} hrs</p>
-                    `;
-                }
-            }
-        }
-        function startHomeTimer() {
-            if (homeTimer) clearInterval(homeTimer);
-            homeTimer = setInterval(() => {
-                if (currentTab === 'inicio') renderHome();
-            }, 30000);
-        }
-
-        // TAREAS
-        function handleAddTask(e) {
-            e.preventDefault();
-            const desc = document.getElementById('task-title').value.trim();
-            const priority = document.getElementById('task-priority').value;
-            const category = document.getElementById('task-category').value;
-            const date = document.getElementById('task-date').value;
-            if (!desc) return;
-            db.ref(`${userKey}/tasks`).push({ desc, priority, category, date, completed: false });
-            document.getElementById('form-add-task').reset();
-            initDates();
-            showToast('Tarea agregada', 'success');
-        }
-        function filterTasks(type) {
-            state.taskFilter = type;
-            document.querySelectorAll('.filter-task-btn').forEach(b => {
-                b.classList.replace('bg-brand-500', 'bg-slate-200');
-                b.classList.replace('text-white', 'text-slate-600');
-            });
-            const activeBtn = document.getElementById('ftask-' + type);
-            if (activeBtn) {
-                activeBtn.classList.replace('bg-slate-200', 'bg-brand-500');
-                activeBtn.classList.replace('text-slate-600', 'text-white');
-            }
-            renderTasks();
-        }
-        function toggleTaskComplete(id) {
-            const task = state.tasks.find(t => t.id === id);
-            if (task) db.ref(`${userKey}/tasks/${id}`).update({ completed: !task.completed });
-        }
-        function deleteTask(id) {
-            db.ref(`${userKey}/tasks/${id}`).remove();
-            showToast('Tarea eliminada', 'info', 2000);
-        }
-        function renderTasks() {
-            const container = document.getElementById('tasks-container');
-            let list = state.tasks;
-            if (state.taskFilter === 'pending') list = list.filter(t => !t.completed);
-            if (state.taskFilter === 'completed') list = list.filter(t => t.completed);
-            if (list.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No hay tareas pendientes.</p>`;
-                return;
-            }
-            container.innerHTML = list.map((t, idx) => `
-                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
-                    <div class="flex items-center space-x-3 flex-1 min-w-0">
-                        <button onclick="toggleTaskComplete('${escapeAttr(t.id)}')" class="text-lg text-slate-400 hover:text-brand-purple transition shrink-0">
-                            <i class="fa-${t.completed ? 'solid fa-circle-check text-brand-purple' : 'regular fa-circle'}"></i>
-                        </button>
-                        <div class="truncate">
-                            <p class="text-xs sm:text-sm font-medium ${t.completed ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-100'} truncate">${escapeHtml(t.desc)}</p>
-                            <div class="flex items-center gap-2 mt-0.5">
-                                <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30">${escapeHtml(t.priority || 'Media')}</span>
-                                <span class="text-[10px] text-slate-400">${escapeHtml(t.category || 'General')} • ${escapeHtml(t.date || 'Sin fecha')}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button onclick="deleteTask('${escapeAttr(t.id)}')" class="text-slate-300 hover:text-red-500 transition p-1">
-                        <i class="fa-solid fa-trash-can text-sm"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // HORARIO
-        function openModalHorario() {
-            editingHorarioId = null;
-            document.getElementById('modal-horario-title').innerHTML = '<i class="fa-solid fa-clock text-brand-purple"></i> Agregar Bloque';
-            document.getElementById('horario-submit-btn').innerText = 'Agregar Bloque';
-            document.getElementById('horario-title').value = '';
-            document.getElementById('horario-start-time').value = '08:00';
-            document.getElementById('horario-end-time').value = '09:00';
-            // Reset días
-            document.querySelectorAll('#modal-days-box .day-chip[data-day]').forEach(chip => {
-                chip.classList.toggle('active', chip.dataset.day === '1');
-            });
-            updateAllDaysChipState();
-            document.getElementById('modal-horario').classList.remove('hidden');
-        }
-
-        function openModalHorarioEdit(blockId) {
-            const block = state.horario.find(b => b.id === blockId);
-            if (!block) return;
-            editingHorarioId = blockId;
-            document.getElementById('modal-horario-title').innerHTML = '<i class="fa-solid fa-pen text-brand-purple"></i> Editar Bloque';
-            document.getElementById('horario-submit-btn').innerText = 'Guardar Cambios';
-            document.getElementById('horario-title').value = block.activity || '';
-            
-            const times = parseHourLabelToInputs(block.hour || '');
-            document.getElementById('horario-start-time').value = times.start || '08:00';
-            document.getElementById('horario-end-time').value = times.end || '09:00';
-
-            // Marcar día(s)
-            document.querySelectorAll('#modal-days-box .day-chip[data-day]').forEach(chip => {
-                chip.classList.toggle('active', parseInt(chip.dataset.day) === block.day);
-            });
-            updateAllDaysChipState();
-            document.getElementById('modal-horario').classList.remove('hidden');
-        }
-
-        function closeModalHorario() { 
-            document.getElementById('modal-horario').classList.add('hidden'); 
-            editingHorarioId = null;
-        }
-        function toggleModalDayChip(btn) {
-            btn.classList.toggle('active');
-            updateAllDaysChipState();
-        }
-        function toggleAllDaysModal() {
-            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
-            const allChip = document.getElementById('chip-all-days');
-            const shouldActivateAll = !allChip.classList.contains('active');
-            dayChips.forEach(chip => {
-                if (shouldActivateAll) chip.classList.add('active');
-                else chip.classList.remove('active');
-            });
-            if (shouldActivateAll) allChip.classList.add('active');
-            else allChip.classList.remove('active');
-        }
-        function updateAllDaysChipState() {
-            const dayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day]');
-            const activeChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
-            const allChip = document.getElementById('chip-all-days');
-            if (dayChips.length === activeChips.length) allChip.classList.add('active');
-            else allChip.classList.remove('active');
-        }
-
-        function handleSaveHorario(e) {
-            e.preventDefault();
-            const activity = document.getElementById('horario-title').value.trim();
-            const startTime = document.getElementById('horario-start-time').value;
-            const endTime = document.getElementById('horario-end-time').value;
-
-            if (!activity) return toastAlert('Escribe el título.', 'warning');
-            if (!startTime || !endTime) return toastAlert('Selecciona hora inicio y fin.', 'warning');
-            if (startTime === endTime) return toastAlert('La hora inicio y fin no pueden ser iguales.', 'warning');
-
-            const hourLabel = buildHourLabel(startTime, endTime);
-            const selectedDayChips = document.querySelectorAll('#modal-days-box .day-chip[data-day].active');
-            if (selectedDayChips.length === 0) return toastAlert('Selecciona al menos un día.', 'warning');
-
-            if (editingHorarioId) {
-                // EDITAR
-                const day = parseInt(selectedDayChips[0].getAttribute('data-day'));
-                db.ref(`${userKey}/timeblocks/${editingHorarioId}`).update({
-                    activity, hour: hourLabel, day
-                });
-                showToast('Bloque actualizado', 'success');
-            } else {
-                // AGREGAR
-                selectedDayChips.forEach(chip => {
-                    const day = parseInt(chip.getAttribute('data-day'));
-                    db.ref(`${userKey}/timeblocks`).push({ activity, hour: hourLabel, day });
-                });
-                showToast(`Bloque agregado a ${selectedDayChips.length} día(s)`, 'success');
-            }
-
-            closeModalHorario();
-        }
-
-        function deleteHorarioItem(id) { 
-            if (confirm('¿Eliminar este bloque?')) {
-                db.ref(`${userKey}/timeblocks/${id}`).remove();
-                showToast('Bloque eliminado', 'info', 2000);
-            }
-        }
-
-        function renderHorario() {
-            const container = document.getElementById('horario-grid-body');
-            const days = [1, 2, 3, 4, 5, 6, 0];
-            let html = '';
-            CUSTOM_HOURS.forEach(h => {
-                html += `<div class="p-2 font-bold text-slate-500 dark:text-slate-400 text-[10px] bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-center text-center leading-tight">${escapeHtml(h)}</div>`;
-                days.forEach(d => {
-                    // Buscar bloque: primero por coincidencia exacta de día, luego bloque sin día (global)
-                    const blocksForThisCell = state.horario.filter(item => {
-                        const matchesDay = (item.day == d);
-                        const matchesHour = item.hour == h;
-                        return matchesDay && matchesHour;
-                    });
-
-                    if (blocksForThisCell.length > 0) {
-                        const block = blocksForThisCell[0];
-                        html += `
-                            <div class="horario-block p-1.5 rounded-lg grad-bg text-white text-[10px] font-semibold shadow-sm flex flex-col justify-between relative"
-                                 onclick="openModalHorarioEdit('${escapeAttr(block.id)}')">
-                                <i class="fa-solid fa-pen edit-indicator text-white"></i>
-                                <span class="truncate">${escapeHtml(block.activity)}</span>
-                                <button onclick="event.stopPropagation(); deleteHorarioItem('${escapeAttr(block.id)}')" class="text-white/70 hover:text-white text-[9px] text-right mt-1">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
-                            </div>`;
-                    } else {
-                        html += `<div class="p-2 rounded-lg bg-slate-100/50 dark:bg-slate-800/20 border border-dashed border-slate-200 dark:border-slate-800"></div>`;
-                    }
-                });
-            });
-            container.innerHTML = html;
-        }
-
-        // PASTILLERO
-        function handleSavePill(e) {
-            e.preventDefault();
-            const name = document.getElementById('pillName').value.trim();
-            const dose = document.getElementById('pillDose').value.trim();
-            const interval = document.getElementById('pillInterval').value;
-            const startTime = document.getElementById('pillStartTime').value;
-            if(!name || !dose || !startTime) return;
-            db.ref(`${userKey}/pills`).push({ name, dose, interval, startTime }, (err) => {
-                if(!err) {
-                    document.getElementById('pillName').value = '';
-                    document.getElementById('pillDose').value = '';
-                    showToast('Medicamento agregado', 'success');
-                }
-            });
-        }
-        function deletePill(id) {
-            db.ref(`${userKey}/pills/${id}`).remove();
-            showToast('Medicamento eliminado', 'info', 2000);
-        }
-        function renderPills() {
-            const container = document.getElementById('pills-container');
-            if (state.pills.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No tienes medicamentos registrados.</p>`;
-                return;
-            }
-            container.innerHTML = state.pills.map((p, idx) => {
-                const nextPill = getNextPillTime(p.startTime, p.interval);
-                return `
-                    <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-lg font-bold shrink-0">💊</div>
-                            <div>
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100">${escapeHtml(p.name)}</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">${escapeHtml(p.dose)} • Cada ${escapeHtml(p.interval)} hrs</p>
-                                <div class="flex items-center gap-1.5 mt-1">
-                                    <span id="pill-next-${escapeAttr(p.id)}" class="text-[10px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
-                                        <i class="fa-solid fa-bell text-indigo-500"></i> Próxima toma: <span class="pill-next-label">${escapeHtml(nextPill.displayLabel)}</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="deletePill('${escapeAttr(p.id)}')" class="text-slate-300 hover:text-red-500 transition p-2">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-        function updatePillLabels() {
-            state.pills.forEach(p => {
-                const container = document.getElementById(`pill-next-${p.id}`);
-                if (!container) return;
-                const label = container.querySelector('.pill-next-label');
-                if (!label) return;
-                const nextPill = getNextPillTime(p.startTime, p.interval);
-                label.textContent = nextPill.displayLabel;
-            });
-        }
-
-        // MIGRAÑA
-        function selectPainLevel(level, btn) {
-            selectedPainLevel = level;
-            document.querySelectorAll('#painScaleBox .pain-btn').forEach(b => b.classList.remove('selected'));
-            if(btn) btn.classList.add('selected');
-        }
-        function handleSaveMigraineDirect(e) {
-            e.preventDefault();
-            const date = document.getElementById('migDate').value;
-            const time = document.getElementById('migTime').value;
-            const duration = parseFloat(document.getElementById('migDuration').value) || 1;
-            const meds = document.getElementById('migMeds').value.trim();
-            const customTrigger = document.getElementById('migCustomTrigger').value.trim();
-            const symptoms = Array.from(document.querySelectorAll('#symptomsChipsBox .tag-chip.active')).map(c => c.innerText);
-            const triggers = Array.from(document.querySelectorAll('#triggersChipsBox .tag-chip.active')).map(c => c.innerText);
-            if(customTrigger) triggers.push(customTrigger);
-            if(!date || !time) return toastAlert('Selecciona la fecha y hora.', 'warning');
-            const episode = { date, time, duration, pain: selectedPainLevel, symptoms, triggers, meds, timestamp: Date.now() };
-            db.ref(`${userKey}/migraines`).push(episode, (err) => {
-                if(!err) {
-                    toastAlert('Episodio de migraña registrado', 'success');
-                    document.getElementById('migMeds').value = '';
-                    document.getElementById('migCustomTrigger').value = '';
-                    document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
-                }
-            });
-        }
-        function deleteMigraine(id) {
-            db.ref(`${userKey}/migraines/${id}`).remove();
-            showToast('Episodio eliminado', 'info', 2000);
-        }
-        function renderMigraines() {
-            const total = state.migraines.length;
-            document.getElementById('stat-total-migraines').innerText = total;
-            if (total > 0) {
-                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
-                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
-                const avgPain = (totalPain / total).toFixed(1);
-                const avgHours = (totalHours / total).toFixed(1);
-                document.getElementById('stat-avg-pain').innerText = avgPain + ' / 10';
-                document.getElementById('stat-avg-hours').innerText = avgHours + 'h';
-                const triggerCounts = {};
-                state.migraines.forEach(m => {
-                    if(m.triggers && Array.isArray(m.triggers)) {
-                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
-                    }
-                });
-                const topTrig = Object.keys(triggerCounts).sort((a,b) => triggerCounts[b] - triggerCounts[a])[0] || 'N/A';
-                document.getElementById('stat-top-trigger').innerText = topTrig.length > 15 ? topTrig.substring(0, 15) + '...' : topTrig;
-                document.getElementById('migPatternInsight').innerHTML = `Se han registrado <strong>${total} episodios</strong>. Detonante más recurrente: <strong>${escapeHtml(topTrig)}</strong>.`;
-            } else {
-                document.getElementById('stat-avg-pain').innerText = '0.0';
-                document.getElementById('stat-avg-hours').innerText = '0h';
-                document.getElementById('stat-top-trigger').innerText = 'N/A';
-                document.getElementById('migPatternInsight').innerText = 'Registra episodios para analizar patrones.';
-            }
-            const container = document.getElementById('migraine-history-container');
-            if (total === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No hay episodios registrados.</p>`;
-                return;
-            }
-            container.innerHTML = state.migraines.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).map((m, idx) => `
-                <div class="stagger-item hover-card bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 30, 300)}ms">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-8 h-8 rounded-xl font-bold text-xs text-white flex items-center justify-center ${m.pain >= 7 ? 'bg-red-500' : m.pain >= 4 ? 'bg-amber-500' : 'bg-blue-500'}">${escapeHtml(m.pain)}</span>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-100">Crisis de Migraña</h4>
-                                <p class="text-[10px] text-slate-400">${escapeHtml(m.date)} • ${escapeHtml(m.time || '')} (${escapeHtml(m.duration || 1)} hrs)</p>
-                            </div>
-                        </div>
-                        <button onclick="deleteMigraine('${escapeAttr(m.id)}')" class="text-slate-300 hover:text-red-500 text-xs">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                    ${m.symptoms && m.symptoms.length ? `<p class="text-[11px] text-slate-500"><strong>Síntomas:</strong> ${m.symptoms.map(escapeHtml).join(', ')}</p>` : ''}
-                    ${m.triggers && m.triggers.length ? `<div class="flex flex-wrap gap-1 text-[10px]">${m.triggers.map(t => `<span class="bg-purple-50 dark:bg-purple-950/40 text-brand-purple px-2 py-0.5 rounded-md font-medium">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-                    ${m.meds ? `<p class="text-xs text-slate-600 dark:text-slate-300"><i class="fa-solid fa-pills text-brand-blue mr-1"></i> ${escapeHtml(m.meds)}</p>` : ''}
-                </div>
-            `).join('');
-        }
-
-        // PDF MIGRAÑA
-        let dmSansRegularBase64 = null;
-        let dmSansBoldBase64 = null;
-        let dmSansLoaded = false;
-
-        async function loadDMSansForPDF() {
-            if (dmSansLoaded) return true;
-            try {
-                const [resRegular, resBold] = await Promise.all([
-                    fetch('./fonts/DMSans-Regular.ttf'),
-                    fetch('./fonts/DMSans-Bold.ttf')
-                ]);
-                if (!resRegular.ok || !resBold.ok) throw new Error('No se pudieron descargar las fuentes');
-
-                const [bufReg, bufBold] = await Promise.all([
-                    resRegular.arrayBuffer(),
-                    resBold.arrayBuffer()
-                ]);
-
-                const toBase64 = (buf) => {
-                    const bytes = new Uint8Array(buf);
-                    let binary = '';
-                    const chunkSize = 8192;
-                    for (let i = 0; i < bytes.length; i += chunkSize) {
-                        const chunk = bytes.subarray(i, i + chunkSize);
-                        binary += String.fromCharCode.apply(null, chunk);
-                    }
-                    return btoa(binary);
-                };
-
-                dmSansRegularBase64 = toBase64(bufReg);
-                dmSansBoldBase64 = toBase64(bufBold);
-                dmSansLoaded = true;
-                console.log('✅ DM Sans cargada para PDF');
-                return true;
-            } catch (err) {
-                console.warn('⚠️ No se pudo cargar DM Sans, usando helvetica:', err);
-                return false;
-            }
-        }
-
-        function buildMigrainePDFFileName() {
-            const now = new Date();
-            const day = String(now.getDate()).padStart(2, '0');
-            const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            let h = now.getHours();
-            const ampm = h >= 12 ? 'pm' : 'am';
-            h = h % 12;
-            if (h === 0) h = 12;
-            const hh = String(h).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const reg = currentUserData.reg || 'usuario';
-            return `${reg}_${day}-${month}-${year}-h${hh}-${mm}${ampm}.pdf`;
-        }
-
-        async function downloadMigrainePDF() {
-            if (state.migraines.length === 0) return toastAlert('No hay episodios para exportar.', 'warning');
-            if (typeof window.jspdf === 'undefined') return toastAlert('Error: recarga la página.', 'error');
-
-            showToast('Generando PDF...', 'info', 2000);
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                const hasDM = await loadDMSansForPDF();
-                let fontName = 'helvetica';
-                if (hasDM && dmSansRegularBase64 && dmSansBoldBase64) {
-                    doc.addFileToVFS('DMSans-Regular.ttf', dmSansRegularBase64);
-                    doc.addFont('DMSans-Regular.ttf', 'DMSans', 'normal');
-                    doc.addFileToVFS('DMSans-Bold.ttf', dmSansBoldBase64);
-                    doc.addFont('DMSans-Bold.ttf', 'DMSans', 'bold');
-                    fontName = 'DMSans';
-                }
-
-                const userName = `${currentUserData.firstName || ''} ${currentUserData.lastName || ''}`.trim() || 'Usuario';
-
-                doc.setFillColor(99, 102, 241);
-                doc.rect(0, 0, 210, 35, 'F');
-                doc.setTextColor(255, 255, 255);
-                doc.setFont(fontName, 'bold');
-                doc.setFontSize(22);
-                doc.text('Informe Médico', 15, 15);
-                doc.setFont(fontName, 'normal');
-                doc.setFontSize(12);
-                doc.text('Control de Migraña — Omniapp', 15, 23);
-                doc.setFontSize(9);
-                doc.text('Generado: ' + new Date().toLocaleString('es-ES'), 15, 30);
-
-                doc.setTextColor(30, 41, 59);
-                doc.setFont(fontName, 'bold');
-                doc.setFontSize(11);
-                doc.text('Paciente:', 15, 50);
-                doc.setFont(fontName, 'normal');
-                doc.text(userName, 45, 50);
-
-                doc.setFont(fontName, 'bold');
-                doc.text('N° Registro:', 15, 57);
-                doc.setFont(fontName, 'normal');
-                doc.text(currentUserData.reg || '--', 48, 57);
-
-                doc.setFont(fontName, 'bold');
-                doc.text('Fecha informe:', 15, 64);
-                doc.setFont(fontName, 'normal');
-                doc.text(new Date().toLocaleDateString('es-ES'), 55, 64);
-
-                const total = state.migraines.length;
-                const totalPain = state.migraines.reduce((acc, m) => acc + (parseInt(m.pain) || 0), 0);
-                const totalHours = state.migraines.reduce((acc, m) => acc + (parseFloat(m.duration) || 0), 0);
-                const avgPain = (totalPain / total).toFixed(1);
-                const avgHours = (totalHours / total).toFixed(1);
-
-                const triggerCounts = {};
-                state.migraines.forEach(m => {
-                    if (m.triggers && Array.isArray(m.triggers)) {
-                        m.triggers.forEach(t => triggerCounts[t] = (triggerCounts[t] || 0) + 1);
-                    }
-                });
-                const topTriggers = Object.keys(triggerCounts)
-                    .sort((a, b) => triggerCounts[b] - triggerCounts[a])
-                    .slice(0, 3);
-
-                doc.setFont(fontName, 'bold');
-                doc.setFontSize(14);
-                doc.setTextColor(99, 102, 241);
-                doc.text('Resumen Estadístico', 15, 80);
-
-                doc.setFont(fontName, 'normal');
-                doc.setFontSize(10);
-                doc.setTextColor(30, 41, 59);
-                doc.text(`Total de episodios: ${total}`, 15, 90);
-                doc.text(`Promedio de dolor: ${avgPain} / 10`, 15, 97);
-                doc.text(`Duración promedio: ${avgHours} horas`, 15, 104);
-                doc.text(`Detonantes más frecuentes: ${topTriggers.length > 0 ? topTriggers.join(', ') : 'Sin datos'}`, 15, 111);
-
-                doc.setFont(fontName, 'bold');
-                doc.setFontSize(14);
-                doc.setTextColor(99, 102, 241);
-                doc.text('Historial de Episodios', 15, 128);
-
-                const sorted = [...state.migraines].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                const tableData = sorted.map(m => [
-                    m.date || '--',
-                    m.time || '--',
-                    `${m.pain || 0}/10`,
-                    `${m.duration || 1}h`,
-                    (Array.isArray(m.symptoms) ? m.symptoms.join(', ') : '').substring(0, 35),
-                    (Array.isArray(m.triggers) ? m.triggers.join(', ') : '').substring(0, 35),
-                    (m.meds || '').substring(0, 30)
-                ]);
-
-                doc.autoTable({
-                    startY: 133,
-                    head: [['Fecha', 'Hora', 'Dolor', 'Dur.', 'Síntomas', 'Detonantes', 'Medicamento']],
-                    body: tableData,
-                    theme: 'striped',
-                    headStyles: {
-                        fillColor: [99, 102, 241],
-                        textColor: [255, 255, 255],
-                        fontSize: 8,
-                        fontStyle: 'bold',
-                        font: fontName
-                    },
-                    bodyStyles: { fontSize: 7, cellPadding: 2, font: fontName },
-                    alternateRowStyles: { fillColor: [240, 243, 255] },
-                    margin: { left: 15, right: 15 }
-                });
-
-                const pageCount = doc.internal.getNumberOfPages();
-                for (let i = 1; i <= pageCount; i++) {
-                    doc.setPage(i);
-                    doc.setFont(fontName, 'normal');
-                    doc.setFontSize(8);
-                    doc.setTextColor(150, 150, 150);
-                    doc.text(`Omniapp  |  Página ${i} de ${pageCount}`, 105, 290, { align: 'center' });
-                }
-
-                const fileName = buildMigrainePDFFileName();
-                doc.save(fileName);
-                showToast('PDF generado exitosamente', 'success', 3000);
-            } catch (err) {
-                console.error('Error PDF:', err);
-                toastAlert('Error al generar el PDF.', 'error');
-            }
-        }
-
-        // CHAT
-        function handleChatKeydown(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSendChatMessage(e);
-            }
-        }
-        function handleSendChatMessage(e) {
-            if (e && e.preventDefault) e.preventDefault();
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text) return;
-            db.ref(`${userKey}/chat`).push({
-                text, timestamp: Date.now(),
-                time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-                date: new Date().toLocaleDateString('es-ES')
-            });
-            input.value = '';
-            input.style.height = 'auto';
-        }
-        function deleteChatMessage(id) {
-            if (confirm('¿Eliminar este mensaje?')) {
-                db.ref(`${userKey}/chat/${id}`).remove();
-                showToast('Mensaje eliminado', 'info', 2000);
-            }
-        }
-        function renderChat() {
-            const container = document.getElementById('chat-messages');
-            if (state.chat.length === 0) {
-                container.innerHTML = `
-                    <div class="chat-empty">
-                        <i class="fa-solid fa-comment-dots text-4xl mb-3 opacity-30"></i>
-                        <p>Aún no hay mensajes.</p>
-                        <p class="text-xs mt-1">Escribe tu primera nota abajo 👇</p>
-                    </div>
-                `;
-                return;
-            }
-            container.innerHTML = state.chat.map(msg => `
-                <div class="chat-bubble mine">
-                    <div>${escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
-                    <div class="chat-bubble-time">
-                        ${escapeHtml(msg.time || '')} • ${escapeHtml(msg.date || '')}
-                        <button onclick="deleteChatMessage('${escapeAttr(msg.id)}')" class="ml-2 text-white/60 hover:text-white transition">
-                            <i class="fa-solid fa-xmark text-[10px]"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
-        }
-
-        // OmniBan
-        function toggleOmniBanForm() {
-            const formContainer = document.getElementById('omniban-form-container');
-            const btn = document.getElementById('omniban-toggle-btn');
-            if (formContainer.classList.contains('hidden')) {
-                formContainer.classList.remove('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cerrar formulario';
-            } else {
-                formContainer.classList.add('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-plus"></i> Agregar nueva intención';
-            }
-        }
-
-        function toggleOmniBanAllDays() {
-            const allDays = document.getElementById('omniban-alldays').checked;
-            const datesBox = document.getElementById('omniban-dates-box');
-            const startInput = document.getElementById('omniban-start');
-            const endInput = document.getElementById('omniban-end');
-            if (allDays) {
-                datesBox.classList.add('hidden');
-                startInput.required = false;
-                endInput.required = false;
-            } else {
-                datesBox.classList.remove('hidden');
-                startInput.required = true;
-                endInput.required = true;
-            }
-        }
-        function handleAddOmniBan(e) {
-            e.preventDefault();
-            const name = document.getElementById('omniban-name').value.trim();
-            const reason = document.getElementById('omniban-reason').value.trim();
-            const allDays = document.getElementById('omniban-alldays').checked;
-            const start = document.getElementById('omniban-start').value;
-            const end = allDays ? null : document.getElementById('omniban-end').value;
-            if (!name) return toastAlert('Escribe el nombre o intención.', 'warning');
-            if (!allDays && (!start || !end)) return toastAlert('Selecciona fechas.', 'warning');
-            if (!allDays && start > end) return toastAlert('Fecha fin no puede ser antes de inicio.', 'warning');
-            const omniban = {
-                name, reason, allDays,
-                start: start || new Date().toISOString().split('T')[0],
-                end, timestamp: Date.now(), completed: false
-            };
-            db.ref(`${userKey}/omniban`).push(omniban, (err) => {
-                if (!err) {
-                    document.getElementById('omniban-name').value = '';
-                    document.getElementById('omniban-reason').value = '';
-                    document.getElementById('omniban-alldays').checked = false;
-                    toggleOmniBanAllDays();
-                    initDates();
-                    toggleOmniBanForm();
-                    showToast('Petición agregada', 'success');
-                }
-            });
-        }
-        function toggleOmniBanCompleted(id) {
-            const item = state.omniban.find(o => o.id === id);
-            if (item) db.ref(`${userKey}/omniban/${id}`).update({ completed: !item.completed });
-        }
-        function deleteOmniBan(id) {
-            if (confirm('¿Eliminar esta petición?')) {
-                db.ref(`${userKey}/omniban/${id}`).remove();
-                showToast('Petición eliminada', 'info', 2000);
-            }
-        }
-        function calcularDiasOmniBan(item) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const start = new Date(item.start + 'T00:00:00');
-            if (item.allDays) {
-                const diff = Math.floor((today - start) / 86400000) + 1;
-                return diff > 0 ? diff : 0;
-            } else {
-                const end = new Date(item.end + 'T00:00:00');
-                const diff = Math.floor((end - start) / 86400000) + 1;
-                return diff > 0 ? diff : 0;
-            }
-        }
-        function estaVigenteOmniBan(item) {
-            if (item.allDays) return true;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const start = new Date(item.start + 'T00:00:00');
-            const end = new Date(item.end + 'T00:00:00');
-            return today >= start && today <= end;
-        }
-        function renderOmniBan() {
-            const container = document.getElementById('omniban-container');
-            const countEl = document.getElementById('omniban-active-count');
-            if (state.omniban.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-slate-400">
-                        <i class="fa-solid fa-hands-praying text-4xl mb-3 opacity-30"></i>
-                        <p class="text-xs">Aún no hay peticiones guardadas.</p>
-                    </div>
-                `;
-                if (countEl) countEl.innerText = '';
-                return;
-            }
-            const activos = state.omniban.filter(o => !o.completed && estaVigenteOmniBan(o)).length;
-            if (countEl) countEl.innerText = `${activos} activa(s)`;
-            container.innerHTML = state.omniban.map((o, idx) => {
-                const dias = calcularDiasOmniBan(o);
-                const vigente = estaVigenteOmniBan(o);
-                const completado = o.completed;
-                let estadoBadge = '';
-                if (completado) {
-                    estadoBadge = `<span class="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300 px-2 py-0.5 rounded-md font-bold">COMPLETADA</span>`;
-                } else if (!vigente) {
-                    estadoBadge = `<span class="text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-md font-bold">VENCIDA</span>`;
-                } else if (o.allDays) {
-                    estadoBadge = `<span class="text-[9px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md font-bold">TODOS LOS DIAS</span>`;
-                } else {
-                    estadoBadge = `<span class="text-[9px] bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-md font-bold">${dias} DIA(S)</span>`;
-                }
-                return `
-                    <div class="omniban-card ${completado ? 'completed' : ''} stagger-item hover-card bg-white dark:bg-slate-900 p-4 pl-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2" style="animation-delay: ${Math.min(idx * 40, 300)}ms">
-                        <div class="flex justify-between items-start gap-2">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-100 ${completado ? 'line-through' : ''}">${escapeHtml(o.name)}</h4>
-                                ${o.reason ? `<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${escapeHtml(o.reason)}</p>` : ''}
-                                <div class="flex flex-wrap items-center gap-2 mt-2">
-                                    ${estadoBadge}
-                                    ${o.allDays ? `<span class="text-[9px] text-slate-400">Desde ${escapeHtml(o.start)}</span>` : `<span class="text-[9px] text-slate-400">${escapeHtml(o.start)} → ${escapeHtml(o.end || '')}</span>`}
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-1 shrink-0">
-                                <button onclick="toggleOmniBanCompleted('${escapeAttr(o.id)}')" class="text-slate-400 hover:text-emerald-500 transition p-1">
-                                    <i class="fa-${completado ? 'solid fa-circle-check text-emerald-500' : 'regular fa-circle'}"></i>
-                                </button>
-                                <button onclick="deleteOmniBan('${escapeAttr(o.id)}')" class="text-slate-300 hover:text-red-500 transition p-1">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // DEVOCIONAL
-        function toggleDevForm() {
-            const formContainer = document.getElementById('dev-form-container');
-            const btn = document.getElementById('dev-toggle-btn');
-            if (formContainer.classList.contains('hidden')) {
-                formContainer.classList.remove('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Cerrar formulario';
-            } else {
-                formContainer.classList.add('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-plus"></i> Añadir Reflexión u Oración';
-            }
-        }
-
-        function handleDevCategoryChange() {
-            const select = document.getElementById('dev-category');
-            const newInput = document.getElementById('dev-new-category');
-            if (select.value === '__new__') {
-                newInput.classList.remove('hidden');
-                newInput.focus();
-            } else {
-                newInput.classList.add('hidden');
-                newInput.value = '';
-            }
-        }
-
-        function handleAddDevotional(e) {
-            e.preventDefault();
-            const categorySelect = document.getElementById('dev-category').value;
-            const newCategory = document.getElementById('dev-new-category').value.trim();
-            let category = '';
-
-            if (categorySelect === '__new__') {
-                if (!newCategory) return toastAlert('Escribe el nombre de la nueva categoría.', 'warning');
-                category = newCategory;
-            } else if (categorySelect) {
-                category = categorySelect;
-            } else {
-                return toastAlert('Selecciona o crea una categoría.', 'warning');
-            }
-
-            const title = document.getElementById('dev-title').value.trim() || 'Sin título';
-            const body = document.getElementById('dev-text').value.trim();
-            if (!body) return toastAlert('Escribe el contenido.', 'warning');
-
-            db.ref(`${userKey}/notes`).push({
-                title, body, category,
-                date: new Date().toLocaleDateString('es-ES'),
-                timestamp: Date.now()
-            });
-
-            document.getElementById('dev-title').value = '';
-            document.getElementById('dev-text').value = '';
-            document.getElementById('dev-category').value = '';
-            document.getElementById('dev-new-category').value = '';
-            document.getElementById('dev-new-category').classList.add('hidden');
-            toggleDevForm();
-            showToast('Reflexión guardada', 'success');
-        }
-
-        function deleteDevotional(id) {
-            if (confirm('¿Eliminar esta entrada?')) {
-                db.ref(`${userKey}/notes/${id}`).remove();
-                showToast('Entrada eliminada', 'info', 2000);
-            }
-        }
-
-        function toggleCategoryGroup(catKey) {
-            const header = document.querySelector(`.category-header[data-cat="${catKey}"]`);
-            const items = document.querySelector(`.category-items[data-cat="${catKey}"]`);
-            if (header && items) {
-                header.classList.toggle('open');
-                items.classList.toggle('open');
-            }
-        }
-
-        function toggleDevotionalItem(itemId) {
-            const header = document.querySelector(`.devotional-item-header[data-item="${itemId}"]`);
-            const body = document.querySelector(`.devotional-item-body[data-item="${itemId}"]`);
-            if (header && body) {
-                header.classList.toggle('open');
-                body.classList.toggle('open');
-            }
-        }
-
-        function renderDevotionals() {
-            const container = document.getElementById('devotional-entries-container');
-            if (state.devotionals.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Sin entradas guardadas.</p>`;
-                return;
-            }
-
-            const grouped = {};
-            state.devotionals.forEach(d => {
-                const cat = d.category || 'Sin categoría';
-                if (!grouped[cat]) grouped[cat] = [];
-                grouped[cat].push(d);
-            });
-
-            Object.keys(grouped).forEach(cat => {
-                grouped[cat].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            });
-
-            const sortedCategories = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
-
-            container.innerHTML = sortedCategories.map(cat => {
-                const items = grouped[cat];
-                const catKey = cat.replace(/[^a-zA-Z0-9]/g, '_');
-                const catEsc = escapeHtml(cat);
-
-                return `
-                    <div class="category-group">
-                        <div class="category-header" data-cat="${catKey}" onclick="toggleCategoryGroup('${catKey}')">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-folder text-indigo-500"></i>
-                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">${catEsc}</span>
-                                <span class="text-[10px] font-bold text-white bg-indigo-500 rounded-full px-2 py-0.5">${items.length}</span>
-                            </div>
-                            <i class="fa-solid fa-chevron-down text-slate-400 chevron"></i>
-                        </div>
-                        <div class="category-items" data-cat="${catKey}">
-                            ${items.map(d => {
-                                const itemId = escapeAttr(d.id);
-                                return `
-                                    <div class="devotional-item">
-                                        <div class="devotional-item-header" data-item="${itemId}" onclick="toggleDevotionalItem('${itemId}')">
-                                            <div class="flex items-center gap-2 flex-1 min-w-0">
-                                                <i class="fa-solid fa-bookmark text-purple-400 text-xs"></i>
-                                                <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">${escapeHtml(d.title || 'Sin título')}</span>
-                                            </div>
-                                            <i class="fa-solid fa-chevron-down text-slate-400 text-[10px] chevron-small"></i>
-                                        </div>
-                                        <div class="devotional-item-body" data-item="${itemId}">
-                                            <p class="text-xs text-slate-700 dark:text-slate-200 leading-relaxed mb-2">${escapeHtml(d.body || d.text || '')}</p>
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-[10px] text-slate-400">${escapeHtml(d.date || '')}</span>
-                                                <button onclick="event.stopPropagation(); deleteDevotional('${itemId}')" class="text-slate-300 hover:text-red-500 text-xs">
-                                                    <i class="fa-solid fa-trash-can"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // SÚPER
-        function selectStore(storeKey) {
-            currentStoreKey = storeKey;
-            document.querySelectorAll('.store-btn').forEach(b => {
-                b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
-            });
-            const activeBtn = document.getElementById('btn-store-' + storeKey);
-            if(activeBtn) {
-                activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
-            }
-            renderSuper();
-        }
-        function handleAddSuperItem(e) {
-            e.preventDefault();
-            const name = document.getElementById('super-item-name').value.trim();
-            if(!name) return;
-            db.ref(`${userKey}/stores/${currentStoreKey}`).push({ name, qty: "", price: "", done: false });
-            document.getElementById('super-item-name').value = '';
-        }
-        function toggleSuperItem(key, currentDone) {
-            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ done: !currentDone });
-        }
-        function updateStoreField(key, field, val) {
-            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ [field]: val });
-        }
-        function deleteSuperItem(key) {
-            db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).remove();
-        }
-        function clearCurrentStore() {
-            if(confirm('¿Deseas limpiar esta tienda?')) {
-                const storeData = state.stores[currentStoreKey] || {};
-                Object.keys(storeData).forEach(key => {
-                    db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ qty: "", price: "", done: false });
-                });
-                showToast('Tienda limpiada', 'success');
-            }
-        }
-        function renderSuper() {
-            const container = document.getElementById('super-items-container');
-            const items = state.stores[currentStoreKey] || {};
-            if (Object.keys(items).length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Lista de tienda vacía.</p>`;
-                return;
-            }
-            container.innerHTML = Object.keys(items).map(key => {
-                const p = items[key];
-                const safeKey = escapeAttr(key);
-                return `
-                    <div class="super-product-item-wrapper bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-2 ${p.done ? 'opacity-60' : ''}">
-                        <div class="product-row-pill flex items-center gap-3 flex-1">
-                            <div class="pill-name-wrapper flex items-center gap-2 flex-1">
-                                <input type="checkbox" class="custom-circle-check" ${p.done ? 'checked' : ''} onchange="toggleSuperItem('${safeKey}', ${p.done})">
-                                <input type="text" class="pill-input pill-name-box flex-1 text-left ${p.done ? 'line-through' : ''}" value="${escapeAttr(p.name || '')}" onchange="updateStoreField('${safeKey}', 'name', this.value)">
-                            </div>
-                            <div class="pill-sub-group flex gap-2">
-                                <input type="text" class="pill-input pill-qty-box w-24" placeholder="Cant." value="${escapeAttr(p.qty || '')}" onchange="updateStoreField('${safeKey}', 'qty', this.value)">
-                                <input type="text" class="pill-input pill-price-box w-24" placeholder="Precio" value="${escapeAttr(p.price || '')}" onchange="updateStoreField('${safeKey}', 'price', this.value)">
-                            </div>
-                        </div>
-                        <button onclick="deleteSuperItem('${safeKey}')" class="text-red-500 font-bold px-2 text-sm">✕</button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // EXPORTAR
-        function arrayToCSV(rows, headers) {
-            if (!rows || rows.length === 0) return headers ? headers.join(',') + '\n' : '';
-            const allHeaders = headers || Object.keys(rows[0]);
-            const escapeCSV = (value) => {
-                if (value === null || value === undefined) return '';
-                const str = String(value);
-                if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-                    return '"' + str.replace(/"/g, '""') + '"';
-                }
-                return str;
-            };
-            const headerLine = allHeaders.map(escapeCSV).join(',');
-            const dataLines = rows.map(row => allHeaders.map(h => escapeCSV(row[h])).join(','));
-            return [headerLine, ...dataLines].join('\n');
-        }
-        function getBackupTimestamp() {
-            const now = new Date();
-            const pad = (n) => String(n).padStart(2, '0');
-            return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-        }
-        async function exportAllData() {
-            if (!userKey || !currentUserData) return toastAlert('Debes iniciar sesión.', 'warning');
-            if (typeof JSZip === 'undefined') return toastAlert('Error: recarga la página.', 'error');
-            showToast('Generando backup...', 'info', 2000);
-            try {
-                const zip = new JSZip();
-                const folder = zip.folder(`omniapp-backup-${getBackupTimestamp()}`);
-                folder.file('usuario.csv', '\uFEFF' + arrayToCSV([{
-                    firstName: currentUserData.firstName || '', lastName: currentUserData.lastName || '',
-                    reg: currentUserData.reg || '', tieneHash: currentUserData.passHash ? 'Sí' : 'No'
-                }], ['firstName', 'lastName', 'reg', 'tieneHash']));
-
-                folder.file('tareas.csv', '\uFEFF' + (state.tasks.length ? arrayToCSV(state.tasks.map(t => ({
-                    descripcion: t.desc || '', prioridad: t.priority || '', categoria: t.category || '',
-                    fecha: t.date || '', completada: t.completed ? 'Sí' : 'No'
-                })), ['descripcion', 'prioridad', 'categoria', 'fecha', 'completada']) : 'descripcion,prioridad,categoria,fecha,completada\n'));
-
-                const dayNames = { 0: 'Domingo', 1: 'Lunes', 2: 'Martes', 3: 'Miércoles', 4: 'Jueves', 5: 'Viernes', 6: 'Sábado' };
-                folder.file('horario.csv', '\uFEFF' + (state.horario.length ? arrayToCSV(state.horario.map(h => ({
-                    dia: dayNames[h.day] || h.day, hora: h.hour || '', actividad: h.activity || ''
-                })), ['dia', 'hora', 'actividad']) : 'dia,hora,actividad\n'));
-
-                folder.file('pastillas.csv', '\uFEFF' + (state.pills.length ? arrayToCSV(state.pills.map(p => ({
-                    nombre: p.name || '', dosis: p.dose || '', intervalo_horas: p.interval || '', hora_inicio: p.startTime || ''
-                })), ['nombre', 'dosis', 'intervalo_horas', 'hora_inicio']) : 'nombre,dosis,intervalo_horas,hora_inicio\n'));
-
-                folder.file('migrana.csv', '\uFEFF' + (state.migraines.length ? arrayToCSV(state.migraines.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)).map(m => ({
-                    fecha: m.date || '', hora: m.time || '', dolor: m.pain || '', duracion_horas: m.duration || '',
-                    sintomas: Array.isArray(m.symptoms) ? m.symptoms.join(' | ') : '',
-                    desencadenantes: Array.isArray(m.triggers) ? m.triggers.join(' | ') : '',
-                    medicamento: m.meds || ''
-                })), ['fecha', 'hora', 'dolor', 'duracion_horas', 'sintomas', 'desencadenantes', 'medicamento']) : 'fecha,hora,dolor,duracion_horas,sintomas,desencadenantes,medicamento\n'));
-
-                folder.file('devocional.csv', '\uFEFF' + (state.devotionals.length ? arrayToCSV(state.devotionals.map(d => ({
-                    categoria: d.category || '', titulo: d.title || '', texto: d.body || d.text || '', fecha: d.date || ''
-                })), ['categoria', 'titulo', 'texto', 'fecha']) : 'categoria,titulo,texto,fecha\n'));
-
-                const superRows = [];
-                const storeNames = { mercado: 'Mercado', costco: 'Costco', sams: "Sam's", zorro: 'El Zorro', monarca: 'Monarca', extras: 'Extras' };
-                Object.keys(state.stores || {}).forEach(storeKey => {
-                    const items = state.stores[storeKey] || {};
-                    Object.keys(items).forEach(itemKey => {
-                        const item = items[itemKey];
-                        superRows.push({
-                            tienda: storeNames[storeKey] || storeKey,
-                            producto: item.name || '', cantidad: item.qty || '',
-                            precio: item.price || '', comprado: item.done ? 'Sí' : 'No'
-                        });
-                    });
-                });
-                folder.file('super.csv', '\uFEFF' + (superRows.length ? arrayToCSV(superRows, ['tienda', 'producto', 'cantidad', 'precio', 'comprado']) : 'tienda,producto,cantidad,precio,comprado\n'));
-
-                folder.file('LEEME.txt', `Omniapp - Backup\nUsuario: ${currentUserData.firstName || ''} ${currentUserData.lastName || ''}\nReg: ${currentUserData.reg || ''}\nFecha: ${new Date().toLocaleString('es-ES')}\n`);
-
-                const blob = await zip.generateAsync({ type: 'blob' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `omniapp-backup-${getBackupTimestamp()}.zip`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showToast('¡Backup descargado!', 'success', 4000);
-            } catch (err) {
-                console.error('Error:', err);
-                toastAlert('Error al generar el backup.', 'error');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', checkActiveSession);
-    </script>
 </body>
 </html>
