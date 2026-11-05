@@ -4,7 +4,7 @@
 
 let currentStoreKey = "mercado";
 let stores = {};
-let receivedMoney = 0; // Variable para el total recibido
+let receivedMoney = 0;
 
 // --- MENÚ FLOTANTE MÓVIL ---
 function toggleStoreMenu() {
@@ -41,7 +41,6 @@ document.addEventListener('click', function(event) {
 function selectStore(storeKey) {
     currentStoreKey = storeKey;
     
-    // Actualizar botones en Desktop
     document.querySelectorAll('.store-btn').forEach(b => {
         b.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-none shrink-0 transition-all";
     });
@@ -50,7 +49,6 @@ function selectStore(storeKey) {
         activeBtn.className = "store-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow border border-indigo-100 dark:bg-indigo-600 dark:text-white dark:border-none shrink-0 transition-all";
     }
 
-    // Actualizar botones en Móvil (Menú)
     document.querySelectorAll('.mobile-store-btn').forEach(b => {
         b.classList.remove('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/40', 'dark:text-indigo-300');
         b.classList.add('text-slate-700', 'dark:text-slate-300');
@@ -79,9 +77,8 @@ function toggleSuperItem(key, currentDone) {
 }
 
 function updateStoreField(key, field, val) {
-    // Si es precio, limpiamos caracteres extraños y convertimos a número
     if (field === 'price') {
-        val = String(val).replace(/[^0-9.]/g, ''); // Solo números y punto
+        val = String(val).replace(/[^0-9.]/g, ''); 
     }
     db.ref(`${userKey}/stores/${currentStoreKey}/${key}`).update({ [field]: val });
 }
@@ -105,8 +102,53 @@ function renderSuper() {
     const container = document.getElementById('super-items-container');
     if (!container) return;
     
-    const items = stores[currentStoreKey] || {};
-    
+    // INYECCIÓN DEL BOTÓN Y RESUMEN EN EL HTML (Si no existen)
+    let financialSection = document.getElementById('financial-summary-section');
+    if (!financialSection) {
+        financialSection = document.createElement('div');
+        financialSection.id = 'financial-summary-section';
+        financialSection.className = 'bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-indigo-200 dark:border-indigo-900 shadow-sm space-y-4 mt-6';
+        financialSection.innerHTML = `
+            <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                <i class="fa-solid fa-calculator"></i> Resumen Financiero
+            </h3>
+            <div>
+                <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Total Recibido (Dinero que tienes)</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                    <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="updateFinancialSummary(); saveReceivedMoney(this.value);">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Gasto Total</p>
+                    <p id="total-spent" class="text-xl font-extrabold text-slate-700 dark:text-slate-200">$0.00</p>
+                </div>
+                <div id="balance-box" class="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800 text-center">
+                    <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-1" id="balance-label">Sobrante</p>
+                    <p id="total-balance" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">$0.00</p>
+                </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800">
+                <h4 class="text-[11px] font-bold text-slate-500 uppercase mb-2">Desglose por Tienda</h4>
+                <div id="store-breakdown" class="space-y-1 text-sm text-slate-600 dark:text-slate-400"></div>
+            </div>
+            
+            <!-- BOTÓN INYECTADO POR JS -->
+            <button onclick="downloadExpensesPDF()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2 mt-4">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Descargar Reporte de Gastos (PDF)
+            </button>
+        `;
+        
+        const sectionSuper = document.getElementById('tab-super');
+        const clearBtn = sectionSuper.querySelector('button[onclick="clearCurrentStore()"]');
+        if (clearBtn) {
+            clearBtn.parentNode.insertBefore(financialSection, clearBtn.nextSibling);
+        } else {
+            sectionSuper.appendChild(financialSection);
+        }
+    }
+
     // Actualizar etiqueta de tienda (móvil)
     const storeNames = { 
         mercado: 'Mercado', costco: 'Costco', sams: "Sam's", 
@@ -117,13 +159,13 @@ function renderSuper() {
     if (labelEl) labelEl.innerText = storeNames[currentStoreKey] || currentStoreKey;
 
     // Renderizar productos
+    const items = stores[currentStoreKey] || {};
     if (Object.keys(items).length === 0) {
         container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Lista de tienda vacía.</p>`;
     } else {
         container.innerHTML = Object.keys(items).map(key => {
             const p = items[key];
             const safeKey = escapeAttr(key);
-            // Formatear precio
             let priceVal = p.price || '';
             if (priceVal && !isNaN(priceVal)) priceVal = parseFloat(priceVal).toFixed(2);
 
@@ -145,13 +187,11 @@ function renderSuper() {
         }).join('');
     }
 
-    // Llamar a la actualización del resumen financiero
     updateFinancialSummary();
 }
 
 // --- RESUMEN FINANCIERO ---
 function updateFinancialSummary() {
-    // 1. Calcular gasto total de todas las tiendas y desglose
     let totalSpent = 0;
     const breakdownContainer = document.getElementById('store-breakdown');
     const storeNames = { 
@@ -176,7 +216,6 @@ function updateFinancialSummary() {
 
         totalSpent += storeTotal;
         
-        // Solo mostrar en el desglose si hay gasto en esa tienda
         if (storeTotal > 0) {
             breakdownHTML += `
                 <div class="flex justify-between items-center">
@@ -192,13 +231,11 @@ function updateFinancialSummary() {
     }
     if (breakdownContainer) breakdownContainer.innerHTML = breakdownHTML;
 
-    // 2. Obtener Total Recibido
     const receivedInput = document.getElementById('super-received-money');
     if (receivedInput) {
         receivedMoney = parseFloat(receivedInput.value) || 0;
     }
 
-    // 3. Calcular balance (Sobrante/Faltante)
     const balance = receivedMoney - totalSpent;
     const isPositive = balance >= 0;
     
