@@ -102,53 +102,10 @@ function renderSuper() {
     const container = document.getElementById('super-items-container');
     if (!container) return;
     
-    // INYECCIÓN DEL BOTÓN Y RESUMEN EN EL HTML (Si no existen)
-    let financialSection = document.getElementById('financial-summary-section');
-    if (!financialSection) {
-        financialSection = document.createElement('div');
-        financialSection.id = 'financial-summary-section';
-        financialSection.className = 'bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-indigo-200 dark:border-indigo-900 shadow-sm space-y-4 mt-6';
-        financialSection.innerHTML = `
-            <h3 class="font-bold text-indigo-600 dark:text-indigo-400 text-base flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-                <i class="fa-solid fa-calculator"></i> Resumen Financiero
-            </h3>
-            <div>
-                <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Total Recibido (Dinero que tienes)</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                    <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="saveReceivedMoney(this.value)">
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3 pt-2">
-                <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Gasto Total</p>
-                    <p id="total-spent" class="text-xl font-extrabold text-slate-700 dark:text-slate-200">$0.00</p>
-                </div>
-                <div id="balance-box" class="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800 text-center">
-                    <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase mb-1" id="balance-label">Sobrante</p>
-                    <p id="total-balance" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">$0.00</p>
-                </div>
-            </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800">
-                <h4 class="text-[11px] font-bold text-slate-500 uppercase mb-2">Desglose por Tienda</h4>
-                <div id="store-breakdown" class="space-y-1 text-sm text-slate-600 dark:text-slate-400"></div>
-            </div>
-            
-            <!-- BOTÓN INYECTADO POR JS -->
-            <button onclick="downloadExpensesPDF()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-2 mt-4">
-                <i class="fa-solid fa-file-invoice-dollar"></i> Descargar Reporte de Gastos (PDF)
-            </button>
-        `;
-        
-        const sectionSuper = document.getElementById('tab-super');
-        const clearBtn = sectionSuper.querySelector('button[onclick="clearCurrentStore()"]');
-        
-        // ¡ESTA ES LA CLAVE! Solo lo insertamos si el clearBtn existe y no está ya insertado
-        if (clearBtn && !clearBtn.nextElementSibling?.classList.contains('bg-white')) {
-            clearBtn.parentNode.insertBefore(financialSection, clearBtn.nextSibling);
-        } else if (!clearBtn) {
-            sectionSuper.appendChild(financialSection);
-        }
+    // Hacemos visible la tabla
+    const financialSection = document.getElementById('financial-summary-section');
+    if (financialSection) {
+        financialSection.classList.remove('hidden');
     }
 
     // Actualizar etiqueta de tienda (móvil)
