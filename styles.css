@@ -1,0 +1,419 @@
+/* ==========================================
+   OMNIMAPP - Estilos globales
+   ========================================== */
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.grad-bg {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+}
+
+/* Checkbox Círculo Personalizado */
+.custom-circle-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid #cbd5e1; appearance: none; -webkit-appearance: none;
+    outline: none; cursor: pointer; background: #fff;
+    transition: all 0.2s; flex-shrink: 0;
+}
+.custom-circle-check:checked {
+    background: #6366f1; border-color: #6366f1; position: relative;
+}
+.custom-circle-check:checked::after {
+    content: '✓'; color: #fff; font-size: 12px; font-weight: 900;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Píldoras de Productos del Súper */
+.pill-input {
+    border-radius: 9999px; background-color: #d0d7de;
+    border: none; padding: 8px 14px; font-size: 0.85rem;
+    font-weight: 700; color: #0f172a; outline: none; text-align: center;
+}
+.dark .pill-input { background-color: #334155; color: #f8fafc; }
+
+@media (max-width: 600px) {
+    .super-product-item-wrapper { flex-wrap: wrap; align-items: center; gap: 8px; }
+    .product-row-pill { flex-direction: column; align-items: stretch; gap: 8px; flex: 1; }
+    .pill-name-wrapper { display: flex; align-items: center; gap: 10px; width: 100%; }
+    .pill-name-box { flex: 1; width: 100%; }
+    .pill-sub-group { display: flex; gap: 8px; width: 100%; padding-left: 32px; }
+}
+
+/* Botones Escala de Dolor (Migraña) */
+.pain-btn {
+    flex: 1; padding: 8px 0; border-radius: 8px;
+    border: 1.5px solid #e2e8f0; background: #fafafc;
+    font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    transition: all 0.2s; text-align: center;
+}
+.dark .pain-btn { background: #1e293b; border-color: #334155; }
+.pain-btn.selected { border-color: transparent; transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+/* Chips interactivos */
+.tag-chip {
+    padding: 6px 12px; border-radius: 20px;
+    border: 1px solid #e2e8f0; background: #fafafc;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; color: #1e293b;
+}
+.dark .tag-chip { background: #1e293b; border-color: #334155; color: #f8fafc; }
+.tag-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
+
+/* Chips Selección de Días */
+.day-chip {
+    padding: 6px 10px; border-radius: 10px;
+    border: 1px solid #e2e8f0; background: #f8fafc;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; color: #475569; text-align: center;
+}
+.dark .day-chip { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+.day-chip.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
+
+/* ==========================================
+   ANIMACIONES
+   ========================================== */
+
+.tab-content:not(.hidden) {
+    animation: tabFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-item { animation: staggerFadeIn 0.3s ease-out backwards; }
+@keyframes staggerFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#modal-horario:not(.hidden) > div {
+    animation: modalZoomIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalZoomIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+button:active { transform: scale(0.97); transition: transform 0.1s; }
+
+@media (hover: hover) {
+    .hover-card { transition: box-shadow 0.2s, transform 0.2s; }
+    .hover-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==========================================
+   TOASTS (Notificaciones)
+   ========================================== */
+
+#toast-container {
+    position: fixed; top: 1rem; left: 50%;
+    transform: translateX(-50%); z-index: 9999;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    pointer-events: none; max-width: 90vw; width: 22rem;
+}
+.toast {
+    background: #1e293b; color: #f8fafc;
+    padding: 0.75rem 1rem; border-radius: 0.75rem;
+    font-size: 0.85rem; font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    display: flex; align-items: center; gap: 0.6rem;
+    opacity: 0; transform: translateY(-12px);
+    animation: toast-in 0.3s forwards;
+    pointer-events: auto;
+}
+.toast.toast-out { animation: toast-out 0.3s forwards; }
+.toast-success { border-left: 4px solid #10b981; }
+.toast-error   { border-left: 4px solid #ef4444; }
+.toast-info    { border-left: 4px solid #6366f1; }
+.toast-warning { border-left: 4px solid #f59e0b; }
+
+@keyframes toast-in { to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-12px); } }
+
+/* ==========================================
+   CHAT (OmniChat)
+   ========================================== */
+
+#chat-messages { display: flex; flex-direction: column; gap: 0.5rem; }
+.chat-bubble {
+    max-width: 80%; padding: 0.6rem 0.9rem;
+    border-radius: 1rem; font-size: 0.875rem;
+    line-height: 1.4; word-wrap: break-word;
+    position: relative; animation: staggerFadeIn 0.25s ease-out;
+}
+.chat-bubble.mine {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: white; border-bottom-right-radius: 4px;
+}
+.chat-bubble-time { font-size: 0.6rem; opacity: 0.7; margin-top: 0.25rem; text-align: right; }
+.chat-empty { text-align: center; padding: 3rem 1rem; color: #94a3b8; font-size: 0.85rem; }
+
+/* ==========================================
+   OMNIban
+   ========================================== */
+
+.omniban-card { position: relative; overflow: hidden; }
+.omniban-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 4px;
+    background: #6366f1;
+}
+.omniban-card.completed::before { background: #10b981; }
+.omniban-card.completed { opacity: 0.7; }
+
+/* ==========================================
+   SIDEBAR EN MÓVIL
+   ========================================== */
+
+@media (max-width: 767px) {
+    aside.sidebar-desktop {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
+    }
+    main { width: 100% !important; }
+}
+
+/* ==========================================
+   FAB (Botón flotante)
+   ========================================== */
+
+#fab-menu {
+    display: none;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    z-index: 40;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 1.25rem;
+}
+#fab-menu:active { transform: scale(0.95); }
+#fab-menu.rotated i { transform: rotate(45deg); }
+#fab-menu i { transition: transform 0.3s; }
+
+@media (max-width: 767px) {
+    #fab-menu { display: flex; }
+}
+
+/* ==========================================
+   DRAWER MÓVIL
+   ========================================== */
+
+#mobile-drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+#mobile-drawer-overlay.open {
+    display: block;
+    opacity: 1;
+}
+
+#mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 82vw;
+    max-width: 320px;
+    background: #ffffff;
+    z-index: 51;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: 1.25rem;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+}
+.dark #mobile-drawer { background: #0f172a; }
+#mobile-drawer.open { transform: translateX(0); }
+
+#mobile-drawer .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+.dark #mobile-drawer .drawer-header { border-color: #1e293b; }
+
+.drawer-nav-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+    transition: all 0.2s;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+.dark .drawer-nav-btn { color: #cbd5e1; }
+.drawer-nav-btn:hover { background: #f1f5f9; }
+.dark .drawer-nav-btn:hover { background: #1e293b; }
+.drawer-nav-btn.active {
+    background: #eef2ff;
+    color: #6366f1;
+    font-weight: 700;
+}
+.dark .drawer-nav-btn.active { background: #1e1b4b; color: #a5b4fc; }
+
+.drawer-section-title {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    padding: 0.75rem 1rem 0.25rem;
+}
+
+/* ==========================================
+   DASHBOARD INICIO
+   ========================================== */
+
+.home-card {
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+}
+.home-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.home-hour {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 767px) {
+    #app-viewport { padding-bottom: 6rem !important; }
+}
+
+/* ==========================================
+   DEVOCIONAL (Categorías)
+   ========================================== */
+
+.category-group {
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+.dark .category-group { background: #0f172a; border-color: #1e293b; }
+.category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
+.category-header:hover { background: #f8fafc; }
+.dark .category-header:hover { background: #1e293b; }
+.category-header .chevron { transition: transform 0.2s; }
+.category-header.open .chevron { transform: rotate(180deg); }
+.category-items {
+    display: none;
+    border-top: 1px solid #f1f5f9;
+    padding: 0.5rem;
+}
+.dark .category-items { border-color: #1e293b; }
+.category-items.open { display: block; }
+
+.devotional-item {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+.devotional-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
+.devotional-item-header:hover { background: #f8fafc; }
+.dark .devotional-item-header:hover { background: #1e293b; }
+.devotional-item-header .chevron-small { transition: transform 0.2s; }
+.devotional-item-header.open .chevron-small { transform: rotate(180deg); }
+.devotional-item-body {
+    display: none;
+    padding: 0.75rem 0.85rem;
+    border-top: 1px solid #f1f5f9;
+    background: #f8fafc;
+}
+.dark .devotional-item-body { border-color: #1e293b; background: #1e293b; }
+.devotional-item-body.open { display: block; }
+
+/* ==========================================
+   BLOQUES DEL HORARIO
+   ========================================== */
+
+.horario-block {
+    position: relative;
+    cursor: pointer;
+}
+.horario-block .edit-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 8px;
+}
+.horario-block:hover .edit-indicator { opacity: 0.7; }
+
+/* ==========================================
+   SCROLLBAR PERSONALIZADA
+   ========================================== */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.6); }
