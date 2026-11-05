@@ -142,9 +142,11 @@ function renderSuper() {
         
         const sectionSuper = document.getElementById('tab-super');
         const clearBtn = sectionSuper.querySelector('button[onclick="clearCurrentStore()"]');
-        if (clearBtn) {
+        
+        // ¡ESTA ES LA CLAVE! Solo lo insertamos si el clearBtn existe y no está ya insertado
+        if (clearBtn && !clearBtn.nextElementSibling?.classList.contains('bg-white')) {
             clearBtn.parentNode.insertBefore(financialSection, clearBtn.nextSibling);
-        } else {
+        } else if (!clearBtn) {
             sectionSuper.appendChild(financialSection);
         }
     }
@@ -275,7 +277,6 @@ function loadReceivedMoney() {
     });
 }
 
-// IMPORTANTE: Al guardar el dinero, también forzamos la actualización del resumen
 function saveReceivedMoney(val) {
     const num = parseFloat(val) || 0;
     db.ref(`${userKey}/receivedMoney`).set(num);
