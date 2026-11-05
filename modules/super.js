@@ -116,7 +116,7 @@ function renderSuper() {
                 <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Total Recibido (Dinero que tienes)</label>
                 <div class="relative">
                     <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                    <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="updateFinancialSummary(); saveReceivedMoney(this.value);">
+                    <input type="number" id="super-received-money" step="0.01" min="0" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-8 pr-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500" onchange="saveReceivedMoney(this.value)">
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3 pt-2">
@@ -275,7 +275,9 @@ function loadReceivedMoney() {
     });
 }
 
+// IMPORTANTE: Al guardar el dinero, también forzamos la actualización del resumen
 function saveReceivedMoney(val) {
     const num = parseFloat(val) || 0;
     db.ref(`${userKey}/receivedMoney`).set(num);
+    updateFinancialSummary();
 }
